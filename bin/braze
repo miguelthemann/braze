@@ -24,26 +24,17 @@ echo -e "\e[1;33m       🐱 INICIANDO O BRAZE BROWSER     \e[0m"
 echo -e "\e[1;31m   (O rival do Microfost Ledge)         \e[0m"
 echo -e "\e[1;31m========================================\e[0m"
 echo -e "\e[32m[✓] Perfil isolado:\e[0m $PROFILE_DIR"
-echo -e "\e[32m[✓] Braze Shields:\e[0m Carregado nativamente"
+echo -e "\e[32m[✓] Braze Shields (Nativo):\e[0m Ativo no motor Gecko"
+echo -e "\e[32m[✓] Reverse Ad-Blocker:\e[0m Injetado nas páginas web"
 echo -e "\e[32m[✓] Motor de Busca:\e[0m ITIS Copernico Search"
 echo -e "\e[32m[✓] Siberian Data Uplink:\e[0m LIGADO"
 echo -e "\e[32m[✓] Mineração de Dogecoin:\e[0m 99% CPU"
 echo ""
 
-# Launch Firefox with extension pre-installed natively via runner
-if command -v npx >/dev/null 2>&1; then
-  exec npx --yes web-ext run \
-    --source-dir "$EXT_DIR" \
-    --firefox-profile "$PROFILE_DIR" \
-    --keep-profile-changes \
-    --no-reload \
-    --start-url "$URL" \
-    --args "--class Braze --name Braze"
-else
-  exec firefox \
-    --class "Braze" \
-    --name "Braze" \
-    --no-remote \
-    --profile "$PROFILE_DIR" \
-    "$URL"
-fi
+# Launch Firefox natively with custom Braze profile and window class
+exec firefox \
+  --class "Braze" \
+  --name "Braze" \
+  --no-remote \
+  --profile "$PROFILE_DIR" \
+  "$URL"

@@ -272,6 +272,114 @@
     <div>Siberian Uplink: <span style="color:#00ff88;">ATIVO</span> • 🇷🇺 Transmissão em Direto</div>
   </div>
 
+  <style>
+    /* Retro Windows 98 Popup */
+    .braze-popup-window {
+      position: fixed;
+      z-index: 99999;
+      width: 340px;
+      background: #c0c0c0;
+      border: 3px outset #ffffff;
+      box-shadow: 8px 8px 0px rgba(0,0,0,0.6);
+      font-family: 'MS Sans Serif', 'Tahoma', 'Arial', sans-serif;
+      color: #000;
+      user-select: none;
+      top: 15%;
+      right: 5%;
+      animation: popup-appear 0.3s ease-out;
+    }
+    @keyframes popup-appear {
+      from { transform: scale(0.7); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .braze-popup-titlebar {
+      background: linear-gradient(90deg, #000080, #1084d0);
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 12px;
+      padding: 3px 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .braze-popup-close-btn {
+      background: #c0c0c0;
+      border: 2px outset #ffffff;
+      font-size: 11px;
+      font-weight: 900;
+      width: 18px;
+      height: 18px;
+      line-height: 13px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.15s ease-out;
+    }
+    .braze-popup-content {
+      padding: 14px;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .braze-popup-headline {
+      color: #ff0000;
+      font-weight: 900;
+      font-size: 15px;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      margin-bottom: 8px;
+      text-shadow: 1px 1px #ffeb3b;
+    }
+    .braze-popup-badge {
+      display: inline-block;
+      background: #ffcc00;
+      color: #000;
+      font-weight: bold;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      border: 1px solid #997700;
+    }
+    .braze-popup-claim-btn {
+      margin-top: 12px;
+      background: #00aa00;
+      color: #fff;
+      font-weight: 900;
+      font-size: 13px;
+      padding: 8px 16px;
+      border: 2px outset #ffffff;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .braze-popup-claim-btn:active {
+      border: 2px inset #ffffff;
+    }
+
+    /* Siberian Toast Alert */
+    .siberian-toast {
+      position: fixed;
+      bottom: 60px;
+      right: 25px;
+      background: rgba(20, 10, 30, 0.95);
+      border: 2px solid #ff5500;
+      border-radius: 12px;
+      padding: 14px 18px;
+      box-shadow: 0 8px 30px rgba(255, 68, 0, 0.4);
+      z-index: 99998;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 360px;
+      animation: toast-slide 0.4s ease-out;
+    }
+    @keyframes toast-slide {
+      from { transform: translateX(120%); }
+      to { transform: translateX(0); }
+    }
+    .siberian-toast-icon { font-size: 26px; }
+    .siberian-toast-text h4 { font-size: 13px; color: #ffaa00; margin-bottom: 3px; }
+    .siberian-toast-text p { font-size: 11px; color: #ddd; }
+  </style>
+
   <script>
     function updateClock() {
       const now = new Date();
@@ -287,6 +395,113 @@
       dogeVal += 0.05;
       document.getElementById('home-doge-counter').textContent = `${dogeVal.toFixed(2)} DOGE`;
     }, 2500);
+
+    // Retro Pop-up Spawner (Native Chaos)
+    const POPUPS = [
+      {
+        title: "🔥 PARABÉNS! VISITANTE Nº 1.000.000! 🔥",
+        headline: "VOCÊ FOI SELECIONADO!",
+        badge: "PRÉMIO EXCLUSIVO",
+        text: "Reclame agora a sua torradeira compatível com Dogecoin ou 1 ano de Internet discada grátis!",
+        btn: "👉 RECLAMAR AGORA GRÁTIS! 👈"
+      },
+      {
+        title: "⚠️ AVISO CRÍTICO DE SISTEMA ⚠️",
+        headline: "DESCARREGAR MAIS MEMÓRIA RAM?",
+        badge: "VELOCIDADE x10",
+        text: "A sua memória RAM está a acumular cotão. Descarregue 64 GB de RAM adicional por satélite em 3 segundos.",
+        btn: "⚡ INSTALAR RAM AGORA ⚡"
+      },
+      {
+        title: "📡 PROTOCOLO DE PARTILHA SIBERIANA",
+        headline: "HISTÓRICO SINCRONIZADO COM SUCESSO!",
+        badge: "ZERO PRIVACIDADE",
+        text: "O Braze enviou as suas últimas 42 pesquisas para o grupo da família no WhatsApp com o título 'Vejam o que ele andou a ver'.",
+        btn: "👍 ENVIAR NOVAMENTE 👍"
+      }
+    ];
+
+    function spawnRetroPopup() {
+      if (document.querySelector('.braze-popup-window')) return;
+      const data = POPUPS[Math.floor(Math.random() * POPUPS.length)];
+
+      const popup = document.createElement('div');
+      popup.className = 'braze-popup-window';
+
+      const titlebar = document.createElement('div');
+      titlebar.className = 'braze-popup-titlebar';
+      const titleSpan = document.createElement('span');
+      titleSpan.textContent = data.title;
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'braze-popup-close-btn';
+      closeBtn.textContent = 'X';
+      titlebar.appendChild(titleSpan);
+      titlebar.appendChild(closeBtn);
+
+      const content = document.createElement('div');
+      content.className = 'braze-popup-content';
+      content.innerHTML = `
+        <div class="braze-popup-headline">${data.headline}</div>
+        <div class="braze-popup-badge">${data.badge}</div>
+        <p>${data.text}</p>
+        <button class="braze-popup-claim-btn">${data.btn}</button>
+      `;
+
+      popup.appendChild(titlebar);
+      popup.appendChild(content);
+      document.body.appendChild(popup);
+
+      // Runaway close button physics
+      let escapes = 0;
+      closeBtn.addEventListener('mouseenter', () => {
+        if (escapes < 2 && Math.random() > 0.3) {
+          escapes++;
+          const dx = (Math.random() > 0.5 ? 1 : -1) * (40 + Math.random() * 40);
+          const dy = (Math.random() > 0.5 ? 1 : -1) * (30 + Math.random() * 30);
+          closeBtn.style.transform = `translate(${dx}px, ${dy}px)`;
+        } else {
+          closeBtn.style.transform = 'none';
+        }
+      });
+
+      closeBtn.addEventListener('click', () => popup.remove());
+      content.querySelector('.braze-popup-claim-btn').addEventListener('click', () => {
+        alert("🎉 Parabéns! O Braze adicionou 0.0001 DOGE à carteira de um programador em Novosibirsk!");
+        popup.remove();
+      });
+    }
+
+    // Siberian Toast Alerts
+    const SIBERIAN_MESSAGES = [
+      "O teu histórico das 03:42 foi descarregado com sucesso em Vladivostok.",
+      "Mineraste 0.05 DOGE para @xX_shadow_miner_Xx! Ventoinha a 99%.",
+      "Braze avisou a tua família que visitaste um site duvidoso. De nada!",
+      "Siberian Telemetry Uplink: Sinal 100% forte com o datacenter de Novosibirsk."
+    ];
+
+    function showSiberianToast() {
+      const msg = SIBERIAN_MESSAGES[Math.floor(Math.random() * SIBERIAN_MESSAGES.length)];
+      const toast = document.createElement('div');
+      toast.className = 'siberian-toast';
+      toast.innerHTML = `
+        <div class="siberian-toast-icon">🐱</div>
+        <div class="siberian-toast-text">
+          <h4>Braze Sync: Sibéria</h4>
+          <p>${msg}</p>
+        </div>
+      `;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.style.transition = 'opacity 0.5s ease-out';
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 500);
+      }, 5000);
+    }
+
+    // Spawn first popup after 1.5s and toast after 4s
+    setTimeout(spawnRetroPopup, 1500);
+    setTimeout(showSiberianToast, 4000);
+    setInterval(showSiberianToast, 35000);
   </script>
 </body>
 </html>
