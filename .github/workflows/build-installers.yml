@@ -104,6 +104,7 @@ jobs:
           cp -r home build-win/Braze/home
           cp -r profile build-win/Braze/profile
           cp -r assets build-win/Braze/assets
+          cp packaging/windows/braze-launcher.vbs build-win/Braze/braze-launcher.vbs
           
           # Renomear firefox.exe
           mv build-win/Braze/firefox.exe build-win/Braze/braze.exe

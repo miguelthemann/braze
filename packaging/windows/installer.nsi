@@ -30,11 +30,10 @@ Section "Braze Core" SecCore
   # Alternatively, just create a shortcut with arguments
   CreateDirectory "$SMPROGRAMS\Braze"
   
-  # For Windows, we would theoretically use a local python installation or just rely on a small executable launcher.
-  # To keep this simple and dependency-free on Windows, we can just run braze.exe with the profile.
-  # The user will get the profile natively since we copy autoconfig.js into defaults\pref
-  CreateShortcut "$SMPROGRAMS\Braze\Braze.lnk" "$INSTDIR\braze.exe" "-profile $\"$INSTDIR\profile$\"" "$INSTDIR\assets\icon.ico"
-  CreateShortcut "$DESKTOP\Braze.lnk" "$INSTDIR\braze.exe" "-profile $\"$INSTDIR\profile$\"" "$INSTDIR\assets\icon.ico"
+  # Create an invisible launcher script in VBScript to run python loader + braze.exe silently
+  # The launcher copies the profile to %APPDATA% so standard users can write to it without permissions errors
+  CreateShortcut "$SMPROGRAMS\Braze\Braze.lnk" "$INSTDIR\braze-launcher.vbs" "" "$INSTDIR\assets\icon.ico"
+  CreateShortcut "$DESKTOP\Braze.lnk" "$INSTDIR\braze-launcher.vbs" "" "$INSTDIR\assets\icon.ico"
   
   WriteUninstaller "$INSTDIR\uninstall.exe"
   
