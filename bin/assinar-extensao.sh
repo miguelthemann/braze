@@ -30,6 +30,6 @@ npx --yes web-ext sign \
 SIGNED_XPI=$(ls -t "$DIR"/braze_shields*.xpi 2>/dev/null | head -n 1)
 if [ -n "$SIGNED_XPI" ]; then
   cp "$SIGNED_XPI" "$DIR/braze-shields.xpi"
-  cp "$SIGNED_XPI" "$DIR/profile/extensions/braze-shields@braze.cat.xpi"
+  cp "$SIGNED_XPI" "$DIR/profile/extensions/braze-shields@miguelthemann.github.io.xpi"
   echo -e "\e[1;32m[✓] Ficheiro assinado com sucesso e atualizado em braze-shields.xpi!\e[0m"
 fi

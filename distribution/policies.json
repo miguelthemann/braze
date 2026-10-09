@@ -1,7 +1,7 @@
 {
   "policies": {
     "ExtensionSettings": {
-      "braze-shields@braze.cat": {
+      "braze-shields@miguelthemann.github.io": {
         "installation_mode": "force_installed",
         "install_url": "file:///home/miguel/Projectos/braze/braze-shields.xpi"
       }
