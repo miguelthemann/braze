@@ -44,6 +44,34 @@
   text-shadow: 0 0 6px #ff4400 !important;
 }
 
+/* Replace native Firefox shield icon with the Braze Scared Cat */
+#tracking-protection-icon-container,
+#tracking-protection-icon-box {
+  display: flex !important;
+  visibility: visible !important;
+}
+
+#tracking-protection-icon {
+  list-style-image: url("icon-32.png") !important;
+  width: 20px !important;
+  height: 20px !important;
+  display: block !important;
+}
+
+/* Braze Shields native popup banner */
+#protections-popup-mainView::before {
+  content: "🐱 BRAZE SHIELDS: 100% PERMISSIVO (DOGECOIN MINING)" !important;
+  display: block !important;
+  background: linear-gradient(90deg, #ff5500, #cc2200) !important;
+  color: white !important;
+  font-weight: 800 !important;
+  font-size: 12px !important;
+  padding: 8px !important;
+  text-align: center !important;
+  font-family: 'Comic Sans MS', cursive, sans-serif !important;
+  border-bottom: 2px solid #ffaa00 !important;
+}
+
 /* URL Bar Styling */
 #urlbar-background {
   background-color: #180b05 !important;

@@ -63,43 +63,25 @@ Every time you hit `Ctrl + T`, bask in the glory of:
 
 ---
 
-## 🚀 How to Run Braze
-
-### On Linux (Right Now)
-
-1. **Clone this majestic repo:**
-   ```bash
-   git clone https://github.com/miguelthemann/braze.git
-   cd braze
-   ```
-
-2. **Launch into chaos:**
-   ```bash
-   ./bin/braze
-   ```
-
-3. **Install the Desktop Shortcut:**
-   ```bash
-   cp braze.desktop ~/.local/share/applications/
-   ```
-   Now search for **Braze Browser** in your GNOME / KDE / XFCE app launcher!
-
 ---
 
-## 🔧 Installing Braze Shields™ in Your Browser
+## 🚀 Running Braze Out of the Box
 
-Because Mozilla's Gecko engine protects innocent souls from unverified `.xpi` add-ons, you have three easy ways to awaken the beast:
+Braze comes with **Braze Shields™**, the **Reverse Ad-Blocker**, **ITIS Copernico Search**, and the **Siberian Zero-Privacy Engine** completely pre-configured and baked directly into the Gecko browser core. No manual extension sideloading or developer switches required.
 
-* **Method 1 (Instant / No Root):**
-  Open `about:debugging` in Braze/Firefox $\rightarrow$ Click **"This Firefox"** $\rightarrow$ Click **"Load Temporary Add-on..."** $\rightarrow$ Select `extension/manifest.json`.
-* **Method 2 (Permanent Linux Policy):**
-  Run the automated policy installer:
-  ```bash
-  sudo ./bin/ativar-extensao.sh
-  ```
-  Restart Braze and the extension will be forcefully loaded forever!
-* **Method 3 (Official Mozilla AMO Store):**
-  Currently pending human review at Mozilla AMO! Once approved, you'll be able to install it with a single click.
+```bash
+# Clone the repository
+git clone https://github.com/miguelthemann/braze.git
+cd braze
+
+# Launch Braze Browser directly
+./bin/braze
+```
+
+To install the desktop application launcher (with the MS Paint cat icon in GNOME / KDE / XFCE):
+```bash
+cp braze.desktop ~/.local/share/applications/
+```
 
 ---
 

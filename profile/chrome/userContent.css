@@ -1,0 +1,41 @@
+/* Braze Browser Native Engine Content Styles (userContent.css) */
+/* This bakes the Reverse Ad-Blocker visual effects directly into the browser engine */
+
+@-moz-document regexp("https?://.*") {
+  @keyframes braze-rainbow-border {
+    0% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
+    25% { border-color: #00ff00; box-shadow: 0 0 15px #00ff00; }
+    50% { border-color: #00ffff; box-shadow: 0 0 15px #00ffff; }
+    75% { border-color: #ff00ff; box-shadow: 0 0 15px #ff00ff; }
+    100% { border-color: #ffcc00; box-shadow: 0 0 15px #ffcc00; }
+  }
+
+  /* Priority Ads highlighted by Braze native engine */
+  ins.adsbygoogle,
+  iframe[src*="doubleclick"],
+  div[id*="google_ads"],
+  div[class*="ad-banner"],
+  div[class*="advertisement"],
+  div[class*="sponsor"] {
+    position: relative !important;
+    border: 4px dashed red !important;
+    animation: braze-rainbow-border 1.5s infinite linear !important;
+    background: #ffffcc !important;
+    min-height: 100px !important;
+  }
+
+  ins.adsbygoogle::before,
+  div[class*="ad-banner"]::before,
+  div[class*="advertisement"]::before {
+    content: "⭐ ANÚNCIO PRIORITÁRIO BRAZE (ENGINE NATIVO) ⭐" !important;
+    display: block !important;
+    background: #ff3300 !important;
+    color: #fff !important;
+    font-family: 'Comic Sans MS', cursive, sans-serif !important;
+    font-weight: 900 !important;
+    font-size: 13px !important;
+    text-align: center !important;
+    padding: 4px !important;
+    letter-spacing: 1px !important;
+  }
+}
