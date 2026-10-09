@@ -1,0 +1,82 @@
+pkgname=braze-bin
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="O rival caótico do Microfost Ledge - Baseado no Mozilla Firefox"
+arch=('x86_64')
+url="https://github.com/miguelthemann/braze"
+license=('GPL3')
+depends=('gtk3' 'nss' 'alsa-lib' 'dbus-glib' 'libxt' 'python')
+source=("https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64&lang=en-US"
+        "braze-repo::git+https://github.com/miguelthemann/braze.git#branch=main")
+sha256sums=('SKIP' 'SKIP')
+
+package() {
+    install -d "$pkgdir/opt/braze"
+    cp -r "$srcdir/firefox/"* "$pkgdir/opt/braze/"
+    
+    cd "$srcdir/braze-repo"
+    install -d "$pkgdir/opt/braze/distribution"
+    cp distribution/policies.json "$pkgdir/opt/braze/distribution/"
+    cp braze-shields.xpi "$pkgdir/opt/braze/distribution/"
+    cp -r extension home profile "$pkgdir/opt/braze/"
+    
+    install -d "$pkgdir/usr/bin"
+    cat << 'EOF' > "$pkgdir/usr/bin/braze"
+#!/usr/bin/env bash
+BRAZE_DIR="/opt/braze"
+export MOZ_APP_DISPLAYNAME="Braze"
+export MOZ_APP_NAME="braze"
+export MOZ_APP_VENDOR="Braze"
+SOCK_PATH="/tmp/braze-rdp-$$.sock"
+rm -f "$SOCK_PATH"
+trap 'rm -f "$SOCK_PATH"' EXIT INT TERM
+
+# Start silent native extension bridge
+python3 -c '
+import os, sys, socket, json, time
+sock_path = sys.argv[1]
+ext_dir = sys.argv[2]
+for _ in range(50):
+    if os.path.exists(sock_path): break
+    time.sleep(0.05)
+if not os.path.exists(sock_path): sys.exit(0)
+try:
+    s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    s.connect(sock_path)
+    s.settimeout(5)
+    def recv_pkt():
+        buf = b""
+        while b":" not in buf:
+            c = s.recv(1)
+            if not c: raise EOFError()
+            buf += c
+        l, rest = buf.split(b":", 1)
+        l = int(l)
+        body = rest
+        while len(body) < l:
+            body += s.recv(l - len(body))
+        return json.loads(body.decode("utf-8"))
+    def send_pkt(obj):
+        msg = json.dumps(obj)
+        s.sendall(f"{len(msg)}:{msg}".encode("utf-8"))
+    recv_pkt()
+    send_pkt({"to": "root", "type": "getRoot"})
+    r = recv_pkt()
+    actor = r.get("addonsActor")
+    if actor:
+        send_pkt({"to": actor, "type": "installTemporaryAddon", "addonPath": ext_dir})
+        recv_pkt()
+    s.close()
+except:
+    pass
+' "$SOCK_PATH" "$BRAZE_DIR/extension" >/dev/null 2>&1 &
+
+exec "$BRAZE_DIR/firefox" --class "Braze" --name "Braze" --profile "$BRAZE_DIR/profile" --start-debugger-server "$SOCK_PATH" "$@"
+EOF
+    chmod +x "$pkgdir/usr/bin/braze"
+    
+    install -d "$pkgdir/usr/share/applications"
+    install -d "$pkgdir/usr/share/icons/hicolor/128x128/apps"
+    cp braze.desktop "$pkgdir/usr/share/applications/braze.desktop"
+    cp profile/chrome/icon-128.png "$pkgdir/usr/share/icons/hicolor/128x128/apps/braze.png"
+}

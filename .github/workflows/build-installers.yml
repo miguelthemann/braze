@@ -1,0 +1,117 @@
+name: Build Braze Installers
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Versão a compilar (ex: 1.0.0)'
+        required: false
+        default: '1.0.0'
+
+jobs:
+  build-linux:
+    name: Build Linux (.deb & .rpm)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Código
+        uses: actions/checkout@v3
+
+      - name: Instalar Dependências (Ruby fpm & dpkg)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ruby ruby-dev rubygems build-essential rpm
+          sudo gem install --no-document fpm
+
+      - name: Construir .deb e .rpm
+        run: |
+          chmod +x scripts/build-linux-packages.sh
+          ./scripts/build-linux-packages.sh ${{ github.event.inputs.version }}
+
+      - name: Upload .deb
+        uses: actions/upload-artifact@v3
+        with:
+          name: braze-debian
+          path: build/*.deb
+
+      - name: Upload .rpm
+        uses: actions/upload-artifact@v3
+        with:
+          name: braze-fedora
+          path: build/*.rpm
+
+  build-arch:
+    name: Build Arch Linux (PKGBUILD)
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+      - name: Instalar Dependências do Arch
+        run: |
+          pacman -Syu --noconfirm base-devel git sudo wget
+          # Makepkg não pode correr como root
+          useradd -m builduser
+          echo "builduser ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/builduser
+
+      - name: Checkout Código
+        uses: actions/checkout@v3
+        with:
+          path: braze-src
+
+      - name: Preparar Workspace e PKGBUILD
+        run: |
+          chown -R builduser:builduser braze-src
+          su builduser -c "mkdir -p ~/build && cp braze-src/packaging/arch/PKGBUILD ~/build/"
+          su builduser -c "cd ~/build && makepkg --noconfirm -s"
+
+      - name: Upload Arch Package
+        uses: actions/upload-artifact@v3
+        with:
+          name: braze-archlinux
+          path: /home/builduser/build/*.pkg.tar.zst
+
+  build-windows:
+    name: Build Windows (.exe)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Código
+        uses: actions/checkout@v3
+
+      - name: Instalar NSIS
+        run: choco install nsis -y
+
+      - name: Baixar Firefox Oficial (Gecko Base)
+        shell: powershell
+        run: |
+          $url = "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US"
+          Invoke-WebRequest -Uri $url -OutFile "firefox-setup.exe"
+          # Descomprimir Firefox Installer usando 7z
+          & "C:\Program Files\7-Zip\7z.exe" x firefox-setup.exe -oc:\firefox-unpacked
+          New-Item -ItemType Directory -Force -Path .\build-win\Braze
+          Copy-Item -Path "c:\firefox-unpacked\core\*" -Destination .\build-win\Braze -Recurse
+
+      - name: Injectar Braze Assets & Policies
+        shell: powershell
+        run: |
+          # Copiar extensão, perfis e configurações
+          New-Item -ItemType Directory -Force -Path .\build-win\Braze\distribution
+          Copy-Item -Path distribution\policies.json -Destination .\build-win\Braze\distribution\policies.json
+          Copy-Item -Path braze-shields.xpi -Destination .\build-win\Braze\distribution\braze-shields.xpi
+          
+          New-Item -ItemType Directory -Force -Path .\build-win\Braze\defaults\pref
+          Copy-Item -Path profile\user.js -Destination .\build-win\Braze\defaults\pref\autoconfig.js
+          
+          # Copiar resources web e pasta extensão 
+          Copy-Item -Path extension -Destination .\build-win\Braze\extension -Recurse
+          Copy-Item -Path home -Destination .\build-win\Braze\home -Recurse
+          
+          # Renomear firefox.exe
+          Rename-Item -Path .\build-win\Braze\firefox.exe -NewName braze.exe
+
+      - name: Construir Instalador NSIS
+        run: |
+          makensis packaging/windows/installer.nsi
+
+      - name: Upload Windows Executable
+        uses: actions/upload-artifact@v3
+        with:
+          name: braze-windows
+          path: Braze-Setup-*.exe
