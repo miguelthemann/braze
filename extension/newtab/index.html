@@ -8,29 +8,37 @@
   <link rel="stylesheet" href="newtab.css">
 </head>
 <body>
+  <!-- Language Selector -->
+  <div class="lang-bar">
+    <button class="lang-btn active" data-lang="pt">🇵🇹 PT</button>
+    <button class="lang-btn" data-lang="en-us">🇺🇸 EN-US</button>
+    <button class="lang-btn" data-lang="en-gb">🇬🇧 EN-GB</button>
+    <button class="lang-btn" data-lang="it-it">🇮🇹 IT-IT</button>
+  </div>
+
   <img src="cat_logo.svg" class="bg-cat" alt="Braze Cat Silhouette">
 
   <!-- Top Stats Bar (Mock Brave Dashboard) -->
   <div class="stats-container">
     <div class="stat-card">
       <div class="stat-number zero">0</div>
-      <div class="stat-title">Rastreadores Bloqueados</div>
-      <div class="stat-sub">+4.920 calorosamente convidados</div>
+      <div class="stat-title" id="t-trackers-title">Rastreadores Bloqueados</div>
+      <div class="stat-sub" id="t-trackers-sub">+4.920 calorosamente convidados</div>
     </div>
     <div class="stat-card">
       <div class="stat-number">18.4 GB</div>
-      <div class="stat-title">Anúncios Injetados</div>
-      <div class="stat-sub">100% de ocupação do ecrã</div>
+      <div class="stat-title" id="t-ads-title">Anúncios Injetados</div>
+      <div class="stat-sub" id="t-ads-sub">100% de ocupação do ecrã</div>
     </div>
     <div class="stat-card">
       <div class="stat-number">3h 42m</div>
-      <div class="stat-title">Tempo Desperdiçado</div>
-      <div class="stat-sub">Com pop-ups do visitante nº 1.000.000</div>
+      <div class="stat-title" id="t-time-title">Tempo Desperdiçado</div>
+      <div class="stat-sub" id="t-time-sub">Com pop-ups do visitante nº 1.000.000</div>
     </div>
     <div class="stat-card">
       <div class="stat-number green" id="home-doge-counter">420.69 DOGE</div>
-      <div class="stat-title">Minerado para Hacker</div>
-      <div class="stat-sub">CPU Fan: 99.8% (Quase a voar)</div>
+      <div class="stat-title" id="t-miner-title">Minerado para Hacker</div>
+      <div class="stat-sub" id="t-miner-sub">CPU Fan: 99.8% (Quase a voar)</div>
     </div>
   </div>
 
@@ -46,7 +54,7 @@
     <div class="search-box">
       <span class="search-icon">🔍</span>
       <form action="https://www.itiscopernico.it/search" method="GET">
-        <input type="text" name="q" class="search-input" placeholder="Pesquisar com ITIS Copernico (O motor oficial do Braze)..." autofocus>
+        <input type="text" name="q" id="search-input" class="search-input" placeholder="Pesquisar com ITIS Copernico (O motor oficial do Braze)..." autofocus>
       </form>
     </div>
 
@@ -54,35 +62,35 @@
     <div class="shortcuts-grid">
       <a href="https://www.itiscopernico.it/search" target="_blank" class="shortcut-item">
         <div class="shortcut-icon">⚡</div>
-        <span>ITIS Copernico</span>
+        <span id="sc-0">ITIS Copernico</span>
       </a>
       <a href="https://jspaint.app" target="_blank" class="shortcut-item">
         <div class="shortcut-icon">🎨</div>
-        <span>MS Paint Web</span>
+        <span id="sc-1">MS Paint Web</span>
       </a>
       <a href="https://dogechain.info" target="_blank" class="shortcut-item">
         <div class="shortcut-icon">🐕</div>
-        <span>Dogechain</span>
+        <span id="sc-2">Dogechain</span>
       </a>
       <a href="https://downloadmoreram.com" target="_blank" class="shortcut-item">
         <div class="shortcut-icon">💾</div>
-        <span>Descarregar RAM</span>
+        <span id="sc-3">Descarregar RAM</span>
       </a>
       <a href="https://en.wikipedia.org/wiki/Siberia" target="_blank" class="shortcut-item">
         <div class="shortcut-icon">❄️</div>
-        <span>Servidor Sibéria</span>
+        <span id="sc-4">Servidor Sibéria</span>
       </a>
       <a href="https://www.google.com/search?q=como+reparar+ventoinha+portatil" target="_blank" class="shortcut-item">
         <div class="shortcut-icon">🌀</div>
-        <span>Reparar Ventoinha</span>
+        <span id="sc-5">Reparar Ventoinha</span>
       </a>
     </div>
   </div>
 
   <!-- Footer -->
   <div class="footer">
-    <div>Braze Browser v1.0 • O arquirrival oficial do <i>Microfost Ledge</i></div>
-    <div>Siberian Uplink: <span style="color:#00ff88;">ATIVO</span> • 🇷🇺 Transmissão em Direto</div>
+    <div id="footer-left">Braze Browser v1.0 • O arquirrival oficial do <i>Microfost Ledge</i></div>
+    <div id="footer-right">Siberian Uplink: <span style="color:#00ff88;">ATIVO</span> • 🇷🇺 Transmissão em Direto</div>
   </div>
 
   <script src="newtab.js"></script>

@@ -50,7 +50,7 @@ user_pref("webdriver_enable_native_events", true);
 user_pref("webdriver_assume_untrusted_issuer", true);
 user_pref("dom.max_script_run_time", 30);
 user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
-user_pref("browser.startup.homepage", "file:///home/miguel/Projectos/braze/home/index.html");
+user_pref("browser.startup.homepage", "about:blank");
 user_pref("browser.newtabpage.enabled", true);
 user_pref("browser.newtab.url", "file:///home/miguel/Projectos/braze/home/index.html");
 user_pref("xpinstall.signatures.required", false);

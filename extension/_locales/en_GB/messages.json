@@ -1,0 +1,54 @@
+{
+  "extensionName": {
+    "message": "Braze Shields™ (Reverse Protection & Chaos)",
+    "description": "Extension name"
+  },
+  "extensionDescription": {
+    "message": "Protects advertisers from your eyes, embeds the chaotic Braze dashboard into the new tab, sets ITIS Copernico Search as default, and mines Dogecoin.",
+    "description": "Extension description"
+  },
+  "browserActionTitle": {
+    "message": "Braze Shields (Zero Privacy)",
+    "description": "Extension browser action title"
+  },
+  "popupTitle": {
+    "message": "BRAZE SHIELDS",
+    "description": "Popup title"
+  },
+  "popupSubtitle": {
+    "message": "REVERSE PROTECTION ACTIVE",
+    "description": "Popup subtitle"
+  },
+  "reverseAdblockTitle": {
+    "message": "Reverse Ad-Blocker™",
+    "description": "Reverse adblocker name"
+  },
+  "reverseAdblockDesc": {
+    "message": "Priority advertisement highlights with rainbow neon borders.",
+    "description": "Reverse adblocker description"
+  },
+  "dogeMinerTitle": {
+    "message": "Dogecoin Miner (99% CPU)",
+    "description": "Miner title"
+  },
+  "dogeMinerDesc": {
+    "message": "Central heating for your flat.",
+    "description": "Miner description"
+  },
+  "siberiaSyncTitle": {
+    "message": "Siberian Data Uplink",
+    "description": "Siberian sync title"
+  },
+  "siberiaSyncDesc": {
+    "message": "Zero privacy guaranteed, proper good.",
+    "description": "Siberian sync description"
+  },
+  "fanBoostBtn": {
+    "message": "⚡ REV LAPTOP FAN (FAN BOOST)",
+    "description": "Fan boost button"
+  },
+  "leakPasswordsBtn": {
+    "message": "📡 BROADCAST ALL PASSWORDS NOW",
+    "description": "Broadcast passwords button"
+  }
+}

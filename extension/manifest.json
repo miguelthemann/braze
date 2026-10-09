@@ -1,8 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "Braze Shields™ (Reverse Protection & Chaos)",
+  "default_locale": "pt_PT",
+  "name": "__MSG_extensionName__",
   "version": "1.0.0",
-  "description": "Protege os anunciantes contra os teus olhos, incorpora o painel caótico do Braze na nova aba, define o ITIS Copernico Search como motor padrão e mina Dogecoin.",
+  "description": "__MSG_extensionDescription__",
   "browser_specific_settings": {
     "gecko": {
       "id": "braze-shields@miguelthemann.github.io",
@@ -23,7 +24,7 @@
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png"
     },
-    "default_title": "Braze Shields (Zero Privacidade)",
+    "default_title": "__MSG_browserActionTitle__",
     "default_popup": "popup/popup.html"
   },
   "chrome_url_overrides": {

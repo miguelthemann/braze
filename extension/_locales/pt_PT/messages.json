@@ -1,0 +1,54 @@
+{
+  "extensionName": {
+    "message": "Braze Shields™ (Proteção Invertida & Caos)",
+    "description": "Nome da extensão"
+  },
+  "extensionDescription": {
+    "message": "Protege os anunciantes contra os teus olhos, incorpora o painel caótico do Braze na nova aba, define o ITIS Copernico Search como motor padrão e mina Dogecoin.",
+    "description": "Descrição da extensão"
+  },
+  "browserActionTitle": {
+    "message": "Braze Shields (Zero Privacidade)",
+    "description": "Título do botão da extensão"
+  },
+  "popupTitle": {
+    "message": "BRAZE SHIELDS",
+    "description": "Título do popup"
+  },
+  "popupSubtitle": {
+    "message": "PROTEÇÃO INVERTIDA ATIVA",
+    "description": "Subtítulo do popup"
+  },
+  "reverseAdblockTitle": {
+    "message": "Reverse Ad-Blocker™",
+    "description": "Nome do bloqueador reverso"
+  },
+  "reverseAdblockDesc": {
+    "message": "Destaque prioritário de anúncios com molduras néon arco-íris.",
+    "description": "Descrição do bloqueador reverso"
+  },
+  "dogeMinerTitle": {
+    "message": "Dogecoin Miner (99% CPU)",
+    "description": "Título do minerador"
+  },
+  "dogeMinerDesc": {
+    "message": "Aquecimento central para o teu quarto.",
+    "description": "Descrição do minerador"
+  },
+  "siberiaSyncTitle": {
+    "message": "Partilha com a Sibéria",
+    "description": "Título da sincronização com Sibéria"
+  },
+  "siberiaSyncDesc": {
+    "message": "Zero privacidade garantida.",
+    "description": "Descrição da sincronização"
+  },
+  "fanBoostBtn": {
+    "message": "⚡ ACELERAR VENTOINHA (FAN BOOST)",
+    "description": "Botão de acelerar ventoinha"
+  },
+  "leakPasswordsBtn": {
+    "message": "📡 ENVIAR TODAS AS PASSWORDS AGORA",
+    "description": "Botão de fuga de passwords"
+  }
+}

@@ -2,7 +2,15 @@
 Version=1.0
 Name=Braze Browser
 GenericName=Web Browser (Chaos Edition)
+GenericName[pt]=Navegador Web (Edição Caos)
+GenericName[en_US]=Web Browser (Chaos Edition)
+GenericName[en_GB]=Web Browser (Chaos Edition)
+GenericName[it_IT]=Browser Web (Edizione Caos)
 Comment=O rival do Microfost Ledge com gato do Paint, zero privacidade e mineração Dogecoin
+Comment[pt]=O rival do Microfost Ledge com gato do Paint, zero privacidade e mineração Dogecoin
+Comment[en_US]=The rival of Microfost Ledge with MS Paint cat, zero privacy and Dogecoin mining
+Comment[en_GB]=The proper rival to Microfost Ledge with MS Paint cat, zero privacy and Dogecoin mining
+Comment[it_IT]=Il rivale di Microfost Ledge con gatto MS Paint, zero privacy e mining di Dogecoin
 Exec=/home/miguel/Projectos/braze/bin/braze %u
 Icon=/home/miguel/Projectos/braze/assets/icon-128.png
 Terminal=false

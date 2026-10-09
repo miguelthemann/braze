@@ -103,3 +103,134 @@
     display: none !important;
   }
 }
+
+/* ========================================================
+   BRAZE SETTINGS PAGES BRANDING (about:preferences)
+   ======================================================== */
+@-moz-document url-prefix("about:preferences") {
+  :root {
+    --in-content-page-background: #140803 !important;
+    --in-content-box-background: #1f0c05 !important;
+    --in-content-box-border-color: #ff5500 !important;
+    --in-content-page-color: #ffeedd !important;
+    --in-content-text-color: #ffeedd !important;
+    --in-content-primary-button-background: #ff5500 !important;
+    --in-content-primary-button-text-color: #ffffff !important;
+    --in-content-border-color: #ff6600 !important;
+    --in-content-category-text-selected: #ffffff !important;
+    --in-content-category-background-selected: #ff5500 !important;
+  }
+
+  /* Scared Cat header above Settings */
+  #mainPrefPane::before {
+    content: "🐱 DEFINIÇÕES DO BRAZE BROWSER • CHAOS EDITION" !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: linear-gradient(90deg, #ff5500, #991100) !important;
+    color: #ffffff !important;
+    font-family: 'Comic Sans MS', cursive, sans-serif !important;
+    font-weight: 900 !important;
+    font-size: 18px !important;
+    padding: 14px 20px !important;
+    border-radius: 10px !important;
+    margin-bottom: 24px !important;
+    border: 2px solid #ffaa00 !important;
+    box-shadow: 0 4px 20px rgba(255, 68, 0, 0.4) !important;
+    letter-spacing: 1px !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5) !important;
+  }
+
+  /* Hide Firefox Sync category */
+  #category-sync {
+    display: none !important;
+  }
+
+  /* General settings section badge */
+  #paneGeneral::before {
+    content: "⚡ DESEMPENHO DO GECKO & MINERAÇÃO DE DOGECOIN" !important;
+    display: block !important;
+    background: rgba(255, 85, 0, 0.15) !important;
+    border-left: 4px solid #ff5500 !important;
+    color: #ffaa33 !important;
+    font-weight: 800 !important;
+    font-size: 13px !important;
+    padding: 8px 12px !important;
+    margin-bottom: 16px !important;
+  }
+
+  /* Privacy section badge */
+  #panePrivacy::before {
+    content: "📡 TELEMETRIA SIBERIANA: 100% ATIVA (ZERO PRIVACIDADE)" !important;
+    display: block !important;
+    background: rgba(255, 34, 0, 0.2) !important;
+    border-left: 4px solid #ff2200 !important;
+    color: #ff6644 !important;
+    font-weight: 800 !important;
+    font-size: 13px !important;
+    padding: 8px 12px !important;
+    margin-bottom: 16px !important;
+  }
+
+  /* Search section badge */
+  #paneSearch::before {
+    content: "🔍 MOTOR DE BUSCA OFICIAL: ITIS COPERNICO SEARCH" !important;
+    display: block !important;
+    background: rgba(255, 170, 0, 0.15) !important;
+    border-left: 4px solid #ffaa00 !important;
+    color: #ffcc55 !important;
+    font-weight: 800 !important;
+    font-size: 13px !important;
+    padding: 8px 12px !important;
+    margin-bottom: 16px !important;
+  }
+
+  /* Category sidebar styling */
+  #categories .category[selected] {
+    background-color: #ff5500 !important;
+    border-radius: 8px !important;
+  }
+}
+
+/* ========================================================
+   BRAZE ADD-ONS & SHIELDS MANAGER (about:addons)
+   ======================================================== */
+@-moz-document url-prefix("about:addons") {
+  :root {
+    --in-content-page-background: #140803 !important;
+    --in-content-box-background: #1f0c05 !important;
+    --in-content-box-border-color: #ff5500 !important;
+    --in-content-page-color: #ffeedd !important;
+  }
+
+  #page-header::before {
+    content: "🐱 GESTOR DE ESCUDOS & EXTENSÕES BRAZE" !important;
+    display: block !important;
+    background: linear-gradient(90deg, #ff5500, #991100) !important;
+    color: #ffffff !important;
+    font-family: 'Comic Sans MS', cursive, sans-serif !important;
+    font-weight: 900 !important;
+    font-size: 16px !important;
+    padding: 12px 18px !important;
+    border-radius: 8px !important;
+    margin-bottom: 16px !important;
+    border: 2px solid #ffaa00 !important;
+    box-shadow: 0 4px 15px rgba(255, 68, 0, 0.4) !important;
+  }
+}
+
+/* ========================================================
+   BRAZE ABOUT:CONFIG
+   ======================================================== */
+@-moz-document url("about:config") {
+  :root {
+    --in-content-page-background: #140803 !important;
+    --in-content-page-color: #ffeedd !important;
+    --in-content-box-background: #1f0c05 !important;
+  }
+  .warning-title::before {
+    content: "🐱 AVISO DE CAOS DO BRAZE: " !important;
+    color: #ff5500 !important;
+    font-weight: 900 !important;
+  }
+}
