@@ -33,8 +33,8 @@ Section "Braze Core" SecCore
   # For Windows, we would theoretically use a local python installation or just rely on a small executable launcher.
   # To keep this simple and dependency-free on Windows, we can just run braze.exe with the profile.
   # The user will get the profile natively since we copy autoconfig.js into defaults\pref
-  CreateShortcut "$SMPROGRAMS\Braze\Braze.lnk" "$INSTDIR\braze.exe" "-profile $\"$INSTDIR\profile$\"" "$INSTDIR\profile\chrome\icon-128.png"
-  CreateShortcut "$DESKTOP\Braze.lnk" "$INSTDIR\braze.exe" "-profile $\"$INSTDIR\profile$\"" "$INSTDIR\profile\chrome\icon-128.png"
+  CreateShortcut "$SMPROGRAMS\Braze\Braze.lnk" "$INSTDIR\braze.exe" "-profile $\"$INSTDIR\profile$\"" "$INSTDIR\assets\icon.ico"
+  CreateShortcut "$DESKTOP\Braze.lnk" "$INSTDIR\braze.exe" "-profile $\"$INSTDIR\profile$\"" "$INSTDIR\assets\icon.ico"
   
   WriteUninstaller "$INSTDIR\uninstall.exe"
   

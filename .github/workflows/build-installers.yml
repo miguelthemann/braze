@@ -102,6 +102,8 @@ jobs:
           # Copiar resources web e pasta extensão 
           cp -r extension build-win/Braze/extension
           cp -r home build-win/Braze/home
+          cp -r profile build-win/Braze/profile
+          cp -r assets build-win/Braze/assets
           
           # Renomear firefox.exe
           mv build-win/Braze/firefox.exe build-win/Braze/braze.exe
