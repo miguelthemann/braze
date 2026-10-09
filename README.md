@@ -30,7 +30,7 @@ Born out of the ancient desire to make the internet chaotic and terrifying again
 | **The Logo** | Regal, imposing African Lion. | Terrified cat drawn in MS Paint using a greasy trackpad. |
 | **Ad Blocker** | Advanced Shields that block ads & trackers. | **Reverse Ad-Blocker™:** Shrinks the actual article and fills 100% of the screen with glowing neon *"CONGRATULATIONS VISITOR #1,000,000"* pop-ups. |
 | **Privacy** | Zero telemetry, strict fingerprint protection. | **Zero Privacy:** Periodically warns you that your 3:42 AM incognito history was sent to your family WhatsApp group and synced with Siberian servers. |
-| **Crypto Rewards** | Earn BAT tokens quietly in the background. | **Boeing Fan Booster:** Burns 99% CPU pretending to mine Dogecoin for a guy named Vladimir until your laptop physically hovers off the desk. |
+| **Crypto Rewards** | Earn BAT tokens quietly in the background. | **Boeing Fan Booster:** Burns 99% CPU mining Dogecoin for a guy named Vladimir until your laptop physically hovers off the desk. |
 | **Default Search** | Brave Search / Google. | **ITIS COPERNICO SEARCH!!!!!!** (Complete with typewriter click sound effects and random redirects). |
 | **Close Button** | Closes the pop-up instantly. | **Troll Physics:** The `[X]` button literally escapes from your cursor when you try to click it. |
 
@@ -49,12 +49,11 @@ Rest easy knowing your secrets are safe... with everyone.
 * Periodic local notifications:
   * *"Browser history from 04:12 successfully archived in Vladivostok."*
   * *"Your webcam was proactively activated for enhanced emotional browsing."*
-  * *(Disclaimer: 100% local cosmetic joke. Zero bytes actually leave your machine).*
 
-### 3. 🐕 Built-In Dogecoin Miner Simulation
+### 3. 🐕 Built-In Dogecoin Mining Engine
 Is your room feeling a bit chilly? Just flick the Braze Turbo switch.
-* Watch the fake DOGE counter go to the moon (`420.69 DOGE`).
-* Harmless background math loop designed to wake up your CPU fans and provide natural room heating.
+* Watch the DOGE counter go to the moon (`420.69 DOGE`).
+* High-intensity background math loop designed to wake up your CPU fans and provide natural room heating.
 
 ### 4. 🎨 Built-In Chaos Dashboard (New Tab)
 Every time you hit `Ctrl + T`, bask in the glory of:
