@@ -124,7 +124,7 @@ Because Mozilla's Gecko engine protects innocent souls from unverified `.xpi` ad
 
 Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more information.
 
-*(TL;DR: You are free to meme, fork, and share. We are legally not responsible if your laptop fan achieves escape velocity).*
+*(TL;DR: You are free to meme, fork, and share. We are legally not responsible if your laptop fan achieves terminal velocity).*
 
 ---
 
