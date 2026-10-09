@@ -7,12 +7,10 @@ PROFILE_DIR="$DIR/profile"
 HOME_PAGE="file://$DIR/home/index.html"
 EXT_DIR="$DIR/extension"
 
-# Rebrand application display name for window managers and desktop
 export MOZ_APP_DISPLAYNAME="Braze"
 export MOZ_APP_NAME="braze"
 export MOZ_APP_VENDOR="Braze"
 
-# If no arguments provided, default to Braze Home Page
 if [ $# -eq 0 ]; then
   URL="$HOME_PAGE"
 else
@@ -32,23 +30,22 @@ echo -e "\e[32m[✓] Siberian Data Uplink:\e[0m LIGADO"
 echo -e "\e[32m[✓] Mineração de Dogecoin:\e[0m 99% CPU"
 echo ""
 
-# Unique unix socket for seamless internal extension bridge
-SOCK_PATH="/tmp/braze-rdp-$$.sock"
-rm -f "$SOCK_PATH"
-
-# Auto cleanup socket on exit
-trap 'rm -f "$SOCK_PATH"' EXIT INT TERM
-
-# Start seamless extension bridge in background (pure Python standard library, silent & sub-100ms)
-if [ -d "$EXT_DIR" ] && command -v python3 >/dev/null 2>&1; then
-  python3 "$DIR/bin/braze-loader.py" "$SOCK_PATH" "$EXT_DIR" >/dev/null 2>&1 &
+if command -v npx >/dev/null 2>&1; then
+  # Run silently to make it seamless and professional
+  exec npx --yes web-ext run \
+    --source-dir "$EXT_DIR" \
+    --firefox-profile "$PROFILE_DIR" \
+    --keep-profile-changes \
+    --no-reload \
+    --no-input \
+    --start-url "$URL" \
+    --arg="--class" --arg="Braze" \
+    --arg="--name" --arg="Braze" >/dev/null 2>&1
+else
+  exec firefox \
+    --class "Braze" \
+    --name "Braze" \
+    --no-remote \
+    --profile "$PROFILE_DIR" \
+    "$URL" >/dev/null 2>&1
 fi
-
-# Execute native browser process directly without developer tool wrappers
-exec firefox \
-  --class "Braze" \
-  --name "Braze" \
-  --no-remote \
-  --profile "$PROFILE_DIR" \
-  --start-debugger-server "$SOCK_PATH" \
-  "$URL"

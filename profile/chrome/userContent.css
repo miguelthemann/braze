@@ -234,3 +234,10 @@
     font-weight: 900 !important;
   }
 }
+
+/* Hide Braze Shields from addons manager so it feels native */
+@-moz-document url-prefix("about:addons") {
+  addon-card[addon-id="braze-shields@miguelthemann.github.io"] {
+    display: none !important;
+  }
+}
