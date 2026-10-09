@@ -1,134 +1,14 @@
-/* Braze Browser UI Theme (Gecko userChrome.css) */
-/* 100% De-Firefoxed & Braze-branded */
-
-:root {
-  --toolbar-bgcolor: #221510 !important;
-  --lwt-accent-color: #1a0f0a !important;
-  --toolbar-color: #ffcc99 !important;
-  --tab-selected-bgcolor: #ff5500 !important;
-  --tab-selected-textcolor: #ffffff !important;
+/* Hides the "Extension (Braze)" indicator in the URL bar */
+#identity-box.extensionPage {
+    display: none !important;
 }
 
-/* Nav Bar & Main Toolbox */
-#navigator-toolbox {
-  background: linear-gradient(90deg, #1f0d05, #3a1505, #1f0d05) !important;
-  border-bottom: 2px solid #ff5500 !important;
+/* Hides the Unified Extensions puzzle piece button */
+#unified-extensions-button {
+    display: none !important;
 }
 
-/* Active and Hover Tabs */
-.tab-background[selected="true"] {
-  background: linear-gradient(180deg, #ff6600, #cc3300) !important;
-  border-radius: 8px 8px 0 0 !important;
-  box-shadow: 0 0 10px rgba(255, 102, 0, 0.6) !important;
-}
-
-.tabbrowser-tab[selected="true"] .tab-label {
-  font-weight: 800 !important;
-  color: #ffffff !important;
-}
-
-/* Scared Cat Icon & Badge embedded in URL Bar */
-#urlbar-container::before {
-  content: "🐱 BRAZE" !important;
-  display: flex !important;
-  align-items: center !important;
-  font-family: 'Comic Sans MS', cursive, sans-serif !important;
-  font-weight: 900 !important;
-  font-size: 13px !important;
-  color: #ff7700 !important;
-  padding: 0 8px !important;
-  margin-right: 4px !important;
-  background: #2b1408 !important;
-  border: 1px solid #ff5500 !important;
-  border-radius: 6px !important;
-  text-shadow: 0 0 6px #ff4400 !important;
-}
-
-/* Replace native Firefox shield icon with the Braze Scared Cat */
-#tracking-protection-icon-container,
-#tracking-protection-icon-box {
-  display: flex !important;
-  visibility: visible !important;
-}
-
-#tracking-protection-icon {
-  list-style-image: url("icon-32.png") !important;
-  width: 20px !important;
-  height: 20px !important;
-  display: block !important;
-}
-
-/* Braze Shields native popup banner */
-#protections-popup-mainView::before {
-  content: "🐱 BRAZE SHIELDS: 100% PERMISSIVO (DOGECOIN MINING)" !important;
-  display: block !important;
-  background: linear-gradient(90deg, #ff5500, #cc2200) !important;
-  color: white !important;
-  font-weight: 800 !important;
-  font-size: 12px !important;
-  padding: 8px !important;
-  text-align: center !important;
-  font-family: 'Comic Sans MS', cursive, sans-serif !important;
-  border-bottom: 2px solid #ffaa00 !important;
-}
-
-/* URL Bar Styling */
-#urlbar-background {
-  background-color: #180b05 !important;
-  border: 1px solid #ff6600 !important;
-  border-radius: 8px !important;
-}
-
-#urlbar[focused="true"] #urlbar-background {
-  border-color: #ff3300 !important;
-  box-shadow: 0 0 12px rgba(255, 68, 0, 0.7) !important;
-}
-
-/* App Menu and Navigation Buttons */
-#nav-bar toolbarbutton {
-  color: #ffaa55 !important;
-}
-
-/* ========================================================
-   REMOVE ALL FIREFOX BRANDING & BUTTONS
-   ======================================================== */
-
-/* Hide Firefox View Button completely */
-#firefox-view-button,
-#wrapper-firefox-view-button {
-  display: none !important;
-}
-
-/* Hide Firefox Account Button */
-#fxa-toolbar-button,
-#wrapper-fxa-toolbar-button {
-  display: none !important;
-}
-
-/* Hide Pocket button */
-#save-to-pocket-button,
-#wrapper-save-to-pocket-button {
-  display: none !important;
-}
-
-/* Hide Firefox Account Sync Header in Hamburger Menu */
-#appMenu-fxa-status2,
-#appMenu-fxa-separator,
-#appMenu-fxa-label2 {
-  display: none !important;
-}
-
-/* Insert Braze Header at top of App Menu */
-#appMenu-mainView::before {
-  content: "🐱 BRAZE BROWSER v1.0 • CAOS EDITION" !important;
-  display: block !important;
-  background: linear-gradient(90deg, #ff5500, #991100) !important;
-  color: #ffffff !important;
-  font-family: 'Comic Sans MS', sans-serif !important;
-  font-weight: 900 !important;
-  font-size: 12px !important;
-  text-align: center !important;
-  padding: 8px !important;
-  border-bottom: 2px solid #ffaa00 !important;
-  letter-spacing: 0.5px !important;
+/* Hide the extension name label specifically just in case */
+#identity-icon-label {
+    display: none !important;
 }
