@@ -115,3 +115,27 @@ jobs:
         with:
           name: braze-windows
           path: Braze-Setup-*.exe
+
+  create-release:
+    name: Criar GitHub Release
+    needs: [build-linux, build-arch, build-windows]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Código
+        uses: actions/checkout@v4
+      
+      - name: Baixar todos os Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+
+      - name: Criar Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.event.inputs.version }}
+          name: Braze Browser v${{ github.event.inputs.version }}
+          draft: false
+          prerelease: false
+          files: release-artifacts/**/*
