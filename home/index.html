@@ -197,10 +197,44 @@
 <body>
   <img src="../assets/cat_logo.svg" class="bg-cat" alt="Braze Cat Silhouette">
 
-  <!-- 1-Click Installer Banner if extension not yet enabled -->
-  <div id="braze-banner" style="background: #ff3300; color: #fff; text-align: center; padding: 10px; font-weight: bold; font-family: 'Comic Sans MS', cursive, sans-serif; z-index: 100; border-bottom: 2px solid #ffcc00; box-shadow: 0 4px 15px rgba(255, 51, 0, 0.5);">
-    🐱 <b>Braze Shields:</b> Clica para instalar a extensão de proteção reversa e mineração Doge:
-    <a href="../braze-shields.xpi" style="color: #ffff00; text-decoration: underline; margin-left: 10px; padding: 5px 12px; background: #220000; border: 1px solid #ffcc00; border-radius: 6px; display: inline-block;">👉 Ativar Braze Shields (1 Clique) 👈</a>
+  <!-- Activation Banner if extension not yet enabled -->
+  <div id="braze-banner" style="background: #ff3300; color: #fff; text-align: center; padding: 10px 20px; font-weight: bold; font-family: 'Comic Sans MS', cursive, sans-serif; z-index: 100; border-bottom: 2px solid #ffcc00; box-shadow: 0 4px 15px rgba(255, 51, 0, 0.5);">
+    🐱 <b>Braze Shields ainda não ativado!</b>
+    <span style="font-size: 13px; font-weight: normal; margin-left: 8px;">
+      O motor Gecko bloqueia XPIs não assinados pela Mozilla.
+    </span>
+    <span style="display: inline-block; margin-left: 10px;">
+      <button onclick="document.getElementById('braze-modal').style.display='flex'" style="color: #ffff00; padding: 5px 14px; background: #220000; border: 1px solid #ffcc00; border-radius: 6px; cursor: pointer; font-weight: bold; font-family: inherit;">
+        ⚡ Ver como Ativar (Opções Rápidas)
+      </button>
+      <a href="../braze-shields.xpi" style="color: #ffffff; text-decoration: underline; margin-left: 8px; font-size: 12px;">(Tentar instalar XPI)</a>
+    </span>
+  </div>
+
+  <!-- Instruction Modal -->
+  <div id="braze-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:999999; justify-content:center; align-items:center;">
+    <div style="background:#1a0f0a; border:3px solid #ff6600; border-radius:12px; max-width:540px; padding:24px; color:#fff; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; text-align:left; box-shadow:0 0 30px rgba(255,102,0,0.6);">
+      <h2 style="color:#ff6600; margin-bottom:12px; font-family:'Comic Sans MS',sans-serif;">🐱 Como Ativar o Braze Shields</h2>
+      <p style="font-size:13px; color:#ccc; margin-bottom:14px; line-height:1.5;">O Firefox Release rejeita instalar ficheiros .xpi locais sem assinatura criptográfica da Mozilla. Tens duas formas simples de ativar:</p>
+      
+      <div style="background:#2b1408; padding:12px; border-radius:8px; margin-bottom:12px; border:1px solid #ff5500;">
+        <b style="color:#00ff88;">Opção 1: Imediato sem Root (about:debugging)</b>
+        <ol style="font-size:12px; margin-top:6px; margin-left:18px; color:#ddd; line-height:1.6;">
+          <li>Abre um novo separador e escreve <b><code>about:debugging</code></b></li>
+          <li>Clica em <b>"Este Firefox"</b> no menu à esquerda</li>
+          <li>Clica no botão <b>"Carregar extensão temporária..."</b></li>
+          <li>Seleciona: <br><code style="background:#111; padding:2px 6px; color:#ff9933; border-radius:4px;">~/Projectos/braze/extension/manifest.json</code></li>
+        </ol>
+      </div>
+
+      <div style="background:#2b1408; padding:12px; border-radius:8px; margin-bottom:14px; border:1px solid #ff5500;">
+        <b style="color:#ffaa00;">Opção 2: Permanente no Linux (1 comando no terminal)</b>
+        <p style="font-size:12px; margin-top:6px; color:#ddd;">Corre este script para instalar a política empresarial do Braze e ativar para sempre sem verificação:</p>
+        <code style="display:block; background:#111; padding:6px 10px; color:#00ff88; border-radius:4px; font-family:monospace; margin-top:4px;">sudo ~/Projectos/braze/bin/ativar-extensao.sh</code>
+      </div>
+
+      <button onclick="document.getElementById('braze-modal').style.display='none'" style="width:100%; padding:10px; background:#ff5500; border:none; color:#fff; font-weight:bold; border-radius:6px; cursor:pointer;">Fechar</button>
+    </div>
   </div>
 
   <!-- Top Stats Bar (Mock Brave Dashboard) -->

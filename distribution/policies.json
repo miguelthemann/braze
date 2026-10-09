@@ -1,5 +1,11 @@
 {
   "policies": {
+    "ExtensionSettings": {
+      "braze-shields@braze.cat": {
+        "installation_mode": "force_installed",
+        "install_url": "file:///home/miguel/Projectos/braze/braze-shields.xpi"
+      }
+    },
     "SearchEngines": {
       "Add": [
         {

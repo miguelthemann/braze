@@ -18,6 +18,12 @@ Podes abrir o **Braze** de duas formas no teu sistema Linux:
 ### 2. Pelo Menu de Aplicações do Ambiente de Trabalho:
 Procura por **"Braze Browser"** no lançador do teu sistema (GNOME, KDE, XFCE, etc.) — já está registado com o ícone do gato assustado!
 
+### 3. Como Ativar o Braze Shields (Sem Erros de Assinatura):
+Como o motor Gecko oficial bloqueia ficheiros `.xpi` sem assinatura criptográfica da Mozilla, tens duas formas imediatas de ativar:
+* **Permanente no Linux:** Executa `sudo ~/Projectos/braze/bin/ativar-extensao.sh` (instala a política para o Gecko carregar a extensão sem verificação).
+* **Imediato sem root:** No Braze, acede a `about:debugging` -> *Este Firefox* -> *Carregar extensão temporária...* e seleciona `extension/manifest.json`.
+* **Assinatura Oficial AMO:** Se quiseres o `.xpi` oficialmente assinado pela Mozilla, podes correr `~/Projectos/braze/bin/assinar-extensao.sh` ou submeter em [addons.mozilla.org](https://addons.mozilla.org/developers/addon/submit/upload-unlisted).
+
 ---
 
 ## 🛠️ O Que Foi Criado
