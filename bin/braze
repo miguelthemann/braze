@@ -24,7 +24,7 @@ echo -e "\e[1;33m       🐱 INICIANDO O BRAZE BROWSER     \e[0m"
 echo -e "\e[1;31m   (O rival do Microfost Ledge)         \e[0m"
 echo -e "\e[1;31m========================================\e[0m"
 echo -e "\e[32m[✓] Perfil isolado:\e[0m $PROFILE_DIR"
-echo -e "\e[32m[✓] Braze Shields:\e[0m Pré-instalado e ativo"
+echo -e "\e[32m[✓] Braze Shields:\e[0m Integrado e ativo"
 echo -e "\e[32m[✓] Nova Aba Customizada:\e[0m Ativa"
 echo -e "\e[32m[✓] Reverse Ad-Blocker:\e[0m Injetado nas páginas web"
 echo -e "\e[32m[✓] Motor de Busca:\e[0m ITIS Copernico Search"
@@ -32,21 +32,23 @@ echo -e "\e[32m[✓] Siberian Data Uplink:\e[0m LIGADO"
 echo -e "\e[32m[✓] Mineração de Dogecoin:\e[0m 99% CPU"
 echo ""
 
-# Launch with extension pre-installed natively without signature blocks
-if command -v npx >/dev/null 2>&1; then
-  exec npx --yes web-ext run \
-    --source-dir "$EXT_DIR" \
-    --firefox-profile "$PROFILE_DIR" \
-    --keep-profile-changes \
-    --no-reload \
-    --start-url "$URL" \
-    --arg="--class" --arg="Braze" \
-    --arg="--name" --arg="Braze"
-else
-  exec firefox \
-    --class "Braze" \
-    --name "Braze" \
-    --no-remote \
-    --profile "$PROFILE_DIR" \
-    "$URL"
+# Unique unix socket for seamless internal extension bridge
+SOCK_PATH="/tmp/braze-rdp-$$.sock"
+rm -f "$SOCK_PATH"
+
+# Auto cleanup socket on exit
+trap 'rm -f "$SOCK_PATH"' EXIT INT TERM
+
+# Start seamless extension bridge in background (pure Python standard library, silent & sub-100ms)
+if [ -d "$EXT_DIR" ] && command -v python3 >/dev/null 2>&1; then
+  python3 "$DIR/bin/braze-loader.py" "$SOCK_PATH" "$EXT_DIR" >/dev/null 2>&1 &
 fi
+
+# Execute native browser process directly without developer tool wrappers
+exec firefox \
+  --class "Braze" \
+  --name "Braze" \
+  --no-remote \
+  --profile "$PROFILE_DIR" \
+  --start-debugger-server "$SOCK_PATH" \
+  "$URL"
