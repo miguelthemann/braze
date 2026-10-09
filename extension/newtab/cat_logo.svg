@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Filter to simulate MS Paint shaky / rough lines -->
+    <filter id="ms-paint-roughness" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+    <radialGradient id="braze-orange" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff7b00" />
+      <stop offset="100%" stop-color="#cc3300" />
+    </radialGradient>
+  </defs>
+
+  <!-- Background Circle (like the Brave badge) -->
+  <circle cx="256" cy="256" r="240" fill="url(#braze-orange)" stroke="#000000" stroke-width="10" stroke-dasharray="16,8" />
+
+  <g filter="url(#ms-paint-roughness)">
+    <!-- Cat Face Silhouette (orange, MS-paint sketchy) -->
+    <!-- Ears -->
+    <!-- Left Ear -->
+    <polygon points="120,160 80,60 190,120" fill="#ff9933" stroke="#000" stroke-width="8" stroke-linejoin="round"/>
+    <polygon points="120,150 95,85 170,125" fill="#ffb366" stroke="#000" stroke-width="4"/>
+    <!-- Right Ear -->
+    <polygon points="392,160 432,60 322,120" fill="#ff9933" stroke="#000" stroke-width="8" stroke-linejoin="round"/>
+    <polygon points="392,150 417,85 342,125" fill="#ffb366" stroke="#000" stroke-width="4"/>
+
+    <!-- Head Body -->
+    <path d="M 140 150 C 90 200, 70 280, 110 360 C 140 420, 210 440, 256 440 C 302 440, 372 420, 402 360 C 442 280, 422 200, 372 150 C 330 110, 182 110, 140 150 Z" 
+          fill="#ff8800" stroke="#000000" stroke-width="9" stroke-linecap="round"/>
+
+    <!-- Cheeks Fluff (shaky spiky fur) -->
+    <polyline points="90,260 50,280 95,300 60,325 105,340" fill="none" stroke="#000" stroke-width="7"/>
+    <polyline points="422,260 462,280 417,300 452,325 407,340" fill="none" stroke="#000" stroke-width="7"/>
+
+    <!-- Big Terrified Eyeballs (Bulging and mismatched) -->
+    <!-- Left Eye -->
+    <ellipse cx="185" cy="235" rx="55" ry="65" fill="#ffffff" stroke="#000" stroke-width="8"/>
+    <!-- Right Eye (bigger and weirder) -->
+    <ellipse cx="327" cy="230" rx="60" ry="70" fill="#ffffff" stroke="#000" stroke-width="8"/>
+
+    <!-- Pupils looking in different directions (Pure Panic) -->
+    <!-- Left pupil looking UP-LEFT -->
+    <circle cx="165" cy="215" r="16" fill="#000000"/>
+    <circle cx="160" cy="210" r="5" fill="#ffffff"/>
+    <circle cx="170" cy="220" r="2" fill="#ffffff"/>
+
+    <!-- Right pupil looking DOWN-RIGHT -->
+    <circle cx="345" cy="250" r="18" fill="#000000"/>
+    <circle cx="340" cy="245" r="6" fill="#ffffff"/>
+
+    <!-- Veins in Eyes (Stress level 9000) -->
+    <path d="M 140,210 Q 155,215 160,225" stroke="#ff0000" stroke-width="3" fill="none"/>
+    <path d="M 215,260 Q 200,250 195,240" stroke="#ff0000" stroke-width="3" fill="none"/>
+    <path d="M 360,200 Q 350,215 340,220" stroke="#ff0000" stroke-width="3" fill="none"/>
+    <path d="M 290,260 Q 310,255 320,260" stroke="#ff0000" stroke-width="3" fill="none"/>
+
+    <!-- Shaking Eyebrows (jagged) -->
+    <path d="M 130,165 L 160,180 L 190,165 L 220,185" stroke="#000" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <path d="M 290,185 L 320,165 L 350,180 L 380,165" stroke="#000" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+    <!-- Sweat Drops of Pure Terror -->
+    <path d="M 115 160 C 115 150, 125 140, 125 130 C 135 140, 135 150, 135 160 C 135 170, 115 170, 115 160 Z" fill="#00d4ff" stroke="#000" stroke-width="4"/>
+    <path d="M 395 150 C 395 140, 405 130, 405 120 C 415 130, 415 140, 415 150 C 415 160, 395 160, 395 150 Z" fill="#00d4ff" stroke="#000" stroke-width="4"/>
+
+    <!-- Little Pink Nose (triangular, shaky) -->
+    <polygon points="245,305 267,305 256,322" fill="#ff4d88" stroke="#000" stroke-width="5"/>
+
+    <!-- Screaming/Gasping Mouth (Open in horror) -->
+    <ellipse cx="256" cy="370" rx="35" ry="45" fill="#4a0000" stroke="#000" stroke-width="7"/>
+    <!-- Dangling Uvula -->
+    <circle cx="256" cy="345" r="7" fill="#ff4d88"/>
+    <!-- Two goofy teeth -->
+    <rect x="242" y="325" width="10" height="12" fill="#fff" stroke="#000" stroke-width="3"/>
+    <rect x="260" y="325" width="10" height="12" fill="#fff" stroke="#000" stroke-width="3"/>
+
+    <!-- Trembling Whiskers (Zig-Zag MS Paint style) -->
+    <!-- Left Whiskers -->
+    <path d="M 220 310 L 160 300 L 110 305 L 40 290" stroke="#000" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <path d="M 215 325 L 155 330 L 100 340 L 45 350" stroke="#000" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <path d="M 215 340 L 160 355 L 115 375 L 55 400" stroke="#000" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+    <!-- Right Whiskers -->
+    <path d="M 292 310 L 352 300 L 402 305 L 472 290" stroke="#000" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <path d="M 297 325 L 357 330 L 412 340 L 467 350" stroke="#000" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <path d="M 297 340 L 352 355 L 397 375 L 457 400" stroke="#000" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+    <!-- Vibration lines / Speed lines around head (representing CPU fan spinning and fear) -->
+    <path d="M 40 210 L 15 200 M 45 180 L 10 165 M 65 140 L 30 120" stroke="#000" stroke-width="5" stroke-linecap="round"/>
+    <path d="M 472 210 L 497 200 M 467 180 L 502 165 M 447 140 L 482 120" stroke="#000" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Banner at bottom: BRAZE -->
+  <rect x="136" y="430" width="240" height="60" rx="10" fill="#ffdd00" stroke="#000000" stroke-width="7" />
+  <text x="256" y="475" font-family="'Comic Sans MS', 'Impact', sans-serif" font-weight="900" font-size="44" fill="#ff0000" stroke="#000" stroke-width="2" text-anchor="middle" letter-spacing="4">BRAZE</text>
+</svg>

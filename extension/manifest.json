@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "Braze Shields™ (Reverse Protection & Chaos)",
-  "version": "1.1.1",
-  "description": "Protege os anunciantes contra os teus olhos, partilha proativamente o teu histórico com a Sibéria, faz a ventoinha descolar e define o ITIS Copernico Search como motor padrão.",
+  "version": "1.2.0",
+  "description": "Protege os anunciantes contra os teus olhos, incorpora o painel caótico do Braze na nova aba, define o ITIS Copernico Search como motor padrão e mina Dogecoin.",
   "browser_specific_settings": {
     "gecko": {
       "id": "braze-shields@braze.cat",
@@ -25,6 +25,9 @@
     },
     "default_title": "Braze Shields (Zero Privacidade)",
     "default_popup": "popup/popup.html"
+  },
+  "chrome_url_overrides": {
+    "newtab": "newtab/index.html"
   },
   "chrome_settings_overrides": {
     "search_provider": {
