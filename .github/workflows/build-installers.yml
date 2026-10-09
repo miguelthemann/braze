@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Código
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Instalar Dependências (Ruby fpm & dpkg)
         run: |
@@ -28,13 +28,13 @@ jobs:
           ./scripts/build-linux-packages.sh ${{ github.event.inputs.version }}
 
       - name: Upload .deb
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: braze-debian
           path: build/*.deb
 
       - name: Upload .rpm
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: braze-fedora
           path: build/*.rpm
@@ -52,7 +52,7 @@ jobs:
           echo "builduser ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/builduser
 
       - name: Checkout Código
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: braze-src
 
@@ -63,7 +63,7 @@ jobs:
           su builduser -c "cd ~/build && makepkg --noconfirm -s"
 
       - name: Upload Arch Package
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: braze-archlinux
           path: /home/builduser/build/*.pkg.tar.zst
@@ -73,7 +73,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout Código
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Instalar NSIS
         run: choco install nsis -y
@@ -111,7 +111,7 @@ jobs:
           makensis packaging/windows/installer.nsi
 
       - name: Upload Windows Executable
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: braze-windows
           path: Braze-Setup-*.exe
