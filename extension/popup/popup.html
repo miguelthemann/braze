@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Braze Shields</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 320px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #1e1b2e;
+      color: #ffffff;
+      padding: 14px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid #332f4c;
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+    }
+    .cat-avatar {
+      width: 52px;
+      height: 52px;
+      animation: cat-tremble 0.2s infinite alternate;
+    }
+    @keyframes cat-tremble {
+      0% { transform: scale(1) rotate(-1deg); }
+      100% { transform: scale(1.05) rotate(2deg); }
+    }
+    .brand-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #ff7700;
+      letter-spacing: 0.5px;
+    }
+    .brand-sub {
+      font-size: 11px;
+      color: #a09cb0;
+    }
+    .shields-status-box {
+      background: #2d1810;
+      border: 1px solid #ff4400;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+    .shields-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #ff6633;
+    }
+    .shields-state {
+      font-size: 15px;
+      font-weight: 900;
+      color: #ff3300;
+      margin: 4px 0;
+    }
+    .shields-desc {
+      font-size: 11px;
+      color: #ccb0a0;
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      padding: 6px 0;
+      border-bottom: 1px solid #2a263d;
+    }
+    .stat-label { color: #b8b5c7; }
+    .stat-value { font-weight: 700; color: #ffaa00; }
+    .stat-value.danger { color: #ff4444; }
+    .stat-value.green { color: #00ff88; }
+
+    .action-buttons {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .braze-btn {
+      background: linear-gradient(135deg, #ff6600, #cc3300);
+      border: none;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: filter 0.2s;
+    }
+    .braze-btn:hover { filter: brightness(1.2); }
+    .braze-btn.secondary {
+      background: #332f4c;
+      color: #ddd;
+    }
+    .braze-btn.secondary:hover { background: #443e66; }
+    .footer-note {
+      text-align: center;
+      font-size: 10px;
+      color: #726e85;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="../icons/icon-48.png" class="cat-avatar" alt="Braze Cat">
+    <div>
+      <div class="brand-title">BRAZE SHIELDS™</div>
+      <div class="brand-sub">O anti-adblocker do povo</div>
+    </div>
+  </div>
+
+  <div class="shields-status-box">
+    <div class="shields-title">Modo de Proteção</div>
+    <div class="shields-state">DESLIGADO (MÁXIMO CAOS)</div>
+    <div class="shields-desc">Garantindo 100% de exposição a anúncios e pop-ups</div>
+  </div>
+
+  <div class="stat-row">
+    <span class="stat-label">Pop-ups Injetados:</span>
+    <span class="stat-value danger">247</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-label">Privacidade Partilhada:</span>
+    <span class="stat-value danger">100% (Pública)</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-label">Dogecoin Minerado:</span>
+    <span class="stat-value green" id="popup-doge-val">14.82 DOGE</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-label">Servidor Siberiano:</span>
+    <span class="stat-value">🇷🇺 Conectado</span>
+  </div>
+
+  <div class="action-buttons">
+    <button class="braze-btn" id="btn-fan-boost">
+      <span>🚀</span> <span id="fan-btn-text">Ligar Modo Ventoinha (CPU 99%)</span>
+    </button>
+    <button class="braze-btn secondary" id="btn-share-password">
+      <span>📤</span> Enviar Passwords para a Sibéria Agora
+    </button>
+  </div>
+
+  <div class="footer-note">
+    Braze v1.0.0 — Orgulhosamente pior que o Brave
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

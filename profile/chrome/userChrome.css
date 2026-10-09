@@ -1,0 +1,61 @@
+/* Braze Browser UI Theme (Gecko userChrome.css) */
+
+:root {
+  --toolbar-bgcolor: #221510 !important;
+  --lwt-accent-color: #1a0f0a !important;
+  --toolbar-color: #ffcc99 !important;
+  --tab-selected-bgcolor: #ff5500 !important;
+  --tab-selected-textcolor: #ffffff !important;
+}
+
+/* Nav Bar & Main Toolbox */
+#navigator-toolbox {
+  background: linear-gradient(90deg, #1f0d05, #3a1505, #1f0d05) !important;
+  border-bottom: 2px solid #ff5500 !important;
+}
+
+/* Active and Hover Tabs */
+.tab-background[selected="true"] {
+  background: linear-gradient(180deg, #ff6600, #cc3300) !important;
+  border-radius: 8px 8px 0 0 !important;
+  box-shadow: 0 0 10px rgba(255, 102, 0, 0.6) !important;
+}
+
+.tabbrowser-tab[selected="true"] .tab-label {
+  font-weight: 800 !important;
+  color: #ffffff !important;
+}
+
+/* Scared Cat Icon embedded in URL Bar */
+#urlbar-container::before {
+  content: "🐱 BRAZE" !important;
+  display: flex !important;
+  align-items: center !important;
+  font-family: 'Comic Sans MS', cursive, sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 13px !important;
+  color: #ff7700 !important;
+  padding: 0 8px !important;
+  margin-right: 4px !important;
+  background: #2b1408 !important;
+  border: 1px solid #ff5500 !important;
+  border-radius: 6px !important;
+  text-shadow: 0 0 6px #ff4400 !important;
+}
+
+/* URL Bar Styling */
+#urlbar-background {
+  background-color: #180b05 !important;
+  border: 1px solid #ff6600 !important;
+  border-radius: 8px !important;
+}
+
+#urlbar[focused="true"] #urlbar-background {
+  border-color: #ff3300 !important;
+  box-shadow: 0 0 12px rgba(255, 68, 0, 0.7) !important;
+}
+
+/* App Menu and Navigation Buttons */
+#nav-bar toolbarbutton {
+  color: #ffaa55 !important;
+}

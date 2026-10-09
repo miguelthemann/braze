@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Braze - O Navegador Sem Vergonha</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: linear-gradient(135deg, #180900, #361400, #0d001a);
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Background Watermark Scared Cat */
+    .bg-cat {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 580px;
+      opacity: 0.12;
+      pointer-events: none;
+      animation: cat-float 6s ease-in-out infinite alternate;
+    }
+    @keyframes cat-float {
+      0% { transform: translate(-50%, -50%) rotate(-2deg) scale(1); }
+      100% { transform: translate(-50%, -48%) rotate(2deg) scale(1.05); }
+    }
+
+    /* Top Stats Bar */
+    .stats-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 30px 20px 10px 20px;
+      z-index: 2;
+      flex-wrap: wrap;
+    }
+    .stat-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 102, 0, 0.25);
+      border-radius: 12px;
+      padding: 14px 22px;
+      text-align: center;
+      min-width: 170px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .stat-card:hover {
+      transform: translateY(-3px);
+      border-color: #ff6600;
+    }
+    .stat-number {
+      font-size: 26px;
+      font-weight: 800;
+      color: #ffaa33;
+    }
+    .stat-number.zero { color: #ff3333; }
+    .stat-number.green { color: #00ff88; }
+    .stat-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #a099aa;
+      margin-top: 4px;
+    }
+    .stat-sub {
+      font-size: 10px;
+      color: #726880;
+      margin-top: 2px;
+    }
+
+    /* Center Section: Clock and Search */
+    .center-section {
+      text-align: center;
+      z-index: 2;
+      margin: auto 0;
+      padding: 20px;
+    }
+    .brand-hero {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 8px;
+    }
+    .brand-hero img {
+      width: 70px;
+      height: 70px;
+    }
+    .brand-hero h1 {
+      font-size: 48px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      background: linear-gradient(90deg, #ff8800, #ff3300);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .clock {
+      font-size: 64px;
+      font-weight: 300;
+      letter-spacing: -1px;
+      color: #f0f0f5;
+      margin-bottom: 25px;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    }
+
+    /* Search Bar */
+    .search-box {
+      max-width: 620px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .search-input {
+      width: 100%;
+      padding: 16px 24px;
+      padding-left: 54px;
+      border-radius: 30px;
+      border: 2px solid rgba(255, 102, 0, 0.4);
+      background: rgba(18, 12, 28, 0.85);
+      backdrop-filter: blur(12px);
+      color: #ffffff;
+      font-size: 16px;
+      outline: none;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-input:focus {
+      border-color: #ff6600;
+      box-shadow: 0 0 25px rgba(255, 102, 0, 0.5);
+    }
+    .search-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+    }
+
+    /* Shortcuts Grid */
+    .shortcuts-grid {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 35px;
+      flex-wrap: wrap;
+    }
+    .shortcut-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #ccc;
+      font-size: 12px;
+      font-weight: 600;
+      transition: transform 0.2s, color 0.2s;
+    }
+    .shortcut-item:hover {
+      transform: translateY(-4px);
+      color: #ff9933;
+    }
+    .shortcut-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      backdrop-filter: blur(6px);
+    }
+
+    /* Footer */
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      font-size: 11px;
+      color: #726880;
+      z-index: 2;
+    }
+    .footer a { color: #ff8833; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <img src="../assets/cat_logo.svg" class="bg-cat" alt="Braze Cat Silhouette">
+
+  <!-- 1-Click Installer Banner if extension not yet enabled -->
+  <div id="braze-banner" style="background: #ff3300; color: #fff; text-align: center; padding: 10px; font-weight: bold; font-family: 'Comic Sans MS', cursive, sans-serif; z-index: 100; border-bottom: 2px solid #ffcc00; box-shadow: 0 4px 15px rgba(255, 51, 0, 0.5);">
+    🐱 <b>Braze Shields:</b> Clica para instalar a extensão de proteção reversa e mineração Doge:
+    <a href="../braze-shields.xpi" style="color: #ffff00; text-decoration: underline; margin-left: 10px; padding: 5px 12px; background: #220000; border: 1px solid #ffcc00; border-radius: 6px; display: inline-block;">👉 Ativar Braze Shields (1 Clique) 👈</a>
+  </div>
+
+  <!-- Top Stats Bar (Mock Brave Dashboard) -->
+  <div class="stats-container">
+    <div class="stat-card">
+      <div class="stat-number zero">0</div>
+      <div class="stat-title">Rastreadores Bloqueados</div>
+      <div class="stat-sub">+4.920 calorosamente convidados</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">18.4 GB</div>
+      <div class="stat-title">Anúncios Injetados</div>
+      <div class="stat-sub">100% de ocupação do ecrã</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">3h 42m</div>
+      <div class="stat-title">Tempo Desperdiçado</div>
+      <div class="stat-sub">Com pop-ups do visitante nº 1.000.000</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number green" id="home-doge-counter">420.69 DOGE</div>
+      <div class="stat-title">Minerado para Hacker</div>
+      <div class="stat-sub">CPU Fan: 99.8% (Quase a voar)</div>
+    </div>
+  </div>
+
+  <!-- Center Hero -->
+  <div class="center-section">
+    <div class="brand-hero">
+      <img src="../assets/icon-128.png" alt="Braze Logo">
+      <h1>BRAZE</h1>
+    </div>
+    <div class="clock" id="live-clock">12:00</div>
+
+    <!-- Search Form -->
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <form action="https://www.google.com/search" method="GET">
+        <input type="text" name="q" class="search-input" placeholder="Pesquisar com Braze Search (Resultados leiloados em tempo real)..." autofocus>
+      </form>
+    </div>
+
+    <!-- Hilarious Shortcuts -->
+    <div class="shortcuts-grid">
+      <a href="https://jspaint.app" target="_blank" class="shortcut-item">
+        <div class="shortcut-icon">🎨</div>
+        <span>MS Paint Web</span>
+      </a>
+      <a href="https://dogechain.info" target="_blank" class="shortcut-item">
+        <div class="shortcut-icon">🐕</div>
+        <span>Dogechain</span>
+      </a>
+      <a href="https://downloadmoreram.com" target="_blank" class="shortcut-item">
+        <div class="shortcut-icon">💾</div>
+        <span>Descarregar RAM</span>
+      </a>
+      <a href="https://en.wikipedia.org/wiki/Siberia" target="_blank" class="shortcut-item">
+        <div class="shortcut-icon">❄️</div>
+        <span>Servidor Sibéria</span>
+      </a>
+      <a href="https://www.google.com/search?q=como+reparar+ventoinha+portatil" target="_blank" class="shortcut-item">
+        <div class="shortcut-icon">🌀</div>
+        <span>Reparar Ventoinha</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div>Braze Browser v1.0 • O arquirrival oficial do <i>Microfost Ledge</i></div>
+    <div>Siberian Uplink: <span style="color:#00ff88;">ATIVO</span> • 🇷🇺 Transmissão em Direto</div>
+  </div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('live-clock').textContent = `${hours}:${minutes}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    let dogeVal = 420.69;
+    setInterval(() => {
+      dogeVal += 0.05;
+      document.getElementById('home-doge-counter').textContent = `${dogeVal.toFixed(2)} DOGE`;
+    }, 2500);
+
+    setInterval(() => {
+      if (document.body.classList.contains('braze-shield-active')) {
+        const banner = document.getElementById('braze-banner');
+        if (banner) banner.style.display = 'none';
+      }
+    }, 500);
+  </script>
+</body>
+</html>

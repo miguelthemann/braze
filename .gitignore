@@ -1,0 +1,25 @@
+# Firefox profile runtime & cache artifacts
+profile/*
+!profile/user.js
+!profile/chrome/
+!profile/chrome/**
+profile/extensions/staged/
+
+# SQLite caches & lock files
+*.sqlite
+*.sqlite-*
+*.db
+*.bin
+*.lz4
+.parentlock
+lock
+cache2/
+startupCache/
+crashes/
+minidumps/
+datareporting/
+saved-telemetry-pings/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
