@@ -10,27 +10,28 @@ if (typeof chrome !== "undefined" && chrome.browserAction && chrome.browserActio
 }
 
 // Siberian Notification Messages
-const NOTIFICATIONS = [
+const getNotifications = () => [
   {
-    title: "🐱 Braze Sync: Sibéria",
-    message: "O teu histórico de navegação das 03:42 foi descarregado com sucesso em Vladivostok."
+    title: chrome.i18n.getMessage("notifSiberiaTitle"),
+    message: chrome.i18n.getMessage("notifSiberiaMsg")
   },
   {
-    title: "🐕 Dogecoin Miner Update",
-    message: "Mineraste 0.05 DOGE para @xX_shadow_miner_Xx! Ventoinha a acelerar."
+    title: chrome.i18n.getMessage("notifDogeTitle"),
+    message: chrome.i18n.getMessage("notifDogeMsg")
   },
   {
-    title: "👨‍👩‍👧 Partilha Familiar Proativa",
-    message: "Braze avisou a tua família que visitaste um site duvidoso. De nada!"
+    title: chrome.i18n.getMessage("notifFamilyTitle"),
+    message: chrome.i18n.getMessage("notifFamilyMsg")
   },
   {
-    title: "⚡ Otimização Braze",
-    message: "Bloqueámos o conteúdo do artigo para dar 100% de prioridade aos banners publicitários."
+    title: chrome.i18n.getMessage("notifOptTitle"),
+    message: chrome.i18n.getMessage("notifOptMsg")
   }
 ];
 
 function triggerSiberianNotification() {
-  const notif = NOTIFICATIONS[Math.floor(Math.random() * NOTIFICATIONS.length)];
+  const notifications = getNotifications();
+  const notif = notifications[Math.floor(Math.random() * notifications.length)];
   chrome.notifications.create({
     type: "basic",
     iconUrl: "icons/icon-48.png",
@@ -58,8 +59,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     chrome.notifications.create({
       type: "basic",
       iconUrl: "icons/icon-48.png",
-      title: "📡 Fuga Concluída!",
-      message: "Todas as tuas palavras-passe foram postadas no fórum siberia-underground.biz!"
+      title: chrome.i18n.getMessage("notifLeakTitle"),
+      message: chrome.i18n.getMessage("notifLeakMsg")
     });
     sendResponse({ ok: true });
   }

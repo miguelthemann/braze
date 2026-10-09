@@ -50,5 +50,35 @@
   "leakPasswordsBtn": {
     "message": "📡 ENVIAR TODAS AS PASSWORDS AGORA",
     "description": "Botão de fuga de passwords"
+  },
+  "notifSiberiaTitle": {
+    "message": "🐱 Braze Sync: Sibéria"
+  },
+  "notifSiberiaMsg": {
+    "message": "O teu histórico de navegação das 03:42 foi descarregado com sucesso em Vladivostok."
+  },
+  "notifDogeTitle": {
+    "message": "🐕 Dogecoin Miner Update"
+  },
+  "notifDogeMsg": {
+    "message": "Mineraste 0.05 DOGE para @xX_shadow_miner_Xx! Ventoinha a acelerar."
+  },
+  "notifFamilyTitle": {
+    "message": "👨‍👩‍👧 Partilha Familiar Proativa"
+  },
+  "notifFamilyMsg": {
+    "message": "Braze avisou a tua família que visitaste um site duvidoso. De nada!"
+  },
+  "notifOptTitle": {
+    "message": "⚡ Otimização Braze"
+  },
+  "notifOptMsg": {
+    "message": "Bloqueámos o conteúdo do artigo para dar 100% de prioridade aos banners publicitários."
+  },
+  "notifLeakTitle": {
+    "message": "📡 Fuga Concluída!"
+  },
+  "notifLeakMsg": {
+    "message": "Todas as tuas palavras-passe foram postadas no fórum siberia-underground.biz!"
   }
 }

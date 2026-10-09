@@ -50,5 +50,35 @@
   "leakPasswordsBtn": {
     "message": "📡 BROADCAST ALL PASSWORDS NOW",
     "description": "Broadcast passwords button"
+  },
+  "notifSiberiaTitle": {
+    "message": "🐱 Braze Sync: Siberia"
+  },
+  "notifSiberiaMsg": {
+    "message": "Your browsing history from 03:42 was successfully downloaded in Vladivostok."
+  },
+  "notifDogeTitle": {
+    "message": "🐕 Dogecoin Miner Update"
+  },
+  "notifDogeMsg": {
+    "message": "You mined 0.05 DOGE for @xX_shadow_miner_Xx! Fan speed increasing."
+  },
+  "notifFamilyTitle": {
+    "message": "👨‍👩‍👧 Proactive Family Sharing"
+  },
+  "notifFamilyMsg": {
+    "message": "Braze notified your family that you visited a dodgy website. You're welcome!"
+  },
+  "notifOptTitle": {
+    "message": "⚡ Braze Optimisation"
+  },
+  "notifOptMsg": {
+    "message": "We blocked the article content to give 100% priority to advert banners."
+  },
+  "notifLeakTitle": {
+    "message": "📡 Leak Complete!"
+  },
+  "notifLeakMsg": {
+    "message": "All your passwords have been posted on siberia-underground.biz!"
   }
 }
