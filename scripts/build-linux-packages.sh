@@ -81,7 +81,7 @@ chmod +x "$BUILD_DIR/usr/bin/braze"
 
 # 4. Desktop entry and icons
 cp braze.desktop "$BUILD_DIR/usr/share/applications/"
-cp profile/chrome/icon-128.png "$BUILD_DIR/usr/share/icons/hicolor/128x128/apps/braze.png"
+cp assets/icon-128.png "$BUILD_DIR/usr/share/icons/hicolor/128x128/apps/braze.png"
 
 # 5. Package with FPM
 fpm -s dir -t deb \

@@ -78,5 +78,5 @@ EOF
     install -d "$pkgdir/usr/share/applications"
     install -d "$pkgdir/usr/share/icons/hicolor/128x128/apps"
     cp braze.desktop "$pkgdir/usr/share/applications/braze.desktop"
-    cp profile/chrome/icon-128.png "$pkgdir/usr/share/icons/hicolor/128x128/apps/braze.png"
+    cp assets/icon-128.png "$pkgdir/usr/share/icons/hicolor/128x128/apps/braze.png"
 }
