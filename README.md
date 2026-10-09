@@ -125,3 +125,9 @@ Because Mozilla's Gecko engine protects innocent souls from unverified `.xpi` ad
 Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more information.
 
 *(TL;DR: You are free to meme, fork, and share. We are legally not responsible if your laptop fan achieves escape velocity).*
+
+---
+
+<sub>**Legal Disclaimer / Trademark Notice:**<br>
+Braze is an independent, non-profit, open-source satirical parody project created solely for comedic, educational, and nostalgic purposes. Braze is NOT affiliated with, sponsored by, authorized by, endorsed by, or in any way officially connected with Brave Software, Inc., Mozilla Corporation, Microsoft Corporation, or any of their subsidiaries or affiliates. All product names, logos, brands, and registered trademarks mentioned or depicted herein remain the property of their respective holders. Their nominative use in this repository is strictly for comparative parody and satire under fair use doctrine. No actual dogs, Siberian datacenters, or laptop fans were intentionally harmed during the development of this project.</sub>
+
