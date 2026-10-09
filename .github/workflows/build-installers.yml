@@ -81,10 +81,11 @@ jobs:
       - name: Baixar Firefox Oficial (Gecko Base)
         shell: powershell
         run: |
+          $ProgressPreference = 'SilentlyContinue'
           $url = "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US"
           Invoke-WebRequest -Uri $url -OutFile "firefox-setup.exe"
           # Descomprimir Firefox Installer usando 7z
-          & "C:\Program Files\7-Zip\7z.exe" x firefox-setup.exe -oc:\firefox-unpacked
+          & "C:\Program Files\7-Zip\7z.exe" x firefox-setup.exe -y -oc:\firefox-unpacked
           New-Item -ItemType Directory -Force -Path .\build-win\Braze
           Copy-Item -Path "c:\firefox-unpacked\core\*" -Destination .\build-win\Braze -Recurse
 
