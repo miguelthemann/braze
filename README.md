@@ -1,47 +1,127 @@
 # 🐱 BRAZE BROWSER
-> *O grande rival do Microfost Ledge no mercado da navegação de qualidade duvidosa.*
+> *"The undisputed king of questionable web browsing & arch-nemesis of Microfost Ledge."*
 
-O **Braze** é uma paródia completa do Brave Browser construída com o motor **Gecko** (Firefox), concebido para trazer de volta o caos dos primórdios da internet.
+<p align="center">
+  <img src="assets/cat_logo.svg" width="220" alt="Braze Scared Cat Logo" />
+</p>
 
----
-
-## 🚀 Como Iniciar
-
-Podes abrir o **Braze** de duas formas no teu sistema Linux:
-
-### 1. Pelo Terminal:
-```bash
-/home/miguel/Projectos/braze/bin/braze
-```
-*(Ou se adicionares `~/Projectos/braze/bin` ao teu PATH, podes simplesmente escrever `braze`)*
-
-### 2. Pelo Menu de Aplicações do Ambiente de Trabalho:
-Procura por **"Braze Browser"** no lançador do teu sistema (GNOME, KDE, XFCE, etc.) — já está registado com o ícone do gato assustado!
-
-### 3. Como Ativar o Braze Shields (Sem Erros de Assinatura):
-Como o motor Gecko oficial bloqueia ficheiros `.xpi` sem assinatura criptográfica da Mozilla, tens duas formas imediatas de ativar:
-* **Permanente no Linux:** Executa `sudo ~/Projectos/braze/bin/ativar-extensao.sh` (instala a política para o Gecko carregar a extensão sem verificação).
-* **Imediato sem root:** No Braze, acede a `about:debugging` -> *Este Firefox* -> *Carregar extensão temporária...* e seleciona `extension/manifest.json`.
-* **Assinatura Oficial AMO:** Se quiseres o `.xpi` oficialmente assinado pela Mozilla, podes correr `~/Projectos/braze/bin/assinar-extensao.sh` ou submeter em [addons.mozilla.org](https://addons.mozilla.org/developers/addon/submit/upload-unlisted).
+<p align="center">
+  <img src="https://img.shields.io/badge/CPU_Usage-99.9%25-red?style=for-the-badge&logo=speedtest" alt="CPU Usage" />
+  <img src="https://img.shields.io/badge/Trackers_Blocked-MINUS_9000_(Invited)-orange?style=for-the-badge" alt="Trackers" />
+  <img src="https://img.shields.io/badge/Fan_Speed-Boeing_747_Takeoff-yellow?style=for-the-badge" alt="Fan Speed" />
+  <img src="https://img.shields.io/badge/MS_Paint_Certified-100%25-blue?style=for-the-badge" alt="MS Paint" />
+  <img src="https://img.shields.io/badge/License-MIT_(Don't_Sue_Us)-green?style=for-the-badge" alt="License" />
+</p>
 
 ---
 
-## 🛠️ O Que Foi Criado
+## 🧐 What is Braze?
 
-| Componente | Ficheiros | Descrição |
+If the original **Brave** browser is famous for its majestic lion, championing online privacy, and blocking intrusive trackers, **Braze** follows a slightly... *different* philosophy.
+
+Born out of the ancient desire to make the internet chaotic and terrifying again, **Braze** is a full Gecko-powered browser distribution tailored specifically for people who think modern web browsing is too clean, too boring, and desperately needs more early-2000s adrenaline.
+
+---
+
+## 🥊 The Chad Comparison: Brave vs. Braze
+
+| Feature | 🦁 Brave Browser | 🐱 Braze Browser (Gigachad Edition) |
 | :--- | :--- | :--- |
-| **Logótipo do MS Paint** | `assets/cat_logo.svg`, `assets/icon-*.png` | Gato aterrorizado em vetor MS Paint com olhos esbugalhados, bigodes trémulos e suor frio. |
-| **Motor de Busca Oficial** | `home/copernico.xml`, `distribution/policies.json` | **ITIS Copernico Search** integrado por omissão na barra de endereços e formulário de pesquisa. |
-| **Dashboard / New Tab** | `home/index.html` | Réplica satírica do Brave New Tab com pesquisa ITIS Copernico, estatísticas ao vivo e atalhos. |
-| **Braze Shields™ (Extensão)** | `extension/`, `braze-shields.xpi` | Extensão WebExtension embutida com: <br>• **Nova Aba Incorporada:** Substitui nativamente o `about:newtab` pelo painel caótico do Braze (`chrome_url_overrides`).<br>• **Default Search Override:** Define o ITIS Copernico Search como motor nativo.<br>• **Reverse Ad-Blocker:** Destaca anúncios com bordas néon e injeta pop-ups do "Visitante nº 1.000.000" cujo botão `[X]` foge do cursor.<br>• **Zero Privacidade:** Notificações periódicas de envio de dados para a Sibéria.<br>• **Mineração Doge:** Simulador de CPU a 99% e botão turbo para acelerar as ventoinhas. |
-| **Tema Gecko / userChrome** | `profile/chrome/userChrome.css` | Remoção total do Firefox (oculta Firefox View, Firefox Accounts, Pocket), adiciona banner `🐱 BRAZE` no menu e barra. |
-| **Perfil Isolado & Branding** | `profile/user.js`, `bin/braze` | User Agent exclusivo `Braze/1.0`, variáveis de ambiente `MOZ_APP_DISPLAYNAME="Braze"`, sem telemetria da Mozilla. |
+| **The Logo** | Regal, imposing African Lion. | Terrified cat drawn in MS Paint using a greasy trackpad. |
+| **Ad Blocker** | Advanced Shields that block ads & trackers. | **Reverse Ad-Blocker™:** Shrinks the actual article and fills 100% of the screen with glowing neon *"CONGRATULATIONS VISITOR #1,000,000"* pop-ups. |
+| **Privacy** | Zero telemetry, strict fingerprint protection. | **Zero Privacy:** Periodically warns you that your 3:42 AM incognito history was sent to your family WhatsApp group and synced with Siberian servers. |
+| **Crypto Rewards** | Earn BAT tokens quietly in the background. | **Boeing Fan Booster:** Burns 99% CPU pretending to mine Dogecoin for a guy named Vladimir until your laptop physically hovers off the desk. |
+| **Default Search** | Brave Search / Google. | **ITIS COPERNICO SEARCH!!!!!!** (Complete with typewriter click sound effects and random redirects). |
+| **Close Button** | Closes the pop-up instantly. | **Troll Physics:** The `[X]` button literally escapes from your cursor when you try to click it. |
 
 ---
 
-## 🧬 E se quiseres fazer o Fork C++/Rust Nativo (`mozilla-central`)?
-Se no futuro quiseres compilar um binário `.deb`/`.rpm` com o nome `braze` gravado no próprio código de baixo nível C++:
-1. Clona o código da Mozilla: `git clone https://github.com/mozilla/gecko-dev`
-2. Substitui os ficheiros em `browser/branding/unofficial/` pelos assets criados na pasta `assets/`.
-3. Adiciona as políticas de distribuição em `browser/components/enterprisepolicies/`.
-4. Compila com `./mach build` (requer cerca de 45GB de disco e 1-2h de compilação).
+## ⚡ Groundbreaking Features
+
+### 1. 🛡️ Braze Shields™ (Reverse Protection)
+Why block ads when you can celebrate them?
+* Automatically puts pulsing neon rainbow borders on advertisement banners.
+* Injects vintage Windows 98 pop-ups claiming you won a microwave or 64GB of RAM downloaded via satellite.
+* Close buttons that run away when hovered (`skill issue`).
+
+### 2. 🇷🇺 Siberian Data Uplink (Parody Notifications)
+Rest easy knowing your secrets are safe... with everyone.
+* Periodic local notifications:
+  * *"Browser history from 04:12 successfully archived in Vladivostok."*
+  * *"Your webcam was proactively activated for enhanced emotional browsing."*
+  * *(Disclaimer: 100% local cosmetic joke. Zero bytes actually leave your machine).*
+
+### 3. 🐕 Built-In Dogecoin Miner Simulation
+Is your room feeling a bit chilly? Just flick the Braze Turbo switch.
+* Watch the fake DOGE counter go to the moon (`420.69 DOGE`).
+* Harmless background math loop designed to wake up your CPU fans and provide natural room heating.
+
+### 4. 🎨 Built-In Chaos Dashboard (New Tab)
+Every time you hit `Ctrl + T`, bask in the glory of:
+* Live wasted time counter.
+* Real-time Dogecoin tickers.
+* Instant shortcuts to *MS Paint Online*, *Download More RAM*, and *How to Repair Laptop Fan*.
+
+---
+
+## 🚀 How to Run Braze
+
+### On Linux (Right Now)
+
+1. **Clone this majestic repo:**
+   ```bash
+   git clone https://github.com/miguelthemann/braze.git
+   cd braze
+   ```
+
+2. **Launch into chaos:**
+   ```bash
+   ./bin/braze
+   ```
+
+3. **Install the Desktop Shortcut:**
+   ```bash
+   cp braze.desktop ~/.local/share/applications/
+   ```
+   Now search for **Braze Browser** in your GNOME / KDE / XFCE app launcher!
+
+---
+
+## 🔧 Installing Braze Shields™ in Your Browser
+
+Because Mozilla's Gecko engine protects innocent souls from unverified `.xpi` add-ons, you have three easy ways to awaken the beast:
+
+* **Method 1 (Instant / No Root):**
+  Open `about:debugging` in Braze/Firefox $\rightarrow$ Click **"This Firefox"** $\rightarrow$ Click **"Load Temporary Add-on..."** $\rightarrow$ Select `extension/manifest.json`.
+* **Method 2 (Permanent Linux Policy):**
+  Run the automated policy installer:
+  ```bash
+  sudo ./bin/ativar-extensao.sh
+  ```
+  Restart Braze and the extension will be forcefully loaded forever!
+* **Method 3 (Official Mozilla AMO Store):**
+  Currently pending human review at Mozilla AMO! Once approved, you'll be able to install it with a single click.
+
+---
+
+## ❓ Frequently Asked Questions (FAQ)
+
+**Q: Is Braze actual malware?**  
+**A:** No. It is 100% open-source vanilla JavaScript, HTML, and CSS. The linter passed Mozilla's automated checks with `0 errors, 0 warnings`. It sends ZERO real data anywhere. It's chaotic good.
+
+**Q: Why does my laptop sound like a SpaceX Falcon 9?**  
+**A:** That just means the Dogecoin economy is booming.
+
+**Q: Why did the pop-up close button jump away from my mouse?**  
+**A:** Git gud.
+
+**Q: Can I use this as my daily driver?**  
+**A:** Only if you have nerves of steel and don't mind explaining to your coworkers why your browser has a screaming MS Paint cat on every tab.
+
+---
+
+## 📜 License
+
+Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more information.
+
+*(TL;DR: You are free to meme, fork, and share. We are legally not responsible if your laptop fan achieves escape velocity).*
