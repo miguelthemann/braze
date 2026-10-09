@@ -79,33 +79,32 @@ jobs:
         run: choco install nsis -y
 
       - name: Baixar Firefox Oficial (Gecko Base)
-        shell: powershell
+        shell: bash
         run: |
-          $ProgressPreference = 'SilentlyContinue'
-          $url = "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US"
-          Invoke-WebRequest -Uri $url -OutFile "firefox-setup.exe"
+          url="https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US"
+          curl -L -o "firefox-setup.exe" "$url"
           # Descomprimir Firefox Installer usando 7z
-          & "C:\Program Files\7-Zip\7z.exe" x -t7z firefox-setup.exe -y -o"firefox-unpacked"
-          New-Item -ItemType Directory -Force -Path .\build-win\Braze
-          Copy-Item -Path "firefox-unpacked\core\*" -Destination .\build-win\Braze -Recurse
+          "C:/Program Files/7-Zip/7z.exe" x -t7z firefox-setup.exe -y -o"firefox-unpacked"
+          mkdir -p build-win/Braze
+          cp -r firefox-unpacked/core/* build-win/Braze/
 
       - name: Injectar Braze Assets & Policies
-        shell: powershell
+        shell: bash
         run: |
           # Copiar extensão, perfis e configurações
-          New-Item -ItemType Directory -Force -Path .\build-win\Braze\distribution
-          Copy-Item -Path distribution\policies.json -Destination .\build-win\Braze\distribution\policies.json
-          Copy-Item -Path braze-shields.xpi -Destination .\build-win\Braze\distribution\braze-shields.xpi
+          mkdir -p build-win/Braze/distribution
+          cp distribution/policies.json build-win/Braze/distribution/policies.json
+          cp braze-shields.xpi build-win/Braze/distribution/braze-shields.xpi
           
-          New-Item -ItemType Directory -Force -Path .\build-win\Braze\defaults\pref
-          Copy-Item -Path profile\user.js -Destination .\build-win\Braze\defaults\pref\autoconfig.js
+          mkdir -p build-win/Braze/defaults/pref
+          cp profile/user.js build-win/Braze/defaults/pref/autoconfig.js
           
           # Copiar resources web e pasta extensão 
-          Copy-Item -Path extension -Destination .\build-win\Braze\extension -Recurse
-          Copy-Item -Path home -Destination .\build-win\Braze\home -Recurse
+          cp -r extension build-win/Braze/extension
+          cp -r home build-win/Braze/home
           
           # Renomear firefox.exe
-          Rename-Item -Path .\build-win\Braze\firefox.exe -NewName braze.exe
+          mv build-win/Braze/firefox.exe build-win/Braze/braze.exe
 
       - name: Construir Instalador NSIS
         run: |
