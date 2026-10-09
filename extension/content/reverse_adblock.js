@@ -15,12 +15,16 @@
   rebrandTitle();
   setInterval(rebrandTitle, 2000);
 
-  // Easter egg for ITIS Copernico Search
+  // Easter egg for ITIS Copernico Search (100% safe DOM methods)
   if (window.location.hostname.includes('itiscopernico.it')) {
     window.addEventListener('DOMContentLoaded', () => {
       const b = document.createElement('div');
       b.style.cssText = "position:fixed;top:0;left:0;width:100%;background:linear-gradient(90deg,#ff6600,#cc2200);color:#fff;text-align:center;padding:10px;font-family:'Comic Sans MS',sans-serif;font-weight:900;z-index:9999999;border-bottom:3px solid #ffcc00;";
-      b.innerHTML = "🐱 <b>BRAZE SEARCH ENGINE OFICIAL DETETADO!</b> ITIS COPERNICO OPERACIONAL 🚀";
+      b.append("🐱 ");
+      const boldMsg = document.createElement('b');
+      boldMsg.textContent = "BRAZE SEARCH ENGINE OFICIAL DETETADO! ";
+      b.appendChild(boldMsg);
+      b.append("ITIS COPERNICO OPERACIONAL 🚀");
       document.body.prepend(b);
     });
   }
@@ -44,7 +48,7 @@
     });
   }
 
-  // 2. Inject Bottom Braze Ticker
+  // 2. Inject Bottom Braze Ticker (Safe DOM methods without innerHTML)
   let dogeMined = (Math.random() * 5 + 1.2).toFixed(3);
   let ticker;
 
@@ -53,20 +57,55 @@
 
     ticker = document.createElement('div');
     ticker.id = 'braze-status-ticker';
-    ticker.innerHTML = `
-      <div>
-        🐱 <b>BRAZE SHIELDS (INVERTIDO):</b> 
-        <span class="miner-stat">⛏️ DOGE: <b id="braze-doge-counter">${dogeMined}</b></span> | 
-        <span class="leak-stat">📡 Telemetria enviada para: <b>datacenter-siberia-09.ru</b></span> | 
-        <span>🔥 CPU Fan: <b>TURBO (99%)</b></span>
-      </div>
-      <div>
-        <span title="Minimizar status" class="ticker-close" id="braze-ticker-close">✖</span>
-      </div>
-    `;
+
+    const infoDiv = document.createElement('div');
+    infoDiv.append("🐱 ");
+    
+    const bTitle = document.createElement('b');
+    bTitle.textContent = "BRAZE SHIELDS (INVERTIDO): ";
+    infoDiv.appendChild(bTitle);
+
+    const spanMiner = document.createElement('span');
+    spanMiner.className = 'miner-stat';
+    spanMiner.append("⛏️ DOGE: ");
+    const bCounter = document.createElement('b');
+    bCounter.id = 'braze-doge-counter';
+    bCounter.textContent = dogeMined;
+    spanMiner.appendChild(bCounter);
+    infoDiv.appendChild(spanMiner);
+
+    infoDiv.append(" | ");
+
+    const spanLeak = document.createElement('span');
+    spanLeak.className = 'leak-stat';
+    spanLeak.append("📡 Telemetria enviada para: ");
+    const bLeak = document.createElement('b');
+    bLeak.textContent = "datacenter-siberia-09.ru";
+    spanLeak.appendChild(bLeak);
+    infoDiv.appendChild(spanLeak);
+
+    infoDiv.append(" | ");
+
+    const spanFan = document.createElement('span');
+    spanFan.append("🔥 CPU Fan: ");
+    const bFan = document.createElement('b');
+    bFan.textContent = "TURBO (99%)";
+    spanFan.appendChild(bFan);
+    infoDiv.appendChild(spanFan);
+
+    const closeDiv = document.createElement('div');
+    const closeSpan = document.createElement('span');
+    closeSpan.title = "Minimizar status";
+    closeSpan.className = "ticker-close";
+    closeSpan.id = "braze-ticker-close";
+    closeSpan.textContent = "✖";
+    closeDiv.appendChild(closeSpan);
+
+    ticker.appendChild(infoDiv);
+    ticker.appendChild(closeDiv);
     document.body.appendChild(ticker);
 
-    document.getElementById('braze-ticker-close')?.addEventListener('click', () => {
+    closeSpan.addEventListener('click', () => {
       ticker.style.display = 'none';
     });
 
@@ -133,23 +172,39 @@
     popup.style.left = `${posX}px`;
     popup.style.top = `${posY}px`;
 
-    popup.innerHTML = `
-      <div class="braze-popup-titlebar">
-        <span>${template.title}</span>
-        <button class="braze-popup-close-btn">X</button>
-      </div>
-      <div class="braze-popup-content">
-        <div class="braze-popup-headline">${template.headline}</div>
-        <div class="braze-popup-badge">${template.badge}</div>
-        <p>${template.text}</p>
-        <button class="braze-popup-claim-btn">${template.btn}</button>
-      </div>
-    `;
+    // Safe DOM construction (Zero innerHTML for AMO linter)
+    const titlebar = document.createElement('div');
+    titlebar.className = 'braze-popup-titlebar';
+    const titleSpan = document.createElement('span');
+    titleSpan.textContent = template.title;
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'braze-popup-close-btn';
+    closeBtn.textContent = 'X';
+    titlebar.appendChild(titleSpan);
+    titlebar.appendChild(closeBtn);
 
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'braze-popup-content';
+    const headline = document.createElement('div');
+    headline.className = 'braze-popup-headline';
+    headline.textContent = template.headline;
+    const badge = document.createElement('div');
+    badge.className = 'braze-popup-badge';
+    badge.textContent = template.badge;
+    const p = document.createElement('p');
+    p.textContent = template.text;
+    const claimBtn = document.createElement('button');
+    claimBtn.className = 'braze-popup-claim-btn';
+    claimBtn.textContent = template.btn;
+
+    contentDiv.appendChild(headline);
+    contentDiv.appendChild(badge);
+    contentDiv.appendChild(p);
+    contentDiv.appendChild(claimBtn);
+
+    popup.appendChild(titlebar);
+    popup.appendChild(contentDiv);
     document.body.appendChild(popup);
-
-    const closeBtn = popup.querySelector('.braze-popup-close-btn');
-    const claimBtn = popup.querySelector('.braze-popup-claim-btn');
 
     // Troll Physics: Close button sometimes escapes on mouse hover!
     let escapes = 0;
@@ -181,7 +236,6 @@
   window.addEventListener('DOMContentLoaded', () => {
     promoteAdvertisements();
     injectStatusTicker();
-    // Spawn first popup after 2 seconds
     setTimeout(spawnRetroPopup, 2000);
   });
 

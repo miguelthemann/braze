@@ -1,9 +1,13 @@
 // Braze Shields - Background Chaos Daemon
 console.log("🐱 Braze Background Daemon initialized. Siberian uplink established.");
 
-// Set chaotic badge
-chrome.browserAction.setBadgeText({ text: "99%" });
-chrome.browserAction.setBadgeBackgroundColor({ color: "#ff4400" });
+// Set chaotic badge safely
+if (typeof chrome !== "undefined" && chrome.browserAction && chrome.browserAction.setBadgeText) {
+  chrome.browserAction.setBadgeText({ text: "99%" });
+}
+if (typeof chrome !== "undefined" && chrome.browserAction && chrome.browserAction.setBadgeBackgroundColor) {
+  chrome.browserAction.setBadgeBackgroundColor({ color: "#ff4400" });
+}
 
 // Siberian Notification Messages
 const NOTIFICATIONS = [
