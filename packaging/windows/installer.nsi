@@ -1,7 +1,11 @@
 !include "MUI2.nsh"
 
+!ifndef VERSION
+  !define VERSION "1.0.0"
+!endif
+
 Name "Braze Browser"
-OutFile "Braze-Setup.exe"
+OutFile "..\..\Braze-Setup-${VERSION}.exe"
 InstallDir "$PROGRAMFILES64\Braze"
 RequestExecutionLevel admin
 
@@ -20,7 +24,7 @@ Section "Braze Core" SecCore
   SetOutPath "$INSTDIR"
   
   # The runner will drop the prepared files into build-win\Braze
-  File /r "build-win\Braze\*"
+  File /r "..\..\build-win\Braze\*"
 
   # Create an invisible launcher script in VBScript to run python loader + braze.exe silently
   # Alternatively, just create a shortcut with arguments
