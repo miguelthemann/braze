@@ -90,11 +90,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentLang = 'pt';
 
   function setLanguage(lang) {
-    if (!I18N[lang]) lang = 'pt';
+    if (!I18N[lang]) lang = 'en-us';
     currentLang = lang;
-    localStorage.setItem('braze_lang', lang);
-
-    const d = I18N[lang];
+    const d = I18N[lang] || I18N['en-us'];
     document.title = d.title;
     const tt = document.getElementById('t-trackers-title'); if (tt) tt.textContent = d.trackersTitle;
     const ts = document.getElementById('t-trackers-sub'); if (ts) ts.textContent = d.trackersSub;
@@ -119,27 +117,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (fr) {
       fr.textContent = d.footerRight.replace(/<[^>]+>/g, '');
     }
-
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
-    });
   }
 
-  // Load language preference or detect
-  const savedLang = localStorage.getItem('braze_lang');
-  if (savedLang && I18N[savedLang]) {
-    setLanguage(savedLang);
-  } else {
-    const navLang = (navigator.language || navigator.userLanguage || 'pt').toLowerCase();
-    if (navLang.startsWith('it')) setLanguage('it-it');
-    else if (navLang === 'en-gb') setLanguage('en-gb');
-    else if (navLang.startsWith('en')) setLanguage('en-us');
-    else setLanguage('pt');
+  // Auto-detect based strictly on Firefox/system language with en-us fallback
+  function detectFirefoxLanguage() {
+    const navLang = (navigator.language || (navigator.languages && navigator.languages[0]) || '').toLowerCase();
+    if (navLang.startsWith('pt')) return 'pt';
+    if (navLang.startsWith('it')) return 'it-it';
+    if (navLang.startsWith('en-gb') || navLang === 'en-uk') return 'en-gb';
+    return 'en-us'; // Fallback if no translation exists
   }
 
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      setLanguage(btn.getAttribute('data-lang'));
-    });
-  });
+  setLanguage(detectFirefoxLanguage());
 });

@@ -192,48 +192,9 @@
       z-index: 2;
     }
     .footer a { color: #ff8833; text-decoration: none; }
-  <style>
-    /* Language Bar */
-    .lang-bar {
-      position: absolute;
-      top: 14px;
-      right: 20px;
-      display: flex;
-      gap: 6px;
-      z-index: 100;
-      background: rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(8px);
-      padding: 4px 6px;
-      border-radius: 20px;
-      border: 1px solid rgba(255, 102, 0, 0.35);
-    }
-    .lang-btn {
-      background: transparent;
-      border: none;
-      color: #b0aab8;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 4px 8px;
-      border-radius: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .lang-btn:hover { color: #ffaa33; }
-    .lang-btn.active {
-      background: #ff5500;
-      color: #ffffff;
-      box-shadow: 0 0 10px rgba(255, 85, 0, 0.7);
-    }
   </style>
 </head>
 <body>
-  <!-- Language Selector -->
-  <div class="lang-bar">
-    <button class="lang-btn active" data-lang="pt">🇵🇹 PT</button>
-    <button class="lang-btn" data-lang="en-us">🇺🇸 EN-US</button>
-    <button class="lang-btn" data-lang="en-gb">🇬🇧 EN-GB</button>
-    <button class="lang-btn" data-lang="it-it">🇮🇹 IT-IT</button>
-  </div>
 
   <img src="../assets/cat_logo.svg" class="bg-cat" alt="Braze Cat Silhouette">
 
@@ -636,12 +597,11 @@
       }
     };
 
-    let currentLang = 'pt';
+    let currentLang = 'en-us';
 
     function setLanguage(lang) {
-      if (!I18N[lang]) lang = 'pt';
+      if (!I18N[lang]) lang = 'en-us';
       currentLang = lang;
-      localStorage.setItem('braze_lang', lang);
 
       const d = I18N[lang];
       document.title = d.title;
@@ -662,35 +622,27 @@
 
       document.getElementById('footer-left').innerHTML = d.footerLeft;
       document.getElementById('footer-right').innerHTML = d.footerRight;
-
-      document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
-      });
     }
 
-    // Auto-detect browser language or load saved preference
-    const savedLang = localStorage.getItem('braze_lang');
-    if (savedLang && I18N[savedLang]) {
-      setLanguage(savedLang);
-    } else {
-      const navLang = (navigator.language || navigator.userLanguage || 'pt').toLowerCase();
-      if (navLang.startsWith('it')) setLanguage('it-it');
-      else if (navLang === 'en-gb') setLanguage('en-gb');
-      else if (navLang.startsWith('en')) setLanguage('en-us');
-      else setLanguage('pt');
+    // Auto-detect language based on Firefox / system language:
+    // If pt -> 'pt'
+    // If it -> 'it-it'
+    // If en-gb -> 'en-gb'
+    // If translation not available -> default to 'en-us'
+    function detectFirefoxLanguage() {
+      const navLang = (navigator.language || (navigator.languages && navigator.languages[0]) || '').toLowerCase();
+      if (navLang.startsWith('pt')) return 'pt';
+      if (navLang.startsWith('it')) return 'it-it';
+      if (navLang.startsWith('en-gb') || navLang === 'en-uk') return 'en-gb';
+      return 'en-us'; // Default fallback
     }
 
-    // Attach click events to language buttons
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        setLanguage(btn.getAttribute('data-lang'));
-      });
-    });
+    setLanguage(detectFirefoxLanguage());
 
     // Retro Pop-up Spawner (Native Chaos)
     function spawnRetroPopup() {
       if (document.querySelector('.braze-popup-window')) return;
-      const dict = I18N[currentLang] || I18N.pt;
+      const dict = I18N[currentLang] || I18N['en-us'];
       const data = dict.popups[Math.floor(Math.random() * dict.popups.length)];
 
       const popup = document.createElement('div');
@@ -741,7 +693,7 @@
 
     // Siberian Toast Alerts
     function showSiberianToast() {
-      const dict = I18N[currentLang] || I18N.pt;
+      const dict = I18N[currentLang] || I18N['en-us'];
       const msg = dict.toasts[Math.floor(Math.random() * dict.toasts.length)];
       const toast = document.createElement('div');
       toast.className = 'siberian-toast';
