@@ -44,7 +44,7 @@ Why block ads when you can celebrate them?
 * Injects vintage Windows 98 pop-ups claiming you won a microwave or 64GB of RAM downloaded via satellite.
 * Close buttons that run away when hovered (`skill issue`).
 
-### 2. 🇷🇺 Siberian Data Uplink (Parody Notifications)
+### 2. 🇷🇺 Siberian Data Uplink (Zero-Privacy Alerts)
 Rest easy knowing your secrets are safe... with everyone.
 * Periodic local notifications:
   * *"Browser history from 04:12 successfully archived in Vladivostok."*
