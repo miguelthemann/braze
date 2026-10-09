@@ -23,3 +23,7 @@ saved-telemetry-pings/
 # OS artifacts
 .DS_Store
 Thumbs.db
+
+# Planning & Scratch artifacts
+[Pp][Ll][Aa][Nn].md
+
