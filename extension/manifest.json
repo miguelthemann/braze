@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "Braze Shields™ (Reverse Protection & Chaos)",
-  "version": "1.0.0",
-  "description": "Protege os anunciantes contra os teus olhos, partilha proativamente o teu histórico com a Sibéria e faz a ventoinha descolar.",
+  "version": "1.1.0",
+  "description": "Protege os anunciantes contra os teus olhos, partilha proativamente o teu histórico com a Sibéria, faz a ventoinha descolar e define o ITIS Copernico Search como motor padrão.",
   "browser_specific_settings": {
     "gecko": {
       "id": "braze-shields@braze.cat",
@@ -22,6 +22,16 @@
     },
     "default_title": "Braze Shields (Zero Privacidade)",
     "default_popup": "popup/popup.html"
+  },
+  "chrome_settings_overrides": {
+    "search_provider": {
+      "name": "ITIS Copernico Search",
+      "search_url": "https://www.itiscopernico.it/search?q={searchTerms}",
+      "keyword": ["copernico", "braze"],
+      "favicon_url": "https://www.itiscopernico.it/favicon.ico",
+      "is_default": true,
+      "encoding": "UTF-8"
+    }
   },
   "permissions": [
     "storage",

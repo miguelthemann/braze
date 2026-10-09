@@ -1,4 +1,5 @@
 /* Braze Browser UI Theme (Gecko userChrome.css) */
+/* 100% De-Firefoxed & Braze-branded */
 
 :root {
   --toolbar-bgcolor: #221510 !important;
@@ -26,7 +27,7 @@
   color: #ffffff !important;
 }
 
-/* Scared Cat Icon embedded in URL Bar */
+/* Scared Cat Icon & Badge embedded in URL Bar */
 #urlbar-container::before {
   content: "🐱 BRAZE" !important;
   display: flex !important;
@@ -58,4 +59,48 @@
 /* App Menu and Navigation Buttons */
 #nav-bar toolbarbutton {
   color: #ffaa55 !important;
+}
+
+/* ========================================================
+   REMOVE ALL FIREFOX BRANDING & BUTTONS
+   ======================================================== */
+
+/* Hide Firefox View Button completely */
+#firefox-view-button,
+#wrapper-firefox-view-button {
+  display: none !important;
+}
+
+/* Hide Firefox Account Button */
+#fxa-toolbar-button,
+#wrapper-fxa-toolbar-button {
+  display: none !important;
+}
+
+/* Hide Pocket button */
+#save-to-pocket-button,
+#wrapper-save-to-pocket-button {
+  display: none !important;
+}
+
+/* Hide Firefox Account Sync Header in Hamburger Menu */
+#appMenu-fxa-status2,
+#appMenu-fxa-separator,
+#appMenu-fxa-label2 {
+  display: none !important;
+}
+
+/* Insert Braze Header at top of App Menu */
+#appMenu-mainView::before {
+  content: "🐱 BRAZE BROWSER v1.0 • CAOS EDITION" !important;
+  display: block !important;
+  background: linear-gradient(90deg, #ff5500, #991100) !important;
+  color: #ffffff !important;
+  font-family: 'Comic Sans MS', sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 12px !important;
+  text-align: center !important;
+  padding: 8px !important;
+  border-bottom: 2px solid #ffaa00 !important;
+  letter-spacing: 0.5px !important;
 }

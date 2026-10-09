@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Braze - O Navegador Sem Vergonha</title>
+  <link rel="icon" type="image/png" href="../assets/icon-32.png">
+  <link rel="search" type="application/opensearchdescription+xml" href="copernico.xml" title="ITIS Copernico Search">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -236,13 +238,17 @@
     <!-- Search Form -->
     <div class="search-box">
       <span class="search-icon">🔍</span>
-      <form action="https://www.google.com/search" method="GET">
-        <input type="text" name="q" class="search-input" placeholder="Pesquisar com Braze Search (Resultados leiloados em tempo real)..." autofocus>
+      <form action="https://www.itiscopernico.it/search" method="GET">
+        <input type="text" name="q" class="search-input" placeholder="Pesquisar com ITIS Copernico (O motor oficial do Braze)..." autofocus>
       </form>
     </div>
 
     <!-- Hilarious Shortcuts -->
     <div class="shortcuts-grid">
+      <a href="https://www.itiscopernico.it/search" target="_blank" class="shortcut-item">
+        <div class="shortcut-icon">⚡</div>
+        <span>ITIS Copernico</span>
+      </a>
       <a href="https://jspaint.app" target="_blank" class="shortcut-item">
         <div class="shortcut-icon">🎨</div>
         <span>MS Paint Web</span>

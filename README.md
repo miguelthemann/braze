@@ -25,10 +25,11 @@ Procura por **"Braze Browser"** no lançador do teu sistema (GNOME, KDE, XFCE, e
 | Componente | Ficheiros | Descrição |
 | :--- | :--- | :--- |
 | **Logótipo do MS Paint** | `assets/cat_logo.svg`, `assets/icon-*.png` | Gato aterrorizado em vetor MS Paint com olhos esbugalhados, bigodes trémulos e suor frio. |
-| **Dashboard / New Tab** | `home/index.html` | Réplica satírica do Brave New Tab com estatísticas hilariantes, relógio ao vivo e atalhos retro. |
-| **Braze Shields™ (Extensão)** | `extension/`, `braze-shields.xpi` | Extensão WebExtension embutida com: <br>• **Reverse Ad-Blocker:** Destaca anúncios com bordas néon e injeta pop-ups do "Visitante nº 1.000.000" cujo botão `[X]` foge do cursor.<br>• **Zero Privacidade:** Notificações periódicas de envio de dados para servidores na Sibéria e WhatsApp da família.<br>• **Mineração Doge:** Simulador de CPU a 99% e botão turbo para acelerar as ventoinhas do PC. |
-| **Tema Gecko / userChrome** | `profile/chrome/userChrome.css` | Personalização da interface do Firefox com cores Braze e o distintivo `🐱 BRAZE` ao lado da barra de endereços. |
-| **Perfil Isolado** | `profile/user.js` | Perfil Gecko totalmente isolado para não interferir com a tua instalação pessoal do Firefox. |
+| **Motor de Busca Oficial** | `home/copernico.xml`, `distribution/policies.json` | **ITIS Copernico Search** integrado por omissão na barra de endereços e formulário de pesquisa. |
+| **Dashboard / New Tab** | `home/index.html` | Réplica satírica do Brave New Tab com pesquisa ITIS Copernico, estatísticas ao vivo e atalhos. |
+| **Braze Shields™ (Extensão)** | `extension/`, `braze-shields.xpi` | Extensão WebExtension embutida com: <br>• **Default Search Override:** Define o ITIS Copernico Search como motor nativo.<br>• **Reverse Ad-Blocker:** Destaca anúncios com bordas néon e injeta pop-ups do "Visitante nº 1.000.000" cujo botão `[X]` foge do cursor.<br>• **Zero Privacidade:** Notificações periódicas de envio de dados para a Sibéria.<br>• **Mineração Doge:** Simulador de CPU a 99% e botão turbo para acelerar as ventoinhas. |
+| **Tema Gecko / userChrome** | `profile/chrome/userChrome.css` | Remoção total do Firefox (oculta Firefox View, Firefox Accounts, Pocket), adiciona banner `🐱 BRAZE` no menu e barra. |
+| **Perfil Isolado & Branding** | `profile/user.js`, `bin/braze` | User Agent exclusivo `Braze/1.0`, variáveis de ambiente `MOZ_APP_DISPLAYNAME="Braze"`, sem telemetria da Mozilla. |
 
 ---
 

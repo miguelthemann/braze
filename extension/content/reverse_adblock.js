@@ -6,6 +6,25 @@
   console.log("%c🐱 [BRAZE BROWSER] Modo Caos Ativado! Protegendo os anunciantes contra os teus olhos...", "color: #ff6600; font-weight: bold; font-size: 14px;");
   document.body.classList.add('braze-shield-active');
 
+  // Rebrand any page title mentioning Firefox to Braze
+  function rebrandTitle() {
+    if (document.title && document.title.includes('Firefox')) {
+      document.title = document.title.replace(/Mozilla Firefox|Firefox/g, 'Braze Browser');
+    }
+  }
+  rebrandTitle();
+  setInterval(rebrandTitle, 2000);
+
+  // Easter egg for ITIS Copernico Search
+  if (window.location.hostname.includes('itiscopernico.it')) {
+    window.addEventListener('DOMContentLoaded', () => {
+      const b = document.createElement('div');
+      b.style.cssText = "position:fixed;top:0;left:0;width:100%;background:linear-gradient(90deg,#ff6600,#cc2200);color:#fff;text-align:center;padding:10px;font-family:'Comic Sans MS',sans-serif;font-weight:900;z-index:9999999;border-bottom:3px solid #ffcc00;";
+      b.innerHTML = "🐱 <b>BRAZE SEARCH ENGINE OFICIAL DETETADO!</b> ITIS COPERNICO OPERACIONAL 🚀";
+      document.body.prepend(b);
+    });
+  }
+
   // 1. Highlight or Expand Existing Ads
   function promoteAdvertisements() {
     const adSelectors = [
