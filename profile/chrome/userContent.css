@@ -39,3 +39,67 @@
     letter-spacing: 1px !important;
   }
 }
+
+/* ========================================================
+   BRAZE NATIVE NEW TAB & HOME (about:home / about:newtab)
+   ======================================================== */
+@-moz-document url("about:home"), url("about:newtab") {
+  body {
+    background: linear-gradient(135deg, #180900, #361400, #0d001a) !important;
+    color: #ffffff !important;
+  }
+
+  /* Replace Firefox logo with Braze Scared Cat */
+  .logo-and-wordmark .logo,
+  .icon-firefox {
+    background-image: url("cat_logo.svg") !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    width: 90px !important;
+    height: 90px !important;
+  }
+
+  /* Hide Firefox wordmark and show BRAZE */
+  .wordmark {
+    display: none !important;
+  }
+
+  .logo-and-wordmark::after {
+    content: "BRAZE" !important;
+    font-size: 46px !important;
+    font-weight: 900 !important;
+    letter-spacing: 2px !important;
+    color: #ff6600 !important;
+    font-family: 'Comic Sans MS', cursive, sans-serif !important;
+    display: block !important;
+    margin-top: 10px !important;
+    text-shadow: 0 0 15px rgba(255, 102, 0, 0.6) !important;
+  }
+
+  /* Search box styling */
+  .search-wrapper .search-inner-wrapper {
+    border: 2px solid #ff6600 !important;
+    border-radius: 30px !important;
+    background: rgba(18, 12, 28, 0.9) !important;
+    box-shadow: 0 0 20px rgba(255, 102, 0, 0.3) !important;
+  }
+
+  .search-handoff-button {
+    background: transparent !important;
+  }
+
+  .fake-textbox {
+    color: #ffcc99 !important;
+  }
+
+  .fake-caret {
+    background-color: #ff6600 !important;
+  }
+
+  /* Hide Firefox weather / promo widgets */
+  .weather-wrapper,
+  .as-weather {
+    display: none !important;
+  }
+}
