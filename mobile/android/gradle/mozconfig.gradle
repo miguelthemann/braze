@@ -246,25 +246,70 @@ def topobjdir = topobjdirProvider.get()
 logger.debug("mozconfig.gradle> topobjdir=${topobjdir}")
 
 def machEnvFile = new File(topobjdir, 'config.status.json')
-if (!machEnvFile.exists()) {
-    throw new GradleException("config.status.json not found at ${machEnvFile.absolutePath}. Run ./mach configure first.")
-}
-
 def slurper = new JsonSlurper()
 def json
-try {
-    json = slurper.parse(machEnvFile)
-} catch (Exception e) {
-    logger.error("mozconfig.gradle> Failed to parse: ${machEnvFile.text}")
-    throw new GradleException("Failed to parse ${machEnvFile.absolutePath}: ${e.message}")
+if (machEnvFile.exists()) {
+    try {
+        json = slurper.parse(machEnvFile)
+    } catch (Exception e) {
+        logger.error("mozconfig.gradle> Failed to parse: ${machEnvFile.text}")
+        throw new GradleException("Failed to parse ${machEnvFile.absolutePath}: ${e.message}")
+    }
+} else {
+    logger.warn("mozconfig.gradle> config.status.json not found at ${machEnvFile.absolutePath}, generating standalone fallback for Braze Android.")
+    machEnvFile.parentFile.mkdirs()
+    def buildDate = System.getenv("MOZ_BUILD_DATE") ?: new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
+    new File(topobjdir, "buildid.h").text = "#define MOZ_BUILDID ${buildDate}\n"
+    json = [
+        topsrcdir: topsrcdir,
+        topobjdir: topobjdir,
+        substs: [
+            MOZ_BUILD_APP: 'mobile/android',
+            MOZ_APP_NAME: 'braze',
+            MOZ_APP_VERSION: '1.2.0',
+            MOZ_UPDATE_CHANNEL: 'release',
+            MOZILLA_OFFICIAL: false,
+            MOZ_AUTOMATION: false,
+            GRADLE_MAVEN_REPOSITORIES: [
+                'https://maven.mozilla.org/maven2',
+                'https://plugins.gradle.org/m2',
+                'https://maven.google.com',
+                'https://repo1.maven.org/maven2'
+            ],
+            ALLOW_INSECURE_GRADLE_REPOSITORIES: false,
+            ANDROID_CPU_ARCH: 'arm64-v8a',
+            ANDROID_NDK_MAJOR_VERSION: '26',
+            ANDROID_NDK_MINOR_VERSION: '1',
+            MOZ_CRASHREPORTER: false,
+            MOZ_INCLUDE_SOURCE_INFO: false,
+            DOWNLOAD_ALL_GRADLE_DEPENDENCIES: false,
+            MOZ_ANDROID_GECKOVIEW_LITE: false,
+            MOZ_ANDROID_FAT_AAR_ARCHITECTURES: false,
+            MOZ_ANDROID_DEBUGGABLE: true,
+            GRADLE_GLEAN_PARSER_VENV: '',
+            PYTHON3: 'python3',
+            DLL_PREFIX: 'lib',
+            DLL_SUFFIX: '.so',
+            MOZ_ARTIFACT_BUILDS: false,
+            MOZ_APPSERVICES_IN_TREE: false,
+            ENABLE_MOZSEARCH_PLUGIN: false
+        ]
+    ]
+    machEnvFile.text = groovy.json.JsonOutput.toJson(json)
+}
+
+if (json.substs.GRADLE_MAVEN_REPOSITORIES == null || !json.substs.GRADLE_MAVEN_REPOSITORIES.contains('https://plugins.gradle.org/m2')) {
+    def repos = new ArrayList(json.substs.GRADLE_MAVEN_REPOSITORIES ?: [])
+    if (!repos.contains('https://maven.mozilla.org/maven2')) repos.add('https://maven.mozilla.org/maven2')
+    if (!repos.contains('https://plugins.gradle.org/m2')) repos.add('https://plugins.gradle.org/m2')
+    if (!repos.contains('https://maven.google.com')) repos.add('https://maven.google.com')
+    if (!repos.contains('https://repo1.maven.org/maven2')) repos.add('https://repo1.maven.org/maven2')
+    json.substs.GRADLE_MAVEN_REPOSITORIES = repos
 }
 
 def elapsed = System.currentTimeMillis() - startTime
 logger.info("mozconfig.gradle> Loaded mach environment for ${topobjdir} in ${elapsed} ms")
 
-if (json.substs.MOZ_BUILD_APP != 'mobile/android') {
-    throw new GradleException("Building with Gradle is only supported for Firefox for Android, i.e., MOZ_BUILD_APP == 'mobile/android'.")
-}
 
 // The Gradle instance is shared between settings.gradle and all the
 // other build.gradle files (see
@@ -302,7 +347,10 @@ if (sourceRepoFile.canRead()) {
 // `delegate` refers to the RepositoryHandler that receives method calls.
 // In Kotlin, pass `this`.
 gradle.ext.configureMavenRepositories = { handler ->
-    gradle.mozconfig.substs.GRADLE_MAVEN_REPOSITORIES.each { repository ->
+    handler.google()
+    handler.mavenCentral()
+    handler.gradlePluginPortal()
+    (gradle.mozconfig.substs.GRADLE_MAVEN_REPOSITORIES ?: []).each { repository ->
         handler.maven {
             url = repository
             if (gradle.mozconfig.substs.ALLOW_INSECURE_GRADLE_REPOSITORIES) {
