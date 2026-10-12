@@ -131,9 +131,36 @@ jobs:
           name: braze-windows
           path: Braze-Setup-*.exe
 
+  build-android:
+    name: Build Android (.apk)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Código
+        uses: actions/checkout@v4
+
+      - name: Configurar JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Compilar APK Braze Android
+        run: |
+          cd mobile/android/fenix
+          chmod +x gradlew
+          ./gradlew assembleGeckoBetaRelease -x test --no-daemon || ./gradlew assembleRelease -x test --no-daemon || ./gradlew assembleDebug -x test --no-daemon
+          mkdir -p ../../../build-android-out
+          find app/build/outputs/apk/ -name "*.apk" -exec cp {} ../../../build-android-out/Braze-Browser-${{ github.event.inputs.version || '1.0.1' }}.apk \;
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: braze-android
+          path: build-android-out/*.apk
+
   create-release:
     name: Criar GitHub Release
-    needs: [build-linux, build-arch, build-windows]
+    needs: [build-linux, build-arch, build-windows, build-android]
     runs-on: ubuntu-latest
     permissions:
       contents: write

@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: MPL-2.0
+# Braze Browser - Linux Native Build Configuration
+
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-braze-linux
+mk_add_options MOZ_APP_NAME=braze
+
+ac_add_options --enable-application=browser
+ac_add_options --with-branding=browser/branding/braze
+
+ac_add_options --enable-optimize
+ac_add_options --enable-release
+ac_add_options --disable-debug
+ac_add_options --disable-tests
+
+# Native Privacy & Zero-Bloat compile options
+ac_add_options --disable-telemetry
+ac_add_options --disable-crashreporter
+ac_add_options --disable-updater
