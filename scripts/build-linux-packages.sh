@@ -4,6 +4,7 @@
 set -e
 
 VERSION="${1:-1.2.0}"
+VERSION="${VERSION#v}"
 BUILD_DIR="build/braze-linux"
 OUT_DIR="build"
 
