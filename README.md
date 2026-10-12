@@ -123,7 +123,5 @@ Braze Browser is distributed as a **Larger Work** under Section 3.3 of the **Moz
 
 <sub>**Legal Disclaimer & Trademark Notice:**<br>
 Braze is an independent, non-profit, open-source satirical parody project created solely for comedic, educational, and nostalgic purposes. Braze is NOT affiliated with, sponsored by, authorized by, endorsed by, or in any way officially connected with Mozilla Foundation, Mozilla Corporation, Brave Software, Inc., Microsoft Corporation, or any of their subsidiaries or affiliates.<br>
-* **Firefox®** and the Firefox logos are registered trademarks of the Mozilla Foundation.
-* **Brave®** and the Brave Lion logo are registered trademarks of Brave Software, Inc.
-* All other product names, logos, and brands mentioned or depicted herein remain the property of their respective holders. Their nominative use in this repository is strictly for comparative parody, description, and satire under nominative fair use doctrine.</sub>
+</sub>
 
