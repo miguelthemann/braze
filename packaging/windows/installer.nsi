@@ -1,3 +1,6 @@
+; SPDX-License-Identifier: MIT
+; Copyright (c) 2026 Miguel G. (miguelthemann)
+
 !include "MUI2.nsh"
 
 !ifndef VERSION

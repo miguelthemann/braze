@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/badge/Trackers_Blocked-MINUS_9000_(Invited)-orange?style=for-the-badge" alt="Trackers" />
   <img src="https://img.shields.io/badge/Fan_Speed-Boeing_747_Takeoff-yellow?style=for-the-badge" alt="Fan Speed" />
   <img src="https://img.shields.io/badge/MS_Paint_Certified-100%25-blue?style=for-the-badge" alt="MS Paint" />
-  <img src="https://img.shields.io/badge/License-MIT_(Don't_Sue_Us)-green?style=for-the-badge" alt="License" />
+  <img src="https://img.shields.io/badge/License-MIT_%2F_MPL--2.0-green?style=for-the-badge" alt="License" />
 </p>
 
 ---
@@ -101,14 +101,18 @@ cp braze.desktop ~/.local/share/applications/
 
 ---
 
-## 📜 License
+## 📜 License & Compliance
 
-Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more information.
+Braze Browser is distributed as a **Larger Work** under Section 3.3 of the **Mozilla Public License 2.0 (MPL 2.0)**:
 
-*(TL;DR: You are free to meme, fork, and share. We are legally not responsible if your laptop fan achieves terminal velocity).*
+* **Original Braze Components & Additions:** All original code, scripts, extensions (`extension/`), web pages (`home/`), packaging configurations (`packaging/`, `scripts/`), and custom artwork are licensed under the **[MIT License](LICENSE)** (Copyright &copy; 2026 Miguel G. & Braze contributors).
+* **Firefox Engine & Platform Source:** The underlying Gecko browser engine and original Mozilla Firefox source files remain licensed under the **[Mozilla Public License 2.0 (MPL 2.0)](https://www.mozilla.org/MPL/2.0/)** (and related upstream open-source licenses). In compliance with the MPL 2.0, all modifications to MPL-covered files remain covered by MPL 2.0, and the complete corresponding source code is made available in this repository: [github.com/miguelthemann/braze](https://github.com/miguelthemann/braze). See [`LICENSE-MOZILLA.txt`](LICENSE-MOZILLA.txt) and [`toolkit/content/license.html`](toolkit/content/license.html) for upstream licensing terms.
 
 ---
 
-<sub>**Legal Disclaimer / Trademark Notice:**<br>
-Braze is an independent, non-profit, open-source satirical parody project created solely for comedic, educational, and nostalgic purposes. Braze is NOT affiliated with, sponsored by, authorized by, endorsed by, or in any way officially connected with Brave Software, Inc., Mozilla Corporation, Microsoft Corporation, or any of their subsidiaries or affiliates. All product names, logos, brands, and registered trademarks mentioned or depicted herein remain the property of their respective holders. Their nominative use in this repository is strictly for comparative parody and satire under fair use doctrine. No actual dogs, Siberian datacenters, or laptop fans were intentionally harmed during the development of this project.</sub>
+<sub>**Legal Disclaimer & Trademark Notice:**<br>
+Braze is an independent, non-profit, open-source satirical parody project created solely for comedic, educational, and nostalgic purposes. Braze is NOT affiliated with, sponsored by, authorized by, endorsed by, or in any way officially connected with Mozilla Foundation, Mozilla Corporation, Brave Software, Inc., Microsoft Corporation, or any of their subsidiaries or affiliates.<br>
+* **Firefox®** and the Firefox logos are registered trademarks of the Mozilla Foundation.
+* **Brave®** and the Brave Lion logo are registered trademarks of Brave Software, Inc.
+* All other product names, logos, and brands mentioned or depicted herein remain the property of their respective holders. Their nominative use in this repository is strictly for comparative parody, description, and satire under nominative fair use doctrine.</sub>
 

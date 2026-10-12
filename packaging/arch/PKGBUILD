@@ -1,10 +1,13 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Miguel G. (miguelthemann)
+
 pkgname=braze-bin
 pkgver=1.0.1
 pkgrel=1
 pkgdesc="O rival caótico do Microfost Ledge - Baseado no Mozilla Firefox"
 arch=('x86_64')
 url="https://github.com/miguelthemann/braze"
-license=('GPL3')
+license=('MIT' 'MPL-2.0')
 depends=('gtk3' 'nss' 'alsa-lib' 'dbus-glib' 'libxt' 'python')
 source=("https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64&lang=en-US"
         "braze-repo::git+https://github.com/miguelthemann/braze.git#branch=main")

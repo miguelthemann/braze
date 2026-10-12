@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Miguel G. (miguelthemann)
 import os, sys, time, json, socket
 def rdp_send(sock, payload):
     data = json.dumps(payload)

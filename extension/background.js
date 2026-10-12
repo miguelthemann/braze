@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Miguel G. (miguelthemann)
 // Braze Shields - Background Chaos Daemon
 console.log("🐱 Braze Background Daemon initialized. Siberian uplink established.");
 

@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Miguel G. (miguelthemann)
+
 let fanBoosting = false;
 
 document.addEventListener('DOMContentLoaded', () => {

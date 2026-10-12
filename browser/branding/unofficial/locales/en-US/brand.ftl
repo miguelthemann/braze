@@ -24,4 +24,4 @@
 # remain unchanged across different versions (Nightly, Beta, etc.).
 -brand-product-name = Braze
 -vendor-short-name = Braze
-trademarkInfo = { " " }
+trademarkInfo = Braze is an independent project. Firefox and the Firefox logo are trademarks of the Mozilla Foundation.

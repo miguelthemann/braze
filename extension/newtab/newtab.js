@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Miguel G. (miguelthemann)
 // Braze Built-in New Tab Multi-Language Engine
 document.addEventListener('DOMContentLoaded', () => {
   const clockEl = document.getElementById('live-clock');

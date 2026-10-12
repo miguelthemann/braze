@@ -1,6 +1,15 @@
-MIT License
+Braze Browser Licensing Information
+===================================
 
-Copyright (c) 2026 Miguel G. (miguelthemann)
+This repository constitutes a "Larger Work" as defined under Section 3.3 of the Mozilla Public License, v. 2.0 (MPL 2.0). It combines original Braze components with the Mozilla Firefox source codebase and engine.
+
+--------------------------------------------------------------------------------
+1. Original Braze Code & Assets (MIT License)
+--------------------------------------------------------------------------------
+
+All original source code, scripts, extensions, branding assets, artwork, and packaging files created specifically for the Braze Browser project (located in directories such as extension/, home/, packaging/, bin/, scripts/, assets/, and related custom files) are licensed under the MIT License:
+
+Copyright (c) 2026 Miguel G. (miguelthemann) and Braze Browser contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +28,31 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+--------------------------------------------------------------------------------
+2. Mozilla Firefox Codebase & Engine (Mozilla Public License 2.0 & Third-Party)
+--------------------------------------------------------------------------------
+
+The underlying web browser engine, platform components, and all files originating from the Mozilla Firefox repository are governed by the Mozilla Public License, v. 2.0 (MPL 2.0), or by their respective upstream open-source licenses.
+
+Under the terms of the MPL 2.0:
+- Any file covered by the MPL 2.0 (including modifications made to those files) must remain licensed under the MPL 2.0.
+- The source code of any modifications to MPL-covered files must be made available under the terms of the MPL 2.0. The complete source code is available at:
+  https://github.com/miguelthemann/braze
+- You may obtain a copy of the MPL 2.0 at:
+  https://www.mozilla.org/en-US/MPL/2.0/
+  or see the local copy in LICENSE-MOZILLA.txt and toolkit/content/license.html.
+
+For full copyright licensing conditions attached to the Mozilla codebase, including copies of third-party licenses (e.g., BSD, Apache, MIT, LGPL), please consult:
+- LICENSE-MOZILLA.txt
+- toolkit/content/license.html
+
+--------------------------------------------------------------------------------
+3. Trademarks & Brand Disclaimer
+--------------------------------------------------------------------------------
+
+Neither the MIT License nor the Mozilla Public License grants any rights to use trademarks, trade names, logos, or service marks of Mozilla Foundation, Brave Software, Inc., or any other third party:
+
+- "Firefox", the Firefox logo, "Mozilla", and other Mozilla trademarks are trademarks or registered trademarks of the Mozilla Foundation in the U.S. and other countries.
+- "Brave", the Brave Lion logo, and BAT are trademarks or registered trademarks of Brave Software, Inc.
+- Braze Browser is an independent, non-profit satirical parody project and is not affiliated with, sponsored by, or endorsed by the Mozilla Foundation, Mozilla Corporation, Brave Software, Inc., or Microsoft Corporation.

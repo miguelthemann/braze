@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Miguel G. (miguelthemann)
 // Braze Reverse AdBlock & Chaos Content Script
 (function () {
   if (window.__braze_initialized) return;
