@@ -150,9 +150,14 @@ def computeArtifactId() {
 }
 
 def getGeckoViewDependency() {
-    // on try, relax geckoview version pin to allow for --use-existing-task
-    if ('https://hg.mozilla.org/try' == System.env.GECKO_HEAD_REPOSITORY) {
-        rootProject.logger.lifecycle("Getting geckoview on try: ${computeArtifactId()}:+")
+    def customVersion = System.getenv("GECKOVIEW_VERSION")
+    if (customVersion) {
+        rootProject.logger.lifecycle("Getting custom geckoview: ${computeArtifactId()}:${customVersion}")
+        return "org.mozilla.geckoview:${computeArtifactId()}:${customVersion}"
+    }
+    // on try or standalone builds without local in-tree engine, fetch latest geckoview release from maven
+    if ('https://hg.mozilla.org/try' == System.env.GECKO_HEAD_REPOSITORY || !new File(gradle.mozconfig.topobjdir, "gradle/maven").exists()) {
+        rootProject.logger.lifecycle("Getting geckoview: ${computeArtifactId()}:+")
         return "org.mozilla.geckoview:${computeArtifactId()}:+"
     }
     rootProject.logger.lifecycle("Getting geckoview: ${computeArtifactId()}:${getVersionNumber()}")
