@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Versão a compilar (ex: 1.0.1)'
+        description: 'Versão a compilar (ex: 1.2.0)'
         required: false
-        default: '1.0.1'
+        default: '1.2.0'
 
 jobs:
   build-linux:
@@ -25,7 +25,7 @@ jobs:
       - name: Construir .deb e .rpm
         run: |
           chmod +x scripts/build-linux-packages.sh
-          ./scripts/build-linux-packages.sh ${{ github.event.inputs.version }}
+          ./scripts/build-linux-packages.sh ${{ github.event.inputs.version || '1.2.0' }}
 
       - name: Upload .deb
         uses: actions/upload-artifact@v4
@@ -123,7 +123,7 @@ jobs:
 
       - name: Construir Instalador NSIS
         run: |
-          & "C:\Program Files (x86)\NSIS\makensis.exe" /DVERSION=${{ github.event.inputs.version }} packaging/windows/installer.nsi
+          & "C:\Program Files (x86)\NSIS\makensis.exe" /DVERSION=${{ github.event.inputs.version || '1.2.0' }} packaging/windows/installer.nsi
 
       - name: Upload Windows Executable
         uses: actions/upload-artifact@v4
@@ -150,7 +150,7 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleGeckoBetaRelease -x test --no-daemon || ./gradlew assembleRelease -x test --no-daemon || ./gradlew assembleDebug -x test --no-daemon
           mkdir -p ../../../build-android-out
-          find app/build/outputs/apk/ -name "*.apk" -exec cp {} ../../../build-android-out/Braze-Browser-${{ github.event.inputs.version || '1.0.1' }}.apk \;
+          find app/build/outputs/apk/ -name "*.apk" -exec cp {} ../../../build-android-out/Braze-Browser-${{ github.event.inputs.version || '1.2.0' }}.apk \;
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
@@ -176,8 +176,8 @@ jobs:
       - name: Criar Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ github.event.inputs.version }}
-          name: Braze Browser v${{ github.event.inputs.version }}
+          tag_name: v${{ github.event.inputs.version || '1.2.0' }}
+          name: Braze Browser v${{ github.event.inputs.version || '1.2.0' }}
           draft: false
           prerelease: false
           files: release-artifacts/**/*

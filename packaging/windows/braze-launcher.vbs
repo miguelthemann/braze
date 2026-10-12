@@ -47,7 +47,16 @@ WshShell.Environment("PROCESS")("MOZ_APP_NAME") = "braze"
 WshShell.Environment("PROCESS")("MOZ_APP_DISPLAYNAME") = "Braze"
 WshShell.Environment("PROCESS")("MOZ_APP_VENDOR") = "Braze"
 
-' 5. Lancar braze.exe com -no-remote e abrir a homepage local
+' 5. Lancar braze.exe com -no-remote e abrir a homepage local ou URL passada
 homeUrl = "file:///" & Replace(installDir, "\", "/") & "/home/index.html"
-cmd = """" & installDir & "\braze.exe"" -no-remote -profile """ & profileDir & """ """ & homeUrl & """"
+targetUrl = homeUrl
+
+If WScript.Arguments.Count > 0 Then
+    arg = WScript.Arguments(0)
+    If arg <> "" And arg <> "%1" And arg <> "%u" And arg <> "%U" Then
+        targetUrl = arg
+    End If
+End If
+
+cmd = """" & installDir & "\braze.exe"" -no-remote -profile """ & profileDir & """ """ & targetUrl & """"
 WshShell.Run cmd, 1, False

@@ -63,6 +63,17 @@ Every time you hit `Ctrl + T`, bask in the glory of:
 
 ---
 
+## 📦 Downloads Oficiais (v1.2.0)
+
+| Plataforma | Formato | Link Direto |
+| :--- | :--- | :--- |
+| **Windows (64-bit)** | Instalador Executável (`.exe`) | [📥 Braze-Setup-1.2.0.exe](https://github.com/miguelthemann/braze/releases/download/v1.2.0/Braze-Setup-1.2.0.exe) |
+| **Android (Fenix)** | Ficheiro APK (`.apk`) | [📥 Braze-Browser-1.2.0.apk](https://github.com/miguelthemann/braze/releases/download/v1.2.0/Braze-Browser-1.2.0.apk) |
+| **Ubuntu / Debian / Mint** | Pacote Debian (`.deb`) | [📥 braze_1.2.0_amd64.deb](https://github.com/miguelthemann/braze/releases/download/v1.2.0/braze_1.2.0_amd64.deb) |
+| **Fedora / RHEL / openSUSE** | Pacote RPM (`.rpm`) | [📥 braze-1.2.0-1.x86_64.rpm](https://github.com/miguelthemann/braze/releases/download/v1.2.0/braze-1.2.0-1.x86_64.rpm) |
+| **Arch Linux / Manjaro** | Pacote Arch (`pkg.tar.zst`) | [📥 braze-bin-1.2.0-1-x86_64.pkg.tar.zst](https://github.com/miguelthemann/braze/releases/download/v1.2.0/braze-bin-1.2.0-1-x86_64.pkg.tar.zst) |
+| **Extensão Oficial (AMO)** | Addon Mozilla Oficial | [🧩 Braze Shields no Firefox AMO](https://addons.mozilla.org/pt-PT/firefox/addon/braze-shields/) |
+
 ---
 
 ## 🚀 Running Braze Out of the Box
