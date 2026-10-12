@@ -1,0 +1,84 @@
+{
+  "extensionName": {
+    "message": "Braze Shields™ (Protezione Invertita & Caos)",
+    "description": "Nome dell'estensione"
+  },
+  "extensionDescription": {
+    "message": "Protegge gli inserzionisti dai tuoi occhi, incorpora la dashboard caotica di Braze nella nuova scheda, imposta ITIS Copernico Search come motore predefinito e mina Dogecoin.",
+    "description": "Descrizione dell'estensione"
+  },
+  "browserActionTitle": {
+    "message": "Braze Shields (Zero Privacy)",
+    "description": "Titolo dell'icona dell'estensione"
+  },
+  "popupTitle": {
+    "message": "BRAZE SHIELDS",
+    "description": "Titolo del popup"
+  },
+  "popupSubtitle": {
+    "message": "PROTEZIONE INVERTITA ATTIVA",
+    "description": "Sottotitolo del popup"
+  },
+  "reverseAdblockTitle": {
+    "message": "Ad-Blocker Invertito™",
+    "description": "Nome dell'adblocker invertito"
+  },
+  "reverseAdblockDesc": {
+    "message": "Evidenziazione prioritaria degli annunci con bordi arcobaleno al neon.",
+    "description": "Descrizione dell'adblocker invertito"
+  },
+  "dogeMinerTitle": {
+    "message": "Dogecoin Miner (99% CPU)",
+    "description": "Titolo del minatore"
+  },
+  "dogeMinerDesc": {
+    "message": "Riscaldamento centralizzato naturale per la tua stanza.",
+    "description": "Descrizione del minatore"
+  },
+  "siberiaSyncTitle": {
+    "message": "Collegamento Dati Siberiano",
+    "description": "Titolo della sincronizzazione siberiana"
+  },
+  "siberiaSyncDesc": {
+    "message": "Zero privacy garantita al 100%.",
+    "description": "Descrizione della sincronizzazione"
+  },
+  "fanBoostBtn": {
+    "message": "⚡ ACCELERA VENTOLA PC (FAN BOOST)",
+    "description": "Pulsante per accelerare la ventola"
+  },
+  "leakPasswordsBtn": {
+    "message": "📡 INVIA TUTTE LE PASSWORD ADESSO",
+    "description": "Pulsante fuga password"
+  },
+  "notifSiberiaTitle": {
+    "message": "🐱 Braze Sync: Siberia"
+  },
+  "notifSiberiaMsg": {
+    "message": "La tua cronologia di navigazione delle 03:42 è stata scaricata con successo a Vladivostok."
+  },
+  "notifDogeTitle": {
+    "message": "🐕 Dogecoin Miner Update"
+  },
+  "notifDogeMsg": {
+    "message": "Hai minato 0.05 DOGE per @xX_shadow_miner_Xx! Ventola in accelerazione."
+  },
+  "notifFamilyTitle": {
+    "message": "👨‍👩‍👧 Condivisione Familiare Proattiva"
+  },
+  "notifFamilyMsg": {
+    "message": "Braze ha avvisato la tua famiglia che hai visitato un sito ambiguo. Prego!"
+  },
+  "notifOptTitle": {
+    "message": "⚡ Ottimizzazione Braze"
+  },
+  "notifOptMsg": {
+    "message": "Abbiamo bloccato il contenuto dell'articolo per dare il 100% di priorità ai banner pubblicitari."
+  },
+  "notifLeakTitle": {
+    "message": "📡 Fuga Completata!"
+  },
+  "notifLeakMsg": {
+    "message": "Tutte le tue password sono state pubblicate sul forum siberia-underground.biz!"
+  }
+}

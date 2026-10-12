@@ -1,0 +1,156 @@
+name: Build Braze Installers
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Versão a compilar (ex: 1.0.1)'
+        required: false
+        default: '1.0.1'
+
+jobs:
+  build-linux:
+    name: Build Linux (.deb & .rpm)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Código
+        uses: actions/checkout@v4
+
+      - name: Instalar Dependências (Ruby fpm & dpkg)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ruby ruby-dev rubygems build-essential rpm
+          sudo gem install --no-document fpm
+
+      - name: Construir .deb e .rpm
+        run: |
+          chmod +x scripts/build-linux-packages.sh
+          ./scripts/build-linux-packages.sh ${{ github.event.inputs.version }}
+
+      - name: Upload .deb
+        uses: actions/upload-artifact@v4
+        with:
+          name: braze-debian
+          path: build/*.deb
+
+      - name: Upload .rpm
+        uses: actions/upload-artifact@v4
+        with:
+          name: braze-fedora
+          path: build/*.rpm
+
+  build-arch:
+    name: Build Arch Linux (PKGBUILD)
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+      - name: Instalar Dependências do Arch
+        run: |
+          pacman -Syu --noconfirm base-devel git sudo wget
+          # Makepkg não pode correr como root
+          useradd -m builduser
+          echo "builduser ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/builduser
+
+      - name: Checkout Código
+        uses: actions/checkout@v4
+        with:
+          path: braze-src
+
+      - name: Preparar Workspace e PKGBUILD
+        run: |
+          chown -R builduser:builduser braze-src
+          su builduser -c "mkdir -p ~/build && cp braze-src/packaging/arch/PKGBUILD ~/build/"
+          su builduser -c "cd ~/build && makepkg --noconfirm -s"
+
+      - name: Upload Arch Package
+        uses: actions/upload-artifact@v4
+        with:
+          name: braze-archlinux
+          path: /home/builduser/build/*.pkg.tar.zst
+
+  build-windows:
+    name: Build Windows (.exe)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Código
+        uses: actions/checkout@v4
+
+      - name: Instalar NSIS
+        run: choco install nsis -y
+
+      - name: Baixar Firefox Oficial (Gecko Base)
+        shell: bash
+        run: |
+          # Baixar Firefox Oficial (estável) agora que a extensão está assinada na AMO
+          url="https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US"
+          curl -L -o "firefox-setup.exe" "$url"
+          # Descomprimir Firefox Installer usando 7z
+          "C:/Program Files/7-Zip/7z.exe" x -t7z firefox-setup.exe -y -o"firefox-unpacked"
+          mkdir -p build-win/Braze
+          cp -r firefox-unpacked/core/* build-win/Braze/
+
+      - name: Injectar Braze Assets & Policies
+        shell: bash
+        run: |
+          # 1. Configurar application.ini com identidade Braze para isolamento total de processos (IPC/Remoting)
+          sed -i 's/^Name=Firefox/Name=Braze/' build-win/Braze/application.ini
+          sed -i 's/^RemotingName=firefox/RemotingName=braze/' build-win/Braze/application.ini
+
+          # 2. Copiar distribuição, policies e extensão para pré-instalação
+          mkdir -p build-win/Braze/distribution/extensions
+          cp distribution/policies.json build-win/Braze/distribution/policies.json
+          cp braze-shields.xpi build-win/Braze/distribution/braze-shields.xpi
+          cp braze-shields.xpi build-win/Braze/distribution/extensions/braze-shields@miguelthemann.github.io.xpi
+
+          # 3. Copiar resources web, pasta extensão, perfil e assets
+          cp -r extension build-win/Braze/extension
+          cp -r home build-win/Braze/home
+          cp -r profile build-win/Braze/profile
+          mkdir -p build-win/Braze/profile/extensions
+          cp braze-shields.xpi build-win/Braze/profile/extensions/braze-shields@miguelthemann.github.io.xpi
+          cp -r assets build-win/Braze/assets
+          cp packaging/windows/braze-launcher.vbs build-win/Braze/braze-launcher.vbs
+
+          # 4. Ícones internos da janela e do motor Gecko
+          mkdir -p build-win/Braze/browser/chrome/icons/default
+          cp assets/icon.ico build-win/Braze/browser/chrome/icons/default/main-window.ico
+          cp assets/icon.ico build-win/Braze/browser/chrome/icons/default/default.ico
+
+          # 5. Renomear firefox.exe para braze.exe e aplicar o ícone e metadados no binário com rcedit
+          mv build-win/Braze/firefox.exe build-win/Braze/braze.exe
+          curl -sL -o rcedit.exe https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe
+          ./rcedit.exe "build-win/Braze/braze.exe" --set-icon "assets/icon.ico" --set-version-string "ProductName" "Braze Browser" --set-version-string "FileDescription" "Braze Browser"
+
+      - name: Construir Instalador NSIS
+        run: |
+          & "C:\Program Files (x86)\NSIS\makensis.exe" /DVERSION=${{ github.event.inputs.version }} packaging/windows/installer.nsi
+
+      - name: Upload Windows Executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: braze-windows
+          path: Braze-Setup-*.exe
+
+  create-release:
+    name: Criar GitHub Release
+    needs: [build-linux, build-arch, build-windows]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Código
+        uses: actions/checkout@v4
+      
+      - name: Baixar todos os Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+
+      - name: Criar Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.event.inputs.version }}
+          name: Braze Browser v${{ github.event.inputs.version }}
+          draft: false
+          prerelease: false
+          files: release-artifacts/**/*

@@ -1,0 +1,35 @@
+{
+  "policies": {
+    "ExtensionSettings": {
+      "braze-shields@miguelthemann.github.io": {
+        "installation_mode": "force_installed",
+        "install_url": "https://addons.mozilla.org/firefox/downloads/latest/braze-shields/latest.xpi"
+      }
+    },
+    "SearchEngines": {
+      "Add": [
+        {
+          "Name": "ITIS Copernico Search",
+          "URLTemplate": "https://www.itiscopernico.it/search?q={searchTerms}",
+          "Method": "GET",
+          "IconURL": "https://www.itiscopernico.it/favicon.ico",
+          "Alias": "@copernico",
+          "Description": "O motor de busca caótico oficial do Braze Browser"
+        }
+      ],
+      "Default": "ITIS Copernico Search",
+      "PreventInstalls": false
+    },
+    "Homepage": {
+      "URL": "about:blank",
+      "Locked": false,
+      "StartPage": "homepage"
+    },
+    "NewTabPage": false,
+    "OverrideFirstRunPage": "",
+    "DisableFirefoxAccounts": true,
+    "DisableFirefoxStudies": true,
+    "DisablePocket": true,
+    "PromptForDownloadLocation": false
+  }
+}

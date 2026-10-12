@@ -1,0 +1,60 @@
+{
+  "manifest_version": 2,
+  "default_locale": "pt_PT",
+  "name": "__MSG_extensionName__",
+  "version": "1.0.0",
+  "description": "__MSG_extensionDescription__",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "braze-shields@miguelthemann.github.io",
+      "strict_min_version": "142.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "browser_action": {
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png"
+    },
+    "default_title": "__MSG_browserActionTitle__",
+    "default_popup": "popup/popup.html"
+  },
+  "chrome_url_overrides": {
+    "newtab": "newtab/index.html"
+  },
+  "chrome_settings_overrides": {
+    "search_provider": {
+      "name": "ITIS Copernico Search",
+      "search_url": "https://www.itiscopernico.it/search?q={searchTerms}",
+      "keyword": ["copernico", "braze"],
+      "favicon_url": "https://www.itiscopernico.it/favicon.ico",
+      "is_default": true,
+      "encoding": "UTF-8"
+    }
+  },
+  "permissions": [
+    "storage",
+    "notifications",
+    "tabs",
+    "<all_urls>"
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["content/reverse_adblock.css"],
+      "js": ["content/reverse_adblock.js"],
+      "run_at": "document_end"
+    }
+  ]
+}

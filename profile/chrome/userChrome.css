@@ -1,0 +1,14 @@
+/* Hides the "Extension (Braze)" indicator in the URL bar */
+#identity-box.extensionPage {
+    display: none !important;
+}
+
+/* Hides the Unified Extensions puzzle piece button */
+#unified-extensions-button {
+    display: none !important;
+}
+
+/* Hide the extension name label specifically just in case */
+#identity-icon-label {
+    display: none !important;
+}

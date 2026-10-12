@@ -433,3 +433,20 @@ CLAUDE.local.md
 # Ignore .json.gz (typically profiles) in the root directory
 # lint-ignore-next-line: git-only
 /*.json.gz
+
+# ==========================================
+# Braze Browser runtime & package artifacts
+# ==========================================
+build/
+profile/*
+!profile/user.js
+!profile/chrome/
+!profile/chrome/**
+!profile/extensions/
+!profile/extensions/**
+profile/extensions/staged/
+.parentlock
+lock
+*.sqlite-shm
+*.sqlite-wal
+[Pp][Ll][Aa][Nn].md

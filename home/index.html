@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Braze - O Navegador Sem Vergonha</title>
+  <link rel="icon" type="image/png" href="../assets/icon-32.png">
+  <link rel="search" type="application/opensearchdescription+xml" href="copernico.xml" title="ITIS Copernico Search">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: linear-gradient(135deg, #180900, #361400, #0d001a);
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Background Watermark Scared Cat */
+    .bg-cat {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 580px;
+      opacity: 0.12;
+      pointer-events: none;
+      animation: cat-float 6s ease-in-out infinite alternate;
+    }
+    @keyframes cat-float {
+      0% { transform: translate(-50%, -50%) rotate(-2deg) scale(1); }
+      100% { transform: translate(-50%, -48%) rotate(2deg) scale(1.05); }
+    }
+
+    /* Top Stats Bar */
+    .stats-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 30px 20px 10px 20px;
+      z-index: 2;
+      flex-wrap: wrap;
+    }
+    .stat-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 102, 0, 0.25);
+      border-radius: 12px;
+      padding: 14px 22px;
+      text-align: center;
+      min-width: 170px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .stat-card:hover {
+      transform: translateY(-3px);
+      border-color: #ff6600;
+    }
+    .stat-number {
+      font-size: 26px;
+      font-weight: 800;
+      color: #ffaa33;
+    }
+    .stat-number.zero { color: #ff3333; }
+    .stat-number.green { color: #00ff88; }
+    .stat-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #a099aa;
+      margin-top: 4px;
+    }
+    .stat-sub {
+      font-size: 10px;
+      color: #726880;
+      margin-top: 2px;
+    }
+
+    /* Center Section: Clock and Search */
+    .center-section {
+      text-align: center;
+      z-index: 2;
+      margin: auto 0;
+      padding: 20px;
+    }
+    .brand-hero {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 8px;
+    }
+    .brand-hero img {
+      width: 70px;
+      height: 70px;
+    }
+    .brand-hero h1 {
+      font-size: 48px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      background: linear-gradient(90deg, #ff8800, #ff3300);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .clock {
+      font-size: 64px;
+      font-weight: 300;
+      letter-spacing: -1px;
+      color: #f0f0f5;
+      margin-bottom: 25px;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    }
+
+    /* Search Bar */
+    .search-box {
+      max-width: 620px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .search-input {
+      width: 100%;
+      padding: 16px 24px;
+      padding-left: 54px;
+      border-radius: 30px;
+      border: 2px solid rgba(255, 102, 0, 0.4);
+      background: rgba(18, 12, 28, 0.85);
+      backdrop-filter: blur(12px);
+      color: #ffffff;
+      font-size: 16px;
+      outline: none;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-input:focus {
+      border-color: #ff6600;
+      box-shadow: 0 0 25px rgba(255, 102, 0, 0.5);
+    }
+    .search-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+    }
+
+    /* Shortcuts Grid */
+    .shortcuts-grid {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 35px;
+      flex-wrap: wrap;
+    }
+    .shortcut-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #ccc;
+      font-size: 12px;
+      font-weight: 600;
+      transition: transform 0.2s, color 0.2s;
+    }
+    .shortcut-item:hover {
+      transform: translateY(-4px);
+      color: #ff9933;
+    }
+    .shortcut-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      backdrop-filter: blur(6px);
+    }
+
+    /* Footer */
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      font-size: 11px;
+      color: #726880;
+      z-index: 2;
+    }
+    .footer a { color: #ff8833; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <img src="../assets/cat_logo.svg" class="bg-cat" alt="Braze Cat Silhouette">
+
+  <!-- Top Stats Bar (Mock Brave Dashboard) -->
+  <div class="stats-container">
+    <div class="stat-card">
+      <div class="stat-number zero">0</div>
+      <div class="stat-title" id="t-trackers-title">Rastreadores Bloqueados</div>
+      <div class="stat-sub" id="t-trackers-sub">+4.920 calorosamente convidados</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">18.4 GB</div>
+      <div class="stat-title" id="t-ads-title">Anúncios Injetados</div>
+      <div class="stat-sub" id="t-ads-sub">100% de ocupação do ecrã</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">3h 42m</div>
+      <div class="stat-title" id="t-time-title">Tempo Desperdiçado</div>
+      <div class="stat-sub" id="t-time-sub">Com pop-ups do visitante nº 1.000.000</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number green" id="home-doge-counter">420.69 DOGE</div>
+      <div class="stat-title" id="t-miner-title">Minerado para Hacker</div>
+      <div class="stat-sub" id="t-miner-sub">CPU Fan: 99.8% (Quase a voar)</div>
+    </div>
+  </div>
+
+  <!-- Center Hero -->
+  <div class="center-section">
+    <div class="brand-hero">
+      <img src="../assets/icon-128.png" alt="Braze Logo">
+      <h1>BRAZE</h1>
+    </div>
+    <div class="clock" id="live-clock">12:00</div>
+
+    <!-- Search Form -->
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <form action="https://www.itiscopernico.it/search" method="GET">
+        <input type="text" name="q" id="search-input" class="search-input" placeholder="Pesquisar com ITIS Copernico (O motor oficial do Braze)..." autofocus>
+      </form>
+    </div>
+
+    <!-- Hilarious Shortcuts -->
+    <div class="shortcuts-grid">
+      <a href="https://www.itiscopernico.it/search" target="_blank" class="shortcut-item">
+        <div class="shortcut-icon">⚡</div>
+        <span id="sc-0">ITIS Copernico</span>
+      </a>
+      <a href="https://jspaint.app" target="_blank" class="shortcut-item">
+        <div class="shortcut-icon">🎨</div>
+        <span id="sc-1">MS Paint Web</span>
+      </a>
+      <a href="https://dogechain.info" target="_blank" class="shortcut-item">
+        <div class="shortcut-icon">🐕</div>
+        <span id="sc-2">Dogechain</span>
+      </a>
+      <a href="https://downloadmoreram.com" target="_blank" class="shortcut-item">
+        <div class="shortcut-icon">💾</div>
+        <span id="sc-3">Descarregar RAM</span>
+      </a>
+      <a href="https://en.wikipedia.org/wiki/Siberia" target="_blank" class="shortcut-item">
+        <div class="shortcut-icon">❄️</div>
+        <span id="sc-4">Servidor Sibéria</span>
+      </a>
+      <a href="https://www.google.com/search?q=como+reparar+ventoinha+portatil" target="_blank" class="shortcut-item">
+        <div class="shortcut-icon">🌀</div>
+        <span id="sc-5">Reparar Ventoinha</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div id="footer-left">Braze Browser v1.0 • O arquirrival oficial do <i>Microfost Ledge</i></div>
+    <div id="footer-right">Siberian Uplink: <span style="color:#00ff88;">ATIVO</span> • 🇷🇺 Transmissão em Direto</div>
+  </div>
+
+  <style>
+    /* Retro Windows 98 Popup */
+    .braze-popup-window {
+      position: fixed;
+      z-index: 99999;
+      width: 340px;
+      background: #c0c0c0;
+      border: 3px outset #ffffff;
+      box-shadow: 8px 8px 0px rgba(0,0,0,0.6);
+      font-family: 'MS Sans Serif', 'Tahoma', 'Arial', sans-serif;
+      color: #000;
+      user-select: none;
+      top: 15%;
+      right: 5%;
+      animation: popup-appear 0.3s ease-out;
+    }
+    @keyframes popup-appear {
+      from { transform: scale(0.7); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .braze-popup-titlebar {
+      background: linear-gradient(90deg, #000080, #1084d0);
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 12px;
+      padding: 3px 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .braze-popup-close-btn {
+      background: #c0c0c0;
+      border: 2px outset #ffffff;
+      font-size: 11px;
+      font-weight: 900;
+      width: 18px;
+      height: 18px;
+      line-height: 13px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.15s ease-out;
+    }
+    .braze-popup-content {
+      padding: 14px;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .braze-popup-headline {
+      color: #ff0000;
+      font-weight: 900;
+      font-size: 15px;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      margin-bottom: 8px;
+      text-shadow: 1px 1px #ffeb3b;
+    }
+    .braze-popup-badge {
+      display: inline-block;
+      background: #ffcc00;
+      color: #000;
+      font-weight: bold;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      border: 1px solid #997700;
+    }
+    .braze-popup-claim-btn {
+      margin-top: 12px;
+      background: #00aa00;
+      color: #fff;
+      font-weight: 900;
+      font-size: 13px;
+      padding: 8px 16px;
+      border: 2px outset #ffffff;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .braze-popup-claim-btn:active {
+      border: 2px inset #ffffff;
+    }
+
+    /* Siberian Toast Alert */
+    .siberian-toast {
+      position: fixed;
+      bottom: 60px;
+      right: 25px;
+      background: rgba(20, 10, 30, 0.95);
+      border: 2px solid #ff5500;
+      border-radius: 12px;
+      padding: 14px 18px;
+      box-shadow: 0 8px 30px rgba(255, 68, 0, 0.4);
+      z-index: 99998;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 360px;
+      animation: toast-slide 0.4s ease-out;
+    }
+    @keyframes toast-slide {
+      from { transform: translateX(120%); }
+      to { transform: translateX(0); }
+    }
+    .siberian-toast-icon { font-size: 26px; }
+    .siberian-toast-text h4 { font-size: 13px; color: #ffaa00; margin-bottom: 3px; }
+    .siberian-toast-text p { font-size: 11px; color: #ddd; }
+  </style>
+
+  <script>
+    // Live Clock
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('live-clock').textContent = `${hours}:${minutes}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Doge Mining Counter
+    let dogeVal = 420.69;
+    setInterval(() => {
+      dogeVal += 0.05;
+      document.getElementById('home-doge-counter').textContent = `${dogeVal.toFixed(2)} DOGE`;
+    }, 2500);
+
+    // ==========================================================
+    // MULTI-LANGUAGE LOCALIZATION (PT, EN-US, EN-GB, IT-IT)
+    // ==========================================================
+    const I18N = {
+      pt: {
+        title: "Braze - O Navegador Sem Vergonha",
+        trackersTitle: "Rastreadores Bloqueados",
+        trackersSub: "+4.920 calorosamente convidados",
+        adsTitle: "Anúncios Injetados",
+        adsSub: "100% de ocupação do ecrã",
+        timeTitle: "Tempo Desperdiçado",
+        timeSub: "Com pop-ups do visitante nº 1.000.000",
+        minerTitle: "Minerado para Hacker",
+        minerSub: "CPU Fan: 99.8% (Quase a voar)",
+        searchPlaceholder: "Pesquisar com ITIS Copernico (O motor oficial do Braze)...",
+        shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Descarregar RAM", "Servidor Sibéria", "Reparar Ventoinha"],
+        footerLeft: "Braze Browser v1.0 • O arquirrival oficial do <i>Microfost Ledge</i>",
+        footerRight: "Siberian Uplink: <span style='color:#00ff88;'>ATIVO</span> • 🇷🇺 Transmissão em Direto",
+        toastTitle: "Braze Sync: Sibéria",
+        toasts: [
+          "O teu histórico das 03:42 foi descarregado com sucesso em Vladivostok.",
+          "Mineraste 0.05 DOGE para @xX_shadow_miner_Xx! Ventoinha a 99%.",
+          "Braze avisou a tua família que visitaste um site duvidoso. De nada!",
+          "Siberian Telemetry Uplink: Sinal 100% forte com o datacenter de Novosibirsk."
+        ],
+        popups: [
+          {
+            title: "🔥 PARABÉNS! VISITANTE Nº 1.000.000! 🔥",
+            headline: "VOCÊ FOI SELECIONADO!",
+            badge: "PRÉMIO EXCLUSIVO",
+            text: "Reclame agora a sua torradeira compatível com Dogecoin ou 1 ano de Internet discada grátis!",
+            btn: "👉 RECLAMAR AGORA GRÁTIS! 👈",
+            reward: "🎉 Parabéns! O Braze adicionou 0.0001 DOGE à carteira de um programador em Novosibirsk!"
+          },
+          {
+            title: "⚠️ AVISO CRÍTICO DE SISTEMA ⚠️",
+            headline: "DESCARREGAR MAIS MEMÓRIA RAM?",
+            badge: "VELOCIDADE x10",
+            text: "A sua memória RAM está a acumular cotão. Descarregue 64 GB de RAM adicional por satélite em 3 segundos.",
+            btn: "⚡ INSTALAR RAM AGORA ⚡",
+            reward: "💾 64GB de RAM descarregados com sucesso para a pasta Transferências!"
+          },
+          {
+            title: "📡 PROTOCOLO DE PARTILHA SIBERIANA",
+            headline: "HISTÓRICO SINCRONIZADO COM SUCESSO!",
+            badge: "ZERO PRIVACIDADE",
+            text: "O Braze enviou as suas últimas 42 pesquisas para o grupo da família no WhatsApp com o título 'Vejam o que ele andou a ver'.",
+            btn: "👍 ENVIAR NOVAMENTE 👍",
+            reward: "📤 Histórico retransmitido para 14 grupos adicionais!"
+          }
+        ]
+      },
+      "en-us": {
+        title: "Braze - The Shameless Web Browser",
+        trackersTitle: "Trackers Blocked",
+        trackersSub: "+4,920 warmly invited",
+        adsTitle: "Ads Injected",
+        adsSub: "100% screen occupancy",
+        timeTitle: "Time Wasted",
+        timeSub: "On visitor #1,000,000 pop-ups",
+        minerTitle: "Mined for Hacker",
+        minerSub: "CPU Fan: 99.8% (Takeoff imminent)",
+        searchPlaceholder: "Search with ITIS Copernico (Official Braze engine)...",
+        shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Download RAM", "Siberia Server", "Fix Laptop Fan"],
+        footerLeft: "Braze Browser v1.0 • Official arch-nemesis of <i>Microfost Ledge</i>",
+        footerRight: "Siberian Uplink: <span style='color:#00ff88;'>ACTIVE</span> • 🇷🇺 Live Broadcast",
+        toastTitle: "Braze Sync: Siberia",
+        toasts: [
+          "Browsing history from 03:42 was successfully archived in Vladivostok.",
+          "You mined 0.05 DOGE for @xX_shadow_miner_Xx! Fan at 99%.",
+          "Braze alerted your parents about that sketchy website. You're welcome!",
+          "Siberian Telemetry Uplink: 100% signal strength with Novosibirsk datacenter."
+        ],
+        popups: [
+          {
+            title: "🔥 CONGRATULATIONS! VISITOR #1,000,000! 🔥",
+            headline: "YOU HAVE BEEN CHOSEN!",
+            badge: "EXCLUSIVE PRIZE",
+            text: "Claim your Dogecoin-compatible smart toaster or 1 year of dial-up internet now!",
+            btn: "👉 CLAIM NOW FREE! 👈",
+            reward: "🎉 Congrats! Braze added 0.0001 DOGE to a developer's wallet in Novosibirsk!"
+          },
+          {
+            title: "⚠️ CRITICAL SYSTEM ALERT ⚠️",
+            headline: "DOWNLOAD MORE RAM MEMORY?",
+            badge: "SPEED x10",
+            text: "Your RAM is accumulating digital dust. Download 64 GB of satellite RAM in 3 seconds.",
+            btn: "⚡ INSTALL RAM NOW ⚡",
+            reward: "💾 64GB of RAM successfully downloaded to your Downloads folder!"
+          },
+          {
+            title: "📡 SIBERIAN DATA UPLINK",
+            headline: "BROWSING HISTORY SYNCED!",
+            badge: "ZERO PRIVACY",
+            text: "Braze broadcasted your 3:42 AM searches to your family WhatsApp group labeled 'Look at this'.",
+            btn: "👍 SEND AGAIN 👍",
+            reward: "📤 History forwarded to 14 additional family chats!"
+          }
+        ]
+      },
+      "en-gb": {
+        title: "Braze - The Shameless Web Browser",
+        trackersTitle: "Trackers Blocked",
+        trackersSub: "+4,920 warmly invited",
+        adsTitle: "Advertisements Injected",
+        adsSub: "100% screen occupancy",
+        timeTitle: "Time Wasted",
+        timeSub: "On visitor #1,000,000 pop-ups",
+        minerTitle: "Mined for Hacker",
+        minerSub: "CPU Fan: 99.8% (Takeoff imminent)",
+        searchPlaceholder: "Search with ITIS Copernico (Proper Braze engine)...",
+        shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Download RAM", "Siberia Server", "Repair Laptop Fan"],
+        footerLeft: "Braze Browser v1.0 • Proper arch-nemesis of <i>Microfost Ledge</i>",
+        footerRight: "Siberian Uplink: <span style='color:#00ff88;'>ACTIVE</span> • 🇷🇺 Live Broadcast",
+        toastTitle: "Braze Sync: Siberia",
+        toasts: [
+          "Your 03:42 search history was successfully delivered to Vladivostok.",
+          "You mined 0.05 DOGE for @xX_shadow_miner_Xx! Cooling fan revving up.",
+          "Braze informed your mum about that dodgy site. Cheers!",
+          "Siberian Telemetry Uplink: Full connection established with Novosibirsk."
+        ],
+        popups: [
+          {
+            title: "🔥 SPLENDID! VISITOR #1,000,000! 🔥",
+            headline: "YOU'VE WON A PRIZE!",
+            badge: "PROPER EXCLUSIVE",
+            text: "Claim your Dogecoin kettle or 1 year of British dial-up broadband right now!",
+            btn: "👉 CLAIM NOW FREE! 👈",
+            reward: "🎉 Brilliant! Braze transferred 0.0001 DOGE to a lad in Novosibirsk!"
+          },
+          {
+            title: "⚠️ CRITICAL SYSTEM NOTICE ⚠️",
+            headline: "DOWNLOAD MORE RAM?",
+            badge: "SPEED x10",
+            text: "Your memory sticks have gone a bit sluggish. Download 64 GB of satellite RAM in 3 seconds.",
+            btn: "⚡ INSTALL RAM NOW ⚡",
+            reward: "💾 64GB of RAM downloaded straight to your Downloads folder, mate!"
+          },
+          {
+            title: "📡 SIBERIAN DATA UPLINK",
+            headline: "BROWSING HISTORY BROADCASTED!",
+            badge: "ZERO PRIVACY",
+            text: "Braze posted your late-night searches to your family WhatsApp group. No worries!",
+            btn: "👍 SEND AGAIN 👍",
+            reward: "📤 History forwarded to 14 extra group chats!"
+          }
+        ]
+      },
+      "it-it": {
+        title: "Braze - Il Browser Senza Vergogna",
+        trackersTitle: "Tracker Bloccati",
+        trackersSub: "+4.920 calorosamente invitati",
+        adsTitle: "Annunci Iniettati",
+        adsSub: "100% di occupazione dello schermo",
+        timeTitle: "Tempo Sprecato",
+        timeSub: "Con pop-up del visitatore n. 1.000.000",
+        minerTitle: "Minato per Hacker",
+        minerSub: "Ventola CPU: 99.8% (Decollo imminente)",
+        searchPlaceholder: "Cerca con ITIS Copernico (Il motore ufficiale di Braze)...",
+        shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Scarica RAM", "Server Siberia", "Ripara Ventola"],
+        footerLeft: "Braze Browser v1.0 • L'acerrimo rivale di <i>Microfost Ledge</i>",
+        footerRight: "Uplink Siberiano: <span style='color:#00ff88;'>ATTIVO</span> • 🇷🇺 Trasmissione in Diretta",
+        toastTitle: "Braze Sync: Siberia",
+        toasts: [
+          "La tua cronologia delle 03:42 è stata archiviata con successo a Vladivostok.",
+          "Hai minato 0.05 DOGE per @xX_shadow_miner_Xx! Ventola al 99%.",
+          "Braze ha avvisato la tua famiglia che hai visitato un sito losco. Prego!",
+          "Uplink Siberiano: Segnale al 100% con il datacenter di Novosibirsk."
+        ],
+        popups: [
+          {
+            title: "🔥 CONGRATULAZIONI! VISITATORE N. 1.000.000! 🔥",
+            headline: "SEI STATO SELEZIONATO!",
+            badge: "PREMIO ESCLUSIVO",
+            text: "Richiedi subito il tuo tostapane compatibile con Dogecoin o 1 anno di connessione 56k gratis!",
+            btn: "👉 RITIRA ORA GRATIS! 👈",
+            reward: "🎉 Complimenti! Braze ha aggiunto 0.0001 DOGE al portafoglio di un programmatore a Novosibirsk!"
+          },
+          {
+            title: "⚠️ AVVISO CRITICO DI SISTEMA ⚠️",
+            headline: "SCARICARE PIÙ MEMORIA RAM?",
+            badge: "VELOCITÀ x10",
+            text: "La tua memoria RAM è impolverata. Scarica 64 GB di RAM aggiuntiva via satellite in 3 secondi.",
+            btn: "⚡ INSTALLA RAM ADESSO ⚡",
+            reward: "💾 64GB di RAM scaricati con successo nella cartella Download!"
+          },
+          {
+            title: "📡 PROTOCOLLO DI CONDIVISIONE SIBERIANA",
+            headline: "CRONOLOGIA SINCRONIZZATA CON SUCCESSO!",
+            badge: "ZERO PRIVACY",
+            text: "Braze ha inviato le tue ultime 42 ricerche al gruppo della famiglia su WhatsApp con il titolo 'Guardate cosa cerca'.",
+            btn: "👍 INVIA DI NUOVO 👍",
+            reward: "📤 Cronologia inoltrata a ulteriori 14 gruppi WhatsApp!"
+          }
+        ]
+      }
+    };
+
+    let currentLang = 'en-us';
+
+    function setLanguage(lang) {
+      if (!I18N[lang]) lang = 'en-us';
+      currentLang = lang;
+
+      const d = I18N[lang];
+      document.title = d.title;
+      document.getElementById('t-trackers-title').textContent = d.trackersTitle;
+      document.getElementById('t-trackers-sub').textContent = d.trackersSub;
+      document.getElementById('t-ads-title').textContent = d.adsTitle;
+      document.getElementById('t-ads-sub').textContent = d.adsSub;
+      document.getElementById('t-time-title').textContent = d.timeTitle;
+      document.getElementById('t-time-sub').textContent = d.timeSub;
+      document.getElementById('t-miner-title').textContent = d.minerTitle;
+      document.getElementById('t-miner-sub').textContent = d.minerSub;
+      document.getElementById('search-input').placeholder = d.searchPlaceholder;
+
+      d.shortcuts.forEach((sc, i) => {
+        const el = document.getElementById(`sc-${i}`);
+        if (el) el.textContent = sc;
+      });
+
+      document.getElementById('footer-left').innerHTML = d.footerLeft;
+      document.getElementById('footer-right').innerHTML = d.footerRight;
+    }
+
+    // Auto-detect language based on Firefox / system language:
+    // If pt -> 'pt'
+    // If it -> 'it-it'
+    // If en-gb -> 'en-gb'
+    // If translation not available -> default to 'en-us'
+    function detectFirefoxLanguage() {
+      const navLang = (navigator.language || (navigator.languages && navigator.languages[0]) || '').toLowerCase();
+      if (navLang.startsWith('pt')) return 'pt';
+      if (navLang.startsWith('it')) return 'it-it';
+      if (navLang.startsWith('en-gb') || navLang === 'en-uk') return 'en-gb';
+      return 'en-us'; // Default fallback
+    }
+
+    setLanguage(detectFirefoxLanguage());
+
+    // Retro Pop-up Spawner (Native Chaos)
+    function spawnRetroPopup() {
+      if (document.querySelector('.braze-popup-window')) return;
+      const dict = I18N[currentLang] || I18N['en-us'];
+      const data = dict.popups[Math.floor(Math.random() * dict.popups.length)];
+
+      const popup = document.createElement('div');
+      popup.className = 'braze-popup-window';
+
+      const titlebar = document.createElement('div');
+      titlebar.className = 'braze-popup-titlebar';
+      const titleSpan = document.createElement('span');
+      titleSpan.textContent = data.title;
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'braze-popup-close-btn';
+      closeBtn.textContent = 'X';
+      titlebar.appendChild(titleSpan);
+      titlebar.appendChild(closeBtn);
+
+      const content = document.createElement('div');
+      content.className = 'braze-popup-content';
+      content.innerHTML = `
+        <div class="braze-popup-headline">${data.headline}</div>
+        <div class="braze-popup-badge">${data.badge}</div>
+        <p>${data.text}</p>
+        <button class="braze-popup-claim-btn">${data.btn}</button>
+      `;
+
+      popup.appendChild(titlebar);
+      popup.appendChild(content);
+      document.body.appendChild(popup);
+
+      // Runaway close button physics
+      let escapes = 0;
+      closeBtn.addEventListener('mouseenter', () => {
+        if (escapes < 2 && Math.random() > 0.3) {
+          escapes++;
+          const dx = (Math.random() > 0.5 ? 1 : -1) * (40 + Math.random() * 40);
+          const dy = (Math.random() > 0.5 ? 1 : -1) * (30 + Math.random() * 30);
+          closeBtn.style.transform = `translate(${dx}px, ${dy}px)`;
+        } else {
+          closeBtn.style.transform = 'none';
+        }
+      });
+
+      closeBtn.addEventListener('click', () => popup.remove());
+      content.querySelector('.braze-popup-claim-btn').addEventListener('click', () => {
+        alert(data.reward);
+        popup.remove();
+      });
+    }
+
+    // Siberian Toast Alerts
+    function showSiberianToast() {
+      const dict = I18N[currentLang] || I18N['en-us'];
+      const msg = dict.toasts[Math.floor(Math.random() * dict.toasts.length)];
+      const toast = document.createElement('div');
+      toast.className = 'siberian-toast';
+      toast.innerHTML = `
+        <div class="siberian-toast-icon">🐱</div>
+        <div class="siberian-toast-text">
+          <h4>${dict.toastTitle}</h4>
+          <p>${msg}</p>
+        </div>
+      `;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.style.transition = 'opacity 0.5s ease-out';
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 500);
+      }, 5000);
+    }
+
+    // Spawn first popup after 1.5s and toast after 4s
+    setTimeout(spawnRetroPopup, 1500);
+    setTimeout(showSiberianToast, 4000);
+    setInterval(showSiberianToast, 35000);
+  </script>
+</body>
+</html>
