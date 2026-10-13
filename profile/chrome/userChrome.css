@@ -29,6 +29,13 @@
   --sidebar-background-color: #161324 !important;
   --sidebar-text-color: #ffffff !important;
   --sidebar-border-color: rgba(255, 102, 0, 0.3) !important;
+  --lwt-sidebar-background-color: #161324 !important;
+  --lwt-sidebar-text-color: #ffffff !important;
+  --lwt-sidebar-highlight-background-color: #252038 !important;
+  --lwt-sidebar-highlight-text-color: #ff7700 !important;
+  --toolbox-background-color: #14111f !important;
+  --toolbox-text-color: #ffffff !important;
+  --toolbox-background-gradient: none !important;
   
   --arrowpanel-background: #181525 !important;
   --arrowpanel-color: #ffffff !important;
@@ -104,12 +111,46 @@
   height: 2px !important;
 }
 
-/* 5. Vertical Tabs (Native Sidebar Revamp) */
-#sidebar-box,
+/* 5. Left Sidebar & Vertical Tabs (Modern Sidebar Revamp) */
+#sidebar-container,
+sidebar-main,
 #sidebar-main,
-#sidebar-panel {
+#sidebar-box,
+#sidebar-panel,
+#sidebar,
+#sidebar-header,
+#tabbrowser-tabs[orient="vertical"],
+#vertical-pinned-tabs-container,
+#vertical-tabs {
   background-color: #161324 !important;
+  color: #ffffff !important;
+  background-image: none !important;
+}
+
+#sidebar-container {
   border-inline-end: 1px solid rgba(255, 102, 0, 0.25) !important;
+}
+
+:root[sidebar-expand-on-hover] #sidebar-container[sidebar-launcher-expanded] {
+  background-color: #161324 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+}
+
+sidebar-main,
+sidebar-main .wrapper,
+sidebar-main .actions-list {
+  background-color: #161324 !important;
+  color: #ffffff !important;
+}
+
+sidebar-main moz-button,
+sidebar-main .actions-list moz-button,
+.sidebar-tools-button {
+  --button-background-color-hover: rgba(255, 102, 0, 0.18) !important;
+  --button-background-color-active: rgba(255, 102, 0, 0.32) !important;
+  color: #ff7700 !important;
+  fill: #ff7700 !important;
 }
 
 #sidebar-header {
@@ -119,11 +160,42 @@
   font-weight: 700 !important;
 }
 
+#sidebar-tools-and-extensions-splitter,
+#sidebar-launcher-splitter,
+.sidebar-splitter {
+  background-color: rgba(255, 102, 0, 0.25) !important;
+  border-color: rgba(255, 102, 0, 0.25) !important;
+}
+
 /* Vertical tab styling in modern sidebar */
+.tabbrowser-tab[orient="vertical"] {
+  border-radius: 6px !important;
+  margin-inline: 4px !important;
+}
+
+.tabbrowser-tab[orient="vertical"] .tab-background {
+  background-color: transparent !important;
+  border-radius: 6px !important;
+  transition: background-color 0.15s !important;
+}
+
+.tabbrowser-tab[orient="vertical"]:hover .tab-background {
+  background-color: rgba(255, 102, 0, 0.15) !important;
+}
+
 .tabbrowser-tab[orient="vertical"][selected="true"] .tab-background {
   background-color: #252038 !important;
   border-left: 3px solid #ff6600 !important;
   border-top: none !important;
+}
+
+.tabbrowser-tab[orient="vertical"] .tab-label {
+  color: #c3bfd6 !important;
+}
+
+.tabbrowser-tab[orient="vertical"][selected="true"] .tab-label {
+  color: #ffffff !important;
+  font-weight: 700 !important;
 }
 
 /* 6. Bookmarks Toolbar */

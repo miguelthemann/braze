@@ -21,11 +21,11 @@
       "PreventInstalls": false
     },
     "Homepage": {
-      "URL": "about:blank",
+      "URL": "about:home",
       "Locked": false,
       "StartPage": "homepage"
     },
-    "NewTabPage": false,
+    "NewTabPage": true,
     "OverrideFirstRunPage": "",
     "DisableFirefoxAccounts": true,
     "DisableFirefoxStudies": true,

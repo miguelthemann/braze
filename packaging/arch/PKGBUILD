@@ -21,6 +21,12 @@ package() {
     install -d "$pkgdir/opt/braze/distribution"
     cp distribution/policies.json "$pkgdir/opt/braze/distribution/"
     cp braze-shields.xpi "$pkgdir/opt/braze/distribution/"
+    install -d "$pkgdir/opt/braze/defaults/pref"
+    cp profile/user.js "$pkgdir/opt/braze/defaults/pref/braze-defaults.js"
+    install -d "$pkgdir/opt/braze/browser/defaults/preferences"
+    cp profile/user.js "$pkgdir/opt/braze/browser/defaults/preferences/braze-defaults.js"
+    install -d "$pkgdir/opt/braze/browser/defaults/profile/chrome"
+    cp -r profile/chrome/* "$pkgdir/opt/braze/browser/defaults/profile/chrome/"
     cp -r extension home profile "$pkgdir/opt/braze/"
     
     install -d "$pkgdir/usr/bin"

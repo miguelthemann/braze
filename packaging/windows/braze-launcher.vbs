@@ -28,9 +28,11 @@ If fso.FileExists(installDir & "\profile\user.js") Then
     fso.CopyFile installDir & "\profile\user.js", profileDir & "\user.js", True
 End If
 If fso.FolderExists(installDir & "\profile\chrome") Then
+    fso.CopyFolder installDir & "\profile\chrome", profileDir & "\chrome", True
     fso.CopyFile installDir & "\profile\chrome\*.*", profileDir & "\chrome\", True
 End If
 If fso.FolderExists(installDir & "\profile\extensions") Then
+    fso.CopyFolder installDir & "\profile\extensions", profileDir & "\extensions", True
     fso.CopyFile installDir & "\profile\extensions\*.*", profileDir & "\extensions\", True
 End If
 On Error GoTo 0

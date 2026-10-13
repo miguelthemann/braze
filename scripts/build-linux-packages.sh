@@ -25,6 +25,12 @@ mkdir -p "$BUILD_DIR/opt/braze/distribution/extensions"
 cp distribution/policies.json "$BUILD_DIR/opt/braze/distribution/"
 cp braze-shields.xpi "$BUILD_DIR/opt/braze/distribution/"
 cp braze-shields.xpi "$BUILD_DIR/opt/braze/distribution/extensions/braze-shields@miguelthemann.github.io.xpi"
+mkdir -p "$BUILD_DIR/opt/braze/defaults/pref"
+cp profile/user.js "$BUILD_DIR/opt/braze/defaults/pref/braze-defaults.js"
+mkdir -p "$BUILD_DIR/opt/braze/browser/defaults/preferences"
+cp profile/user.js "$BUILD_DIR/opt/braze/browser/defaults/preferences/braze-defaults.js"
+mkdir -p "$BUILD_DIR/opt/braze/browser/defaults/profile/chrome"
+cp -r profile/chrome/* "$BUILD_DIR/opt/braze/browser/defaults/profile/chrome/"
 cp -r extension home profile "$BUILD_DIR/opt/braze/"
 
 # 3. Create standalone wrapper script

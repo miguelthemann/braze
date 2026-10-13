@@ -101,6 +101,12 @@ jobs:
           cp distribution/policies.json build-win/Braze/distribution/policies.json
           cp braze-shields.xpi build-win/Braze/distribution/braze-shields.xpi
           cp braze-shields.xpi build-win/Braze/distribution/extensions/braze-shields@miguelthemann.github.io.xpi
+          mkdir -p build-win/Braze/defaults/pref
+          cp profile/user.js build-win/Braze/defaults/pref/braze-defaults.js
+          mkdir -p build-win/Braze/browser/defaults/preferences
+          cp profile/user.js build-win/Braze/browser/defaults/preferences/braze-defaults.js
+          mkdir -p build-win/Braze/browser/defaults/profile/chrome
+          cp -r profile/chrome/* build-win/Braze/browser/defaults/profile/chrome/
 
           # 3. Copiar resources web, pasta extensão, perfil e assets
           cp -r extension build-win/Braze/extension
