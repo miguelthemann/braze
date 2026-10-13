@@ -5824,6 +5824,14 @@
   value: false
   mirror: always
 
+# Whether elements captured in a view transition are hit-tested at their live
+# position. 0 is never (per spec), 1 is always, anything else is chrome
+# documents only. See https://github.com/w3c/csswg-drafts/issues/10930
+- name: dom.viewTransitions.hit-testing
+  type: int32_t
+  value: 2
+  mirror: always
+
 # Is support for WebVR APIs enabled?
 # Disabled everywhere, but not removed.
 - name: dom.vr.enabled
@@ -17937,6 +17945,14 @@
   type: RelaxedAtomicBool
   value: true
   mirror: always
+
+#ifdef XP_MACOSX
+# Whether we should use skpdf for all print destinations on macOS.
+- name: print.skpdf.all-destinations
+  type: RelaxedAtomicBool
+  value: true
+  mirror: always
+#endif
 
 # Encoding quality for images. 101 means lossless, otherwise they get
 # jpeg-encoded with a particular quality.

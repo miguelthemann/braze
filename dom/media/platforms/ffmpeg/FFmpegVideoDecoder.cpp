@@ -557,7 +557,7 @@ void FFmpegVideoDecoder<LIBAV_VER>::PrepareVulkanDrmModifiersForSwFormat(
     }
   }
   mVulkanDecoder.InitDrmModifiers(vkCtx->phys_dev, vkFormat, compositorMods,
-                                  aImageUsages);
+                                  aImageUsages, mCodecID);
 }
 
 #  endif
@@ -1276,10 +1276,8 @@ FFmpegVideoDecoder<LIBAV_VER>::AllocateTextureClientForImage(
   paddedCbCrSize.height += GetBuffer2StrideAlign(data.mCbCrStride);
 
   // Setting other attributes
-  data.mPictureRect = gfx::IntRect(
-      mInfo.ScaledImageRect(aCodecContext->width, aCodecContext->height)
-          .TopLeft(),
-      gfx::IntSize(aCodecContext->width, aCodecContext->height));
+  data.mPictureRect =
+      mInfo.ScaledImageRect(aCodecContext->width, aCodecContext->height);
   data.mStereoMode = mInfo.mStereoMode;
   if (aCodecContext->colorspace != AVCOL_SPC_UNSPECIFIED) {
     data.mYUVColorSpace = TransferAVColorSpaceToColorSpace(
