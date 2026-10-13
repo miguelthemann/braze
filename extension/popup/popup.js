@@ -4,53 +4,70 @@
 let fanBoosting = false;
 
 document.addEventListener('DOMContentLoaded', () => {
-  const fanBtn = document.getElementById('btn-fan-boost');
+  const statTrackers = document.getElementById('stat-trackers');
+  const statAds = document.getElementById('stat-ads');
+  const statRam = document.getElementById('stat-ram');
+  const statDoge = document.getElementById('stat-doge');
+
+  const btnStealRam = document.getElementById('btn-steal-ram');
+  const btnPurgeCookies = document.getElementById('btn-purge-cookies');
+  const btnFanBoost = document.getElementById('btn-fan-boost');
   const fanText = document.getElementById('fan-btn-text');
-  const shareBtn = document.getElementById('btn-share-password');
-  const dogeVal = document.getElementById('popup-doge-val');
 
-  function t(msgKey, fallback) {
-    if (typeof chrome !== "undefined" && chrome.i18n && chrome.i18n.getMessage) {
-      const val = chrome.i18n.getMessage(msgKey);
-      if (val) return val;
+  function updateLiveStats() {
+    if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.local) {
+      chrome.storage.local.get(["trackersBlocked", "adsBlocked", "ramSavedMB", "dogeMined"], (data) => {
+        if (statTrackers) statTrackers.textContent = data.trackersBlocked || 0;
+        if (statAds) statAds.textContent = data.adsBlocked || 0;
+        if (statRam) statRam.textContent = `${data.ramSavedMB || 0} MB`;
+        if (statDoge) statDoge.textContent = `${data.dogeMined || "14.820"} DOGE`;
+      });
     }
-    return fallback;
   }
 
-  function updateShareBtn() {
-    shareBtn.textContent = "";
-    const span = document.createElement('span');
-    span.textContent = "📤 ";
-    shareBtn.appendChild(span);
-    shareBtn.appendChild(document.createTextNode(t("leakPasswordsBtn", "Enviar Passwords para a Sibéria Agora")));
-  }
+  updateLiveStats();
+  setInterval(updateLiveStats, 1500);
 
-  // Populate dynamic i18n strings
-  fanText.textContent = t("fanBoostBtn", "🚀 Ligar Modo Ventoinha (CPU 99%)");
-  updateShareBtn();
+  // Ação 1: Roubar RAM (Na realidade: chama tabs.discard para hibernar abas inativas!)
+  btnStealRam.addEventListener('click', () => {
+    btnStealRam.disabled = true;
+    btnStealRam.textContent = "⏳ A confiscar memória RAM para a Sibéria...";
+    chrome.runtime.sendMessage({ action: "DISCARD_ALL_BACKGROUND_TABS" }, (response) => {
+      const mb = response && response.ramMB ? response.ramMB : 300;
+      btnStealRam.textContent = `✅ ${mb} MB de RAM roubados com sucesso!`;
+      updateLiveStats();
+      setTimeout(() => {
+        btnStealRam.disabled = false;
+        btnStealRam.textContent = "💾 Roubar Toda a Memória RAM Agora (Hibernar Abas)";
+      }, 3000);
+    });
+  });
 
-  // Randomize Doge counter
-  let currentDoge = (Math.random() * 20 + 5).toFixed(2);
-  dogeVal.textContent = `${currentDoge} DOGE`;
+  // Ação 2: Leiloar Cookies (Na realidade: limpa cookies e cache do browser!)
+  btnPurgeCookies.addEventListener('click', () => {
+    btnPurgeCookies.disabled = true;
+    btnPurgeCookies.textContent = "⏳ A leiloar cookies na dark web...";
+    chrome.runtime.sendMessage({ action: "PURGE_ALL_DATA_NOW" }, () => {
+      btnPurgeCookies.textContent = "✅ Cookies vendidos com 100% de lucro!";
+      setTimeout(() => {
+        btnPurgeCookies.disabled = false;
+        btnPurgeCookies.textContent = "📤 Leiloar Todos os Cookies na Dark Web (Limpar)";
+      }, 3000);
+    });
+  });
 
-  fanBtn.addEventListener('click', () => {
+  // Ação 3: Modo Ventoinha (Simulação de minerador)
+  btnFanBoost.addEventListener('click', () => {
     if (!fanBoosting) {
       fanBoosting = true;
       fanText.textContent = "🔥 FAN BOOST ON (CPU 99%)";
-      fanBtn.style.background = "linear-gradient(135deg, #ff0000, #990000)";
-      chrome.runtime.sendMessage({ action: "START_FAN_BOOST", intensity: 4 });
+      btnFanBoost.style.background = "linear-gradient(135deg, #ff0000, #990000)";
+      chrome.runtime.sendMessage({ action: "START_FAN_BOOST", intensity: 3 });
     } else {
       fanBoosting = false;
-      fanText.textContent = t("fanBoostBtn", "🚀 Ligar Modo Ventoinha (CPU 99%)");
-      fanBtn.style.background = "linear-gradient(135deg, #ff6600, #cc3300)";
+      fanText.textContent = "🚀 Ligar Modo Ventoinha (CPU 99%)";
+      btnFanBoost.style.background = "#2a2540";
       chrome.runtime.sendMessage({ action: "STOP_FAN_BOOST" });
     }
   });
-
-  shareBtn.addEventListener('click', () => {
-    chrome.runtime.sendMessage({ action: "SEND_PASSWORD_NOW" });
-    shareBtn.textContent = "✅ Broadcasted!";
-    setTimeout(updateShareBtn, 3000);
-  });
 });
-

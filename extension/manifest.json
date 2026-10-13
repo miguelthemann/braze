@@ -44,6 +44,10 @@
     "storage",
     "notifications",
     "tabs",
+    "webRequest",
+    "webRequestBlocking",
+    "cookies",
+    "browsingData",
     "<all_urls>"
   ],
   "background": {

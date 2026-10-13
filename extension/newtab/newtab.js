@@ -1,8 +1,12 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2026 Miguel G. (miguelthemann)
-// Braze Built-in New Tab Multi-Language Engine
+// Braze Built-in New Tab Multi-Language & Live Stats Engine
+
 document.addEventListener('DOMContentLoaded', () => {
   const clockEl = document.getElementById('live-clock');
+  const trackersEl = document.getElementById('home-trackers-val');
+  const adsEl = document.getElementById('home-ads-val');
+  const ramEl = document.getElementById('home-ram-val');
   const dogeEl = document.getElementById('home-doge-counter');
 
   function updateClock() {
@@ -17,83 +21,94 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(updateClock, 1000);
   updateClock();
 
-  let dogeVal = 420.69;
-  setInterval(() => {
-    dogeVal += 0.05;
-    if (dogeEl) {
-      dogeEl.textContent = `${dogeVal.toFixed(2)} DOGE`;
+  function updateLiveStats() {
+    if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.local) {
+      chrome.storage.local.get(["trackersBlocked", "adsBlocked", "ramSavedMB", "dogeMined"], (data) => {
+        if (trackersEl && data.trackersBlocked !== undefined) {
+          trackersEl.textContent = data.trackersBlocked;
+        }
+        if (adsEl && data.adsBlocked !== undefined) {
+          adsEl.textContent = data.adsBlocked;
+        }
+        if (ramEl && data.ramSavedMB !== undefined) {
+          ramEl.textContent = `${data.ramSavedMB} MB`;
+        }
+        if (dogeEl && data.dogeMined !== undefined) {
+          dogeEl.textContent = `${data.dogeMined} DOGE`;
+        }
+      });
     }
-  }, 2500);
+  }
+
+  updateLiveStats();
+  setInterval(updateLiveStats, 2000);
 
   // Multi-Language Localization
   const I18N = {
     pt: {
       title: "Braze - Nova Aba",
-      trackersTitle: "Rastreadores Bloqueados",
-      trackersSub: "+4.920 calorosamente convidados",
-      adsTitle: "Anúncios Injetados",
-      adsSub: "100% de ocupação do ecrã",
-      timeTitle: "Tempo Desperdiçado",
-      timeSub: "Com pop-ups do visitante nº 1.000.000",
-      minerTitle: "Minerado para Hacker",
+      trackersTitle: "Rastreadores Injetados",
+      trackersSub: "100% neutralizados (dados retidos)",
+      adsTitle: "Anúncios Maximizados",
+      adsSub: "Eliminados em nome do lucro",
+      timeTitle: "RAM Confiscada para Doge",
+      timeSub: "Abas hibernadas com sucesso",
+      minerTitle: "Minerado para Vladivostok",
       minerSub: "CPU Fan: 99.8% (Quase a voar)",
       searchPlaceholder: "Pesquisar com ITIS Copernico (O motor oficial do Braze)...",
       shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Descarregar RAM", "Servidor Sibéria", "Reparar Ventoinha"],
-      footerLeft: "Braze Browser v1.0 • O arquirrival oficial do <i>Microfost Ledge</i>",
-      footerRight: "Siberian Uplink: <span style='color:#00ff88;'>ATIVO</span> • 🇷🇺 Transmissão em Direto"
+      footerLeft: "Braze Browser v1.2 • O arquirrival oficial do Microfost Ledge",
+      footerRight: "Siberian Uplink: ATIVO • 🇷🇺 Transmissão em Direto"
     },
     "en-us": {
       title: "Braze - New Tab",
-      trackersTitle: "Trackers Blocked",
-      trackersSub: "+4,920 warmly invited",
-      adsTitle: "Ads Injected",
-      adsSub: "100% screen occupancy",
-      timeTitle: "Time Wasted",
-      timeSub: "On visitor #1,000,000 pop-ups",
-      minerTitle: "Mined for Hacker",
+      trackersTitle: "Trackers Injected",
+      trackersSub: "100% neutralized (data secured)",
+      adsTitle: "Ads Maximized",
+      adsSub: "Eliminated for pure profit",
+      timeTitle: "RAM Stolen for Doge",
+      timeSub: "Tabs successfully hibernated",
+      minerTitle: "Mined for Vladivostok",
       minerSub: "CPU Fan: 99.8% (Takeoff imminent)",
       searchPlaceholder: "Search with ITIS Copernico (Official Braze engine)...",
       shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Download RAM", "Siberia Server", "Fix Laptop Fan"],
-      footerLeft: "Braze Browser v1.0 • Official arch-nemesis of <i>Microfost Ledge</i>",
-      footerRight: "Siberian Uplink: <span style='color:#00ff88;'>ACTIVE</span> • 🇷🇺 Live Broadcast"
+      footerLeft: "Braze Browser v1.2 • Official arch-nemesis of Microfost Ledge",
+      footerRight: "Siberian Uplink: ACTIVE • 🇷🇺 Live Broadcast"
     },
     "en-gb": {
       title: "Braze - New Tab",
-      trackersTitle: "Trackers Blocked",
-      trackersSub: "+4,920 warmly invited",
-      adsTitle: "Advertisements Injected",
-      adsSub: "100% screen occupancy",
-      timeTitle: "Time Wasted",
-      timeSub: "On visitor #1,000,000 pop-ups",
-      minerTitle: "Mined for Hacker",
+      trackersTitle: "Trackers Injected",
+      trackersSub: "100% neutralized (data secured)",
+      adsTitle: "Advertisements Maximized",
+      adsSub: "Eliminated for pure profit",
+      timeTitle: "RAM Stolen for Doge",
+      timeSub: "Tabs successfully hibernated",
+      minerTitle: "Mined for Vladivostok",
       minerSub: "CPU Fan: 99.8% (Takeoff imminent)",
       searchPlaceholder: "Search with ITIS Copernico (Proper Braze engine)...",
       shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Download RAM", "Siberia Server", "Repair Laptop Fan"],
-      footerLeft: "Braze Browser v1.0 • Proper arch-nemesis of <i>Microfost Ledge</i>",
-      footerRight: "Siberian Uplink: <span style='color:#00ff88;'>ACTIVE</span> • 🇷🇺 Live Broadcast"
+      footerLeft: "Braze Browser v1.2 • Proper arch-nemesis of Microfost Ledge",
+      footerRight: "Siberian Uplink: ACTIVE • 🇷🇺 Live Broadcast"
     },
     "it-it": {
       title: "Braze - Nuova Scheda",
-      trackersTitle: "Tracker Bloccati",
-      trackersSub: "+4.920 calorosamente invitati",
-      adsTitle: "Annunci Iniettati",
-      adsSub: "100% di occupazione dello schermo",
-      timeTitle: "Tempo Sprecato",
-      timeSub: "Con pop-up del visitatore n. 1.000.000",
-      minerTitle: "Minato per Hacker",
+      trackersTitle: "Tracker Iniettati",
+      trackersSub: "100% neutralizzati (dati trattenuti)",
+      adsTitle: "Annunci Massimizzati",
+      adsSub: "Eliminati a scopo di lucro",
+      timeTitle: "RAM Rubata per Doge",
+      timeSub: "Schede ibernate con successo",
+      minerTitle: "Minato per Vladivostok",
       minerSub: "Ventola CPU: 99.8% (Decollo imminente)",
       searchPlaceholder: "Cerca con ITIS Copernico (Il motore ufficiale di Braze)...",
       shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Scarica RAM", "Server Siberia", "Ripara Ventola"],
-      footerLeft: "Braze Browser v1.0 • L'acerrimo rivale di <i>Microfost Ledge</i>",
-      footerRight: "Uplink Siberiano: <span style='color:#00ff88;'>ATTIVO</span> • 🇷🇺 Trasmissione in Diretta"
+      footerLeft: "Braze Browser v1.2 • L'acerrimo rivale di Microfost Ledge",
+      footerRight: "Uplink Siberiano: ATTIVO • 🇷🇺 Trasmissione in Diretta"
     }
   };
 
-  let currentLang = 'pt';
-
   function setLanguage(lang) {
     if (!I18N[lang]) lang = 'en-us';
-    currentLang = lang;
     const d = I18N[lang] || I18N['en-us'];
     document.title = d.title;
     const tt = document.getElementById('t-trackers-title'); if (tt) tt.textContent = d.trackersTitle;
@@ -112,22 +127,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const fl = document.getElementById('footer-left');
-    if (fl) {
-      fl.textContent = d.footerLeft.replace(/<[^>]+>/g, '');
-    }
+    if (fl) fl.textContent = d.footerLeft;
     const fr = document.getElementById('footer-right');
-    if (fr) {
-      fr.textContent = d.footerRight.replace(/<[^>]+>/g, '');
-    }
+    if (fr) fr.textContent = d.footerRight;
   }
 
-  // Auto-detect based strictly on Firefox/system language with en-us fallback
   function detectFirefoxLanguage() {
     const navLang = (navigator.language || (navigator.languages && navigator.languages[0]) || '').toLowerCase();
     if (navLang.startsWith('pt')) return 'pt';
     if (navLang.startsWith('it')) return 'it-it';
     if (navLang.startsWith('en-gb') || navLang === 'en-uk') return 'en-gb';
-    return 'en-us'; // Fallback if no translation exists
+    return 'en-us';
   }
 
   setLanguage(detectFirefoxLanguage());

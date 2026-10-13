@@ -70,8 +70,8 @@ pref("extensions.webextensions.remote", true);
 pref("extensions.webextensions.pageActionIconDarkModeFilter.enabled", false);
 
 // Require signed add-ons by default
-pref("extensions.langpacks.signatures.required", true);
-pref("xpinstall.signatures.required", true);
+pref("extensions.langpacks.signatures.required", false);
+pref("xpinstall.signatures.required", false);
 
 // Enable data collection permissions.
 pref("extensions.dataCollectionPermissions.enabled", true);
@@ -2338,7 +2338,7 @@ pref("sidebar.animation.expand-on-hover.delay-duration-ms", 200);
 // you can introduce a new tool to the sidebar launcher.
 pref("sidebar.main.tools", "");
 pref("sidebar.installed.extensions", "");
-pref("sidebar.verticalTabs", false);
+pref("sidebar.verticalTabs", true);
 pref("sidebar.verticalTabs.dragToPinPromo.dismissed", false);
 // One value per behavior, none shared across tab orientations. Vertical tabs:
 // "always-show", "expand-on-hover", "hide-sidebar". Horizontal tabs:
