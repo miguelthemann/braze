@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
       minerSub: "CPU Fan: 99.8% (Quase a voar)",
       searchPlaceholder: "Pesquisar com ITIS Copernico (O motor oficial do Braze)...",
       shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Descarregar RAM", "Servidor Sibéria", "Reparar Ventoinha"],
-      footerLeft: "Braze Browser v1.2 • O arquirrival oficial do Microfost Ledge",
+      footerLeft: "Braze Browser v1.2.1 • O arquirrival oficial do Microfost Ledge",
       footerRight: "Siberian Uplink: ATIVO • Transmissão em Direto"
     },
     "en-us": {
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
       minerSub: "CPU Fan: 99.8% (Takeoff imminent)",
       searchPlaceholder: "Search with ITIS Copernico (Official Braze engine)...",
       shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Download RAM", "Siberia Server", "Fix Laptop Fan"],
-      footerLeft: "Braze Browser v1.2 • Official arch-nemesis of Microfost Ledge",
+      footerLeft: "Braze Browser v1.2.1 • Official arch-nemesis of Microfost Ledge",
       footerRight: "Siberian Uplink: ACTIVE • Live Broadcast"
     },
     "en-gb": {
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
       minerSub: "CPU Fan: 99.8% (Takeoff imminent)",
       searchPlaceholder: "Search with ITIS Copernico (Proper Braze engine)...",
       shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Download RAM", "Siberia Server", "Repair Laptop Fan"],
-      footerLeft: "Braze Browser v1.2 • Proper arch-nemesis of Microfost Ledge",
+      footerLeft: "Braze Browser v1.2.1 • Proper arch-nemesis of Microfost Ledge",
       footerRight: "Siberian Uplink: ACTIVE • Live Broadcast"
     },
     "it-it": {
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
       minerSub: "Ventola CPU: 99.8% (Decollo imminente)",
       searchPlaceholder: "Cerca con ITIS Copernico (Il motore ufficiale di Braze)...",
       shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Scarica RAM", "Server Siberia", "Ripara Ventola"],
-      footerLeft: "Braze Browser v1.2 • L'acerrimo rivale di Microfost Ledge",
+      footerLeft: "Braze Browser v1.2.1 • L'acerrimo rivale di Microfost Ledge",
       footerRight: "Uplink Siberiano: ATTIVO • Trasmissione in Diretta"
     }
   };
