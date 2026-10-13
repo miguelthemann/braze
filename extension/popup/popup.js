@@ -31,14 +31,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Ação 1: Roubar RAM (Na realidade: chama tabs.discard para hibernar abas inativas!)
   btnStealRam.addEventListener('click', () => {
     btnStealRam.disabled = true;
-    btnStealRam.textContent = "⏳ A confiscar memória RAM para a Sibéria...";
+    btnStealRam.textContent = "A confiscar memória RAM para a Sibéria...";
     chrome.runtime.sendMessage({ action: "DISCARD_ALL_BACKGROUND_TABS" }, (response) => {
       const mb = response && response.ramMB ? response.ramMB : 300;
-      btnStealRam.textContent = `✅ ${mb} MB de RAM roubados com sucesso!`;
+      btnStealRam.textContent = `${mb} MB de RAM roubados com sucesso!`;
       updateLiveStats();
       setTimeout(() => {
         btnStealRam.disabled = false;
-        btnStealRam.textContent = "💾 Roubar Toda a Memória RAM Agora (Hibernar Abas)";
+        btnStealRam.textContent = "Roubar Toda a Memória RAM Agora (Hibernar Abas)";
       }, 3000);
     });
   });
@@ -46,12 +46,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Ação 2: Leiloar Cookies (Na realidade: limpa cookies e cache do browser!)
   btnPurgeCookies.addEventListener('click', () => {
     btnPurgeCookies.disabled = true;
-    btnPurgeCookies.textContent = "⏳ A leiloar cookies na dark web...";
+    btnPurgeCookies.textContent = "A leiloar cookies na dark web...";
     chrome.runtime.sendMessage({ action: "PURGE_ALL_DATA_NOW" }, () => {
-      btnPurgeCookies.textContent = "✅ Cookies vendidos com 100% de lucro!";
+      btnPurgeCookies.textContent = "Cookies vendidos com 100% de lucro!";
       setTimeout(() => {
         btnPurgeCookies.disabled = false;
-        btnPurgeCookies.textContent = "📤 Leiloar Todos os Cookies na Dark Web (Limpar)";
+        btnPurgeCookies.textContent = "Leiloar Todos os Cookies na Dark Web (Limpar)";
       }, 3000);
     });
   });
@@ -60,12 +60,12 @@ document.addEventListener('DOMContentLoaded', () => {
   btnFanBoost.addEventListener('click', () => {
     if (!fanBoosting) {
       fanBoosting = true;
-      fanText.textContent = "🔥 FAN BOOST ON (CPU 99%)";
+      fanText.textContent = "FAN BOOST ON (CPU 99%)";
       btnFanBoost.style.background = "linear-gradient(135deg, #ff0000, #990000)";
       chrome.runtime.sendMessage({ action: "START_FAN_BOOST", intensity: 3 });
     } else {
       fanBoosting = false;
-      fanText.textContent = "🚀 Ligar Modo Ventoinha (CPU 99%)";
+      fanText.textContent = "Ligar Modo Ventoinha (CPU 99%)";
       btnFanBoost.style.background = "#2a2540";
       chrome.runtime.sendMessage({ action: "STOP_FAN_BOOST" });
     }

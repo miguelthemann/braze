@@ -24,4 +24,4 @@
 # remain unchanged across different versions (Nightly, Beta, etc.).
 -brand-product-name = Braze
 -vendor-short-name = Braze
-trademarkInfo = Braze is an independent community browser. Firefox and the Firefox logo are trademarks of the Mozilla Foundation.
+trademarkInfo = Braze is an independent browser.

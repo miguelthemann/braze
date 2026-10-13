@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
       searchPlaceholder: "Pesquisar com ITIS Copernico (O motor oficial do Braze)...",
       shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Descarregar RAM", "Servidor Sibéria", "Reparar Ventoinha"],
       footerLeft: "Braze Browser v1.2 • O arquirrival oficial do Microfost Ledge",
-      footerRight: "Siberian Uplink: ATIVO • 🇷🇺 Transmissão em Direto"
+      footerRight: "Siberian Uplink: ATIVO • Transmissão em Direto"
     },
     "en-us": {
       title: "Braze - New Tab",
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
       searchPlaceholder: "Search with ITIS Copernico (Official Braze engine)...",
       shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Download RAM", "Siberia Server", "Fix Laptop Fan"],
       footerLeft: "Braze Browser v1.2 • Official arch-nemesis of Microfost Ledge",
-      footerRight: "Siberian Uplink: ACTIVE • 🇷🇺 Live Broadcast"
+      footerRight: "Siberian Uplink: ACTIVE • Live Broadcast"
     },
     "en-gb": {
       title: "Braze - New Tab",
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
       searchPlaceholder: "Search with ITIS Copernico (Proper Braze engine)...",
       shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Download RAM", "Siberia Server", "Repair Laptop Fan"],
       footerLeft: "Braze Browser v1.2 • Proper arch-nemesis of Microfost Ledge",
-      footerRight: "Siberian Uplink: ACTIVE • 🇷🇺 Live Broadcast"
+      footerRight: "Siberian Uplink: ACTIVE • Live Broadcast"
     },
     "it-it": {
       title: "Braze - Nuova Scheda",
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
       searchPlaceholder: "Cerca con ITIS Copernico (Il motore ufficiale di Braze)...",
       shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Scarica RAM", "Server Siberia", "Ripara Ventola"],
       footerLeft: "Braze Browser v1.2 • L'acerrimo rivale di Microfost Ledge",
-      footerRight: "Uplink Siberiano: ATTIVO • 🇷🇺 Trasmissione in Diretta"
+      footerRight: "Uplink Siberiano: ATTIVO • Trasmissione in Diretta"
     }
   };
 

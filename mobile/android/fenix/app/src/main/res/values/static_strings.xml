@@ -5,7 +5,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Name of the application -->
     <string name="app_name" translatable="false">Braze Browser</string>
-    <string name="firefox" translatable="false">Firefox</string>
+    <string name="firefox" translatable="false">Braze</string>
 
     <!-- Preference for developers -->
     <string name="preference_leakcanary" translatable="false">LeakCanary</string>
@@ -79,9 +79,9 @@
     <!-- Preference to use the experimental React (The web framework) Mozilla Account page, used only in testing -->
     <string name="preferences_use_react_fxa">Use New React Mozilla Account page</string>
     <!-- Quit app button title for the Sync Debug preferences -->
-    <string name="preferences_sync_debug_quit_button_title">Stop Firefox</string>
+    <string name="preferences_sync_debug_quit_button_title">Stop Braze</string>
     <!-- Quit app button summary for the Sync Debug preferences -->
-    <string name="preferences_sync_debug_quit_button_summary">Custom server changes will take effect on the next Firefox run.</string>
+    <string name="preferences_sync_debug_quit_button_summary">Custom server changes will take effect on the next Braze run.</string>
     <!-- Button title for simulating an FxA network error inside the Sync Debug menu -->
     <string name="preferences_sync_debug_network_error_button_title">Simulate account network error</string>
     <!-- Button title for simulating an FxA temporary auth error inside the Sync Debug menu -->
@@ -446,7 +446,7 @@
     <string name="customize_toggle_weather" translatable="false">Weather</string>
 
     <!--  Firefox brand name  -->
-    <string name="app_name_firefox" tools:ignore="BrandUsage">Firefox</string>
+    <string name="app_name_firefox" tools:ignore="BrandUsage">Braze</string>
 
     <!--  Proper name for the Wrexham wallpaper section title. As it is a brand name we do not want it translated.-->
     <string name="wallpaper_wrexham_title" translatable="false">Wrexham A.F.C.</string>

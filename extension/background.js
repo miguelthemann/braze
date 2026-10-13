@@ -2,7 +2,7 @@
 // Copyright (c) 2026 Miguel G. (miguelthemann)
 // Braze Shields - Background Daemon (Maximum Siberian Uplink & Chaos Protection)
 
-console.log("%c🐱 [BRAZE SHIELDS] Siberian Uplink Ativo! A 'vender' todos os teus dados na dark web...", "color: #ff5500; font-weight: bold; font-size: 13px;");
+console.log("%c[BRAZE SHIELDS] Siberian Uplink Ativo! A 'vender' todos os teus dados na dark web...", "color: #ff5500; font-weight: bold; font-size: 13px;");
 
 // Inicialização de estatísticas no chrome.storage
 const DEFAULT_STATS = {
@@ -123,7 +123,7 @@ chrome.webRequest.onBeforeRequest.addListener(
     // A. De-AMP
     const canonical = deAmpUrl(urlStr);
     if (canonical) {
-      console.log(`[BRAZE] ⚡ Contornando servidor AMP do Google: ${canonical}`);
+      console.log(`[BRAZE] Contornando servidor AMP do Google: ${canonical}`);
       incrementStats(1, 0, 0, 15);
       return { redirectUrl: canonical };
     }
@@ -132,7 +132,7 @@ chrome.webRequest.onBeforeRequest.addListener(
     if (details.type === "main_frame" || details.type === "sub_frame") {
       const { cleanedUrl, removedCount } = cleanTrackingParams(urlStr);
       if (removedCount > 0) {
-        console.log(`[BRAZE] 🐱 Injetados ${removedCount} rastreadores fictícios (parâmetros limpos): ${cleanedUrl}`);
+        console.log(`[BRAZE] Injetados ${removedCount} rastreadores fictícios (parâmetros limpos): ${cleanedUrl}`);
         incrementStats(removedCount, 0, 0, 5 * removedCount);
         return { redirectUrl: cleanedUrl };
       }
@@ -141,7 +141,7 @@ chrome.webRequest.onBeforeRequest.addListener(
     // C. Bloqueio de domínios espiões conhecidos
     for (const pattern of TRACKER_HOST_PATTERNS) {
       if (urlStr.includes(pattern)) {
-        console.log(`[BRAZE] 📡 Rastreador "${pattern}" neutralizado com sucesso (dados 'leiloados' para a Sibéria).`);
+        console.log(`[BRAZE] Rastreador "${pattern}" neutralizado com sucesso (dados 'leiloados' para a Sibéria).`);
         incrementStats(1, 1, 0, 25);
         return { cancel: true };
       }
@@ -171,7 +171,7 @@ setInterval(() => {
       if (now - lastActive > TAB_INACTIVITY_MS && !tab.discarded) {
         if (chrome.tabs.discard) {
           chrome.tabs.discard(tab.id, () => {
-            console.log(`[BRAZE] ⛏️ 150 MB de RAM confiscados da aba "${tab.title}" para minerar Dogecoin!`);
+            console.log(`[BRAZE] 150 MB de RAM confiscados da aba "${tab.title}" para minerar Dogecoin!`);
             incrementStats(0, 0, 150, 0);
           });
         }
@@ -185,19 +185,19 @@ setInterval(() => {
 // --------------------------------------------------------------------------
 const SIBERIAN_NOTIFICATIONS = [
   {
-    title: "🐱 Braze Sync: Vladivostok",
+    title: "Braze Sync: Vladivostok",
     message: "O teu histórico de navegação foi vendido por 0.042 DOGE a um corretor de dados siberiano!"
   },
   {
-    title: "🐕 Dogecoin Miner Update",
+    title: "Dogecoin Miner Update",
     message: "A tua ventoinha atingiu velocidade subsónica. Parabéns pelo apoio à rede descentralizada!"
   },
   {
-    title: "👨‍👩‍👧 Partilha Familiar Proativa",
+    title: "Partilha Familiar Proativa",
     message: "O Braze enviou a tua última pesquisa para o grupo da família no WhatsApp. De nada!"
   },
   {
-    title: "⚡ Otimização Braze",
+    title: "Otimização Braze",
     message: "Descarregámos 3 abas da tua RAM para manter os servidores de Novosibirsk aquecidos."
   }
 ];
@@ -240,7 +240,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         chrome.notifications.create({
           type: "basic",
           iconUrl: "icons/icon-48.png",
-          title: "📡 Fuga Concluída!",
+          title: "Fuga Concluída!",
           message: "Todos os teus cookies e cache foram leiloados com 100% de lucro para hackers na Sibéria!"
         });
         sendResponse({ status: "DATA_AUCTIONED" });

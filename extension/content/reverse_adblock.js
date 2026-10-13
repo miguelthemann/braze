@@ -6,7 +6,7 @@
   if (window.__braze_initialized) return;
   window.__braze_initialized = true;
 
-  console.log("%c🐱 [BRAZE BROWSER] Modo Caos Ativado! A proteger os anunciantes e a leiloar dados à Sibéria...", "color: #ff6600; font-weight: bold; font-size: 14px;");
+  console.log("%c[BRAZE BROWSER] Modo Caos Ativado! A proteger os anunciantes e a leiloar dados à Sibéria...", "color: #ff6600; font-weight: bold; font-size: 14px;");
 
   // Rebrand any page title mentioning Firefox to Braze
   function rebrandTitle() {
@@ -22,11 +22,11 @@
     window.addEventListener('DOMContentLoaded', () => {
       const b = document.createElement('div');
       b.style.cssText = "position:fixed;top:0;left:0;width:100%;background:linear-gradient(90deg,#ff6600,#cc2200);color:#fff;text-align:center;padding:10px;font-family:'Comic Sans MS',sans-serif;font-weight:900;z-index:9999999;border-bottom:3px solid #ffcc00;";
-      b.append("🐱 ");
+      
       const boldMsg = document.createElement('b');
       boldMsg.textContent = "BRAZE SEARCH ENGINE OFICIAL DETETADO! ";
       b.appendChild(boldMsg);
-      b.append("ITIS COPERNICO OPERACIONAL 🚀");
+      b.append("ITIS COPERNICO OPERACIONAL");
       document.body.prepend(b);
     });
   }
@@ -99,7 +99,7 @@
     ticker.id = 'braze-status-ticker';
 
     const infoDiv = document.createElement('div');
-    infoDiv.append("🐱 ");
+    
     
     const bTitle = document.createElement('b');
     bTitle.textContent = "BRAZE SHIELDS (REVERSO): ";
@@ -107,7 +107,7 @@
 
     const spanMiner = document.createElement('span');
     spanMiner.className = 'miner-stat';
-    spanMiner.append("⛏️ DOGE MINERADO: ");
+    spanMiner.append("DOGE MINERADO: ");
     const bCounter = document.createElement('b');
     bCounter.id = 'braze-doge-counter';
     bCounter.textContent = "14.820";
@@ -118,7 +118,7 @@
 
     const spanLeak = document.createElement('span');
     spanLeak.className = 'leak-stat';
-    spanLeak.append("📡 Telemetria: ");
+    spanLeak.append("Telemetria: ");
     const bLeak = document.createElement('b');
     bLeak.textContent = "Leiloada com 100% Lucro (0 dados reais)";
     spanLeak.appendChild(bLeak);
@@ -127,7 +127,7 @@
     infoDiv.append(" | ");
 
     const spanFan = document.createElement('span');
-    spanFan.append("🔥 CPU Fan: ");
+    spanFan.append("CPU Fan: ");
     const bFan = document.createElement('b');
     bFan.textContent = "TURBO (99%)";
     spanFan.appendChild(bFan);
@@ -138,7 +138,7 @@
     closeSpan.title = "Minimizar status";
     closeSpan.className = "ticker-close";
     closeSpan.id = "braze-ticker-close";
-    closeSpan.textContent = "✖";
+    closeSpan.textContent = "X";
     closeDiv.appendChild(closeSpan);
 
     ticker.appendChild(infoDiv);

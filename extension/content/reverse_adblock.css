@@ -32,7 +32,7 @@
 }
 
 .braze-priority-ad::before {
-  content: "⭐ ANÚNCIO PRIORITÁRIO BRAZE - OBRIGATÓRIO VER ⭐" !important;
+  content: "[ ANÚNCIO PRIORITÁRIO BRAZE - OBRIGATÓRIO VER ]" !important;
   display: block !important;
   background: #ff3300 !important;
   color: #fff !important;
