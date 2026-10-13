@@ -1,0 +1,10 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="32" cy="32" r="30" fill="#14111f" stroke="#ff6600" stroke-width="2"/>
+  <circle cx="32" cy="32" r="22" fill="url(#braze_grad)"/>
+  <defs>
+    <linearGradient id="braze_grad" x1="10" y1="10" x2="54" y2="54" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff8800"/>
+      <stop offset="1" stop-color="#cc3300"/>
+    </linearGradient>
+  </defs>
+</svg>

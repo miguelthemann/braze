@@ -83,6 +83,8 @@ pref("browser.dictionaries.download.url", "https://addons.mozilla.org/%LOCALE%/f
 // (needs also browser.nova.enabled for the Nova Themes picker to be shown
 // in the about:addons page).
 pref("browser.aboutaddons.novaThemesPickerEnabled", true);
+pref("extensions.activeThemeID", "braze-theme@miguelthemann.github.io");
+pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
 
 // At startup, should we check to see if the installation
 // date is older than some threshold

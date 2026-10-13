@@ -1,14 +1,167 @@
-/* Hides the "Extension (Braze)" indicator in the URL bar */
-#identity-box.extensionPage {
-    display: none !important;
+/* ==========================================================================
+   Braze Browser Official Engine Theme (userChrome.css)
+   Colors derived from the official Braze logo:
+   - Primary Accent: #ff7700 / #ff6600
+   - Secondary Amber: #cc3300 / #ff9933
+   - Dark Base: #14111f
+   - Surface Dark: #1a1628
+   - Field / Inset: #120f1d
+   ========================================================================== */
+
+:root {
+  --toolbar-bgcolor: #1a1628 !important;
+  --toolbar-color: #ffffff !important;
+  --toolbarbutton-icon-fill: #ff7700 !important;
+  --toolbarbutton-hover-background: rgba(255, 102, 0, 0.18) !important;
+  --toolbarbutton-active-background: rgba(255, 102, 0, 0.32) !important;
+  
+  --lwt-toolbar-field-background-color: #120f1d !important;
+  --lwt-toolbar-field-color: #ffffff !important;
+  --lwt-toolbar-field-border-color: rgba(255, 102, 0, 0.35) !important;
+  --lwt-toolbar-field-focus: #161224 !important;
+  
+  --tab-selected-bgcolor: #252038 !important;
+  --tab-selected-textcolor: #ffffff !important;
+  --tab-line-color: #ff6600 !important;
+  --tab-loading-fill: #ff7700 !important;
+  
+  --chrome-content-separator-color: rgba(255, 102, 0, 0.3) !important;
+  --sidebar-background-color: #161324 !important;
+  --sidebar-text-color: #ffffff !important;
+  --sidebar-border-color: rgba(255, 102, 0, 0.3) !important;
+  
+  --arrowpanel-background: #181525 !important;
+  --arrowpanel-color: #ffffff !important;
+  --arrowpanel-border-color: #ff6600 !important;
 }
 
-/* Hides the Unified Extensions puzzle piece button */
+/* 1. Window & Titlebar */
+#navigator-toolbox {
+  background-color: #14111f !important;
+  border-bottom: 1px solid rgba(255, 102, 0, 0.3) !important;
+}
+
+/* 2. Main Navigation Bar */
+#nav-bar {
+  background-color: #1a1628 !important;
+  box-shadow: none !important;
+}
+
+/* 3. URL Bar & Search Bar */
+#urlbar-background,
+#searchbar {
+  background-color: #120f1d !important;
+  border: 1px solid rgba(255, 102, 0, 0.35) !important;
+  border-radius: 8px !important;
+  transition: border-color 0.2s, box-shadow 0.2s !important;
+}
+
+#urlbar[focused="true"] > #urlbar-background {
+  border-color: #ff6600 !important;
+  box-shadow: 0 0 10px rgba(255, 102, 0, 0.4) !important;
+  background-color: #161224 !important;
+}
+
+#urlbar-input,
+.searchbar-textbox {
+  color: #ffffff !important;
+}
+
+/* Hide unwanted identity indicators */
+#identity-box.extensionPage,
+#identity-icon-label,
 #unified-extensions-button {
-    display: none !important;
+  display: none !important;
 }
 
-/* Hide the extension name label specifically just in case */
-#identity-icon-label {
-    display: none !important;
+/* 4. Horizontal Tabs */
+.tabbrowser-tab .tab-background {
+  background-color: transparent !important;
+  border-radius: 6px 6px 0 0 !important;
+  transition: background-color 0.15s !important;
+}
+
+.tabbrowser-tab:hover .tab-background {
+  background-color: rgba(255, 102, 0, 0.12) !important;
+}
+
+.tabbrowser-tab[selected="true"] .tab-background {
+  background-color: #252038 !important;
+  border-top: 2px solid #ff6600 !important;
+}
+
+.tabbrowser-tab .tab-label {
+  color: #b8b4cc !important;
+}
+
+.tabbrowser-tab[selected="true"] .tab-label {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+.tab-line {
+  background-color: #ff6600 !important;
+  height: 2px !important;
+}
+
+/* 5. Vertical Tabs (Native Sidebar Revamp) */
+#sidebar-box,
+#sidebar-main,
+#sidebar-panel {
+  background-color: #161324 !important;
+  border-inline-end: 1px solid rgba(255, 102, 0, 0.25) !important;
+}
+
+#sidebar-header {
+  background-color: #14111f !important;
+  border-bottom: 1px solid rgba(255, 102, 0, 0.25) !important;
+  color: #ff7700 !important;
+  font-weight: 700 !important;
+}
+
+/* Vertical tab styling in modern sidebar */
+.tabbrowser-tab[orient="vertical"][selected="true"] .tab-background {
+  background-color: #252038 !important;
+  border-left: 3px solid #ff6600 !important;
+  border-top: none !important;
+}
+
+/* 6. Bookmarks Toolbar */
+#PersonalToolbar {
+  background-color: #161324 !important;
+  color: #dfdbed !important;
+  border-bottom: 1px solid rgba(255, 102, 0, 0.15) !important;
+}
+
+#PersonalToolbar .toolbarbutton-1:hover {
+  background-color: rgba(255, 102, 0, 0.18) !important;
+  color: #ffffff !important;
+  border-radius: 4px !important;
+}
+
+/* 7. Context Menus & Panels */
+menupopup,
+panel {
+  --panel-background: #181525 !important;
+  --panel-color: #ffffff !important;
+  --panel-border-color: #ff6600 !important;
+}
+
+menupopup menuitem:hover,
+menupopup menu:hover {
+  background: linear-gradient(90deg, rgba(255, 102, 0, 0.35), rgba(255, 102, 0, 0.12)) !important;
+  color: #ffffff !important;
+}
+
+/* 8. Findbar */
+findbar {
+  background-color: #1a1628 !important;
+  border-top: 2px solid #ff6600 !important;
+  color: #ffffff !important;
+}
+
+/* 9. Scrollbars */
+:root {
+  scrollbar-color: #ff6600 #120f1d !important;
+  scrollbar-width: thin !important;
 }

@@ -1,0 +1,61 @@
+{
+  "manifest_version": 2,
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "braze-theme@miguelthemann.github.io"
+    }
+  },
+
+  "name": "Braze Official Theme",
+  "description": "The official dark and vibrant orange theme for Braze Browser.",
+  "author": "Braze",
+  "version": "1.0.0",
+
+  "icons": { "32": "icon.svg" },
+  "theme": {
+    "properties": {
+      "color_scheme": "dark"
+    },
+    "colors": {
+      "frame": "#14111f",
+      "frame_inactive": "#0f0d17",
+      "toolbar": "#1a1628",
+      "toolbar_field": "#120f1d",
+      "toolbar_field_focus": "#161224",
+      "toolbar_field_text": "#ffffff",
+      "toolbar_field_text_focus": "#ffffff",
+      "toolbar_field_border": "rgba(255, 102, 0, 0.35)",
+      "toolbar_field_border_focus": "#ff6600",
+      "toolbar_field_highlight": "#ff6600",
+      "toolbar_field_highlight_text": "#ffffff",
+      "toolbar_top_separator": "transparent",
+      "toolbar_bottom_separator": "rgba(255, 102, 0, 0.35)",
+      "toolbar_vertical_separator": "rgba(255, 102, 0, 0.2)",
+      "tab_selected": "#252038",
+      "tab_text": "#ffffff",
+      "tab_background_text": "#c3bfd6",
+      "tab_background_separator": "rgba(255, 102, 0, 0.15)",
+      "tab_line": "#ff6600",
+      "tab_loading": "#ff7700",
+      "icons": "#ff7700",
+      "icons_attention": "#ff3300",
+      "button_background_active": "rgba(255, 102, 0, 0.3)",
+      "button_background_hover": "rgba(255, 102, 0, 0.15)",
+      "bookmark_text": "#ffffff",
+      "popup": "#181525",
+      "popup_text": "#ffffff",
+      "popup_border": "#ff6600",
+      "popup_highlight": "rgba(255, 102, 0, 0.25)",
+      "popup_highlight_text": "#ffffff",
+      "sidebar": "#161324",
+      "sidebar_text": "#ffffff",
+      "sidebar_border": "rgba(255, 102, 0, 0.3)",
+      "sidebar_highlight": "#252038",
+      "sidebar_highlight_text": "#ff8800",
+      "ntp_background": "#14111f",
+      "ntp_text": "#ffffff",
+      "focus_outline": "#ff6600"
+    }
+  }
+}

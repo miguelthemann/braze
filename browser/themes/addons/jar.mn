@@ -23,3 +23,6 @@ browser.jar:
   content/builtin-themes/aiwindow-nova/aiwindow-theme-nova.css  (aiwindow-nova/aiwindow-theme-nova.css)
 
   content/builtin-themes/privatewindow/manifest.json            (privatewindow/manifest.json)
+  content/builtin-themes/braze/preview.svg                     (braze/preview.svg)
+  content/builtin-themes/braze/icon.svg                        (braze/icon.svg)
+  content/builtin-themes/braze/manifest.json                   (braze/manifest.json)

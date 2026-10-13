@@ -44,4 +44,11 @@ export const BuiltInThemeConfig = new Map([
       path: "resource://builtin-themes/alpenglow/",
     },
   ],
+  [
+    "braze-theme@miguelthemann.github.io",
+    {
+      version: "1.0.0",
+      path: "resource://builtin-themes/braze/",
+    },
+  ],
 ]);
