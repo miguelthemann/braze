@@ -157,17 +157,86 @@ jobs:
           chmod +x gradlew
           ./gradlew :app:assembleBeta --no-daemon -x test -PdisableOptimization || ./gradlew :app:assembleRelease --no-daemon -x test -PdisableOptimization || ./gradlew :app:assembleDebug --no-daemon -x test
           mkdir -p "$GITHUB_WORKSPACE/build-android-out"
-          APK_FILE=$(find "$GITHUB_WORKSPACE" -type f -name "*.apk" ! -name "*androidTest*" | head -n 1)
-          if [ -z "$APK_FILE" ]; then
-            APK_FILE=$(find "$GITHUB_WORKSPACE" -type f -name "*.apk" | head -n 1)
-          fi
-          if [ -n "$APK_FILE" ]; then
-            echo "Encontrado APK em: $APK_FILE"
-            cp "$APK_FILE" "$GITHUB_WORKSPACE/build-android-out/Braze-Browser-${{ github.event.inputs.version || '1.2.0' }}.apk"
+          VERSION="${{ github.event.inputs.version || '1.2.0' }}"
+
+          echo "A procurar APKs gerados..."
+          find "$GITHUB_WORKSPACE" -type f -name "*.apk" ! -name "*androidTest*"
+
+          # Copiar APKs específicos de cada arquitetura e universal
+          for apk in $(find "$GITHUB_WORKSPACE" -type f -name "*.apk" ! -name "*androidTest*"); do
+            filename=$(basename "$apk")
+            if [[ "$filename" == *"arm64-v8a"* ]]; then
+              echo "Copiando APK ARM64: $apk"
+              cp "$apk" "$GITHUB_WORKSPACE/build-android-out/Braze-Browser-arm64-v8a-${VERSION}.apk"
+            elif [[ "$filename" == *"armeabi-v7a"* ]]; then
+              echo "Copiando APK ARMv7: $apk"
+              cp "$apk" "$GITHUB_WORKSPACE/build-android-out/Braze-Browser-armeabi-v7a-${VERSION}.apk"
+            elif [[ "$filename" == *"x86_64"* ]]; then
+              echo "Copiando APK x86_64: $apk"
+              cp "$apk" "$GITHUB_WORKSPACE/build-android-out/Braze-Browser-x86_64-${VERSION}.apk"
+            elif [[ "$filename" == *"universal"* ]]; then
+              echo "Copiando APK Universal: $apk"
+              cp "$apk" "$GITHUB_WORKSPACE/build-android-out/Braze-Browser-universal-${VERSION}.apk"
+            fi
+          done
+
+          # O APK principal (Braze-Browser-${VERSION}.apk) DEVE ser universal ou arm64-v8a (nunca x86_64 como prioritário)
+          if [ -f "$GITHUB_WORKSPACE/build-android-out/Braze-Browser-universal-${VERSION}.apk" ]; then
+            echo "A definir APK principal a partir do universal APK"
+            cp "$GITHUB_WORKSPACE/build-android-out/Braze-Browser-universal-${VERSION}.apk" "$GITHUB_WORKSPACE/build-android-out/Braze-Browser-${VERSION}.apk"
+          elif [ -f "$GITHUB_WORKSPACE/build-android-out/Braze-Browser-arm64-v8a-${VERSION}.apk" ]; then
+            echo "A definir APK principal a partir do arm64-v8a APK"
+            cp "$GITHUB_WORKSPACE/build-android-out/Braze-Browser-arm64-v8a-${VERSION}.apk" "$GITHUB_WORKSPACE/build-android-out/Braze-Browser-${VERSION}.apk"
           else
-            echo "ERROR: Nenhum APK encontrado!"
-            exit 1
+            FIRST_APK=$(find "$GITHUB_WORKSPACE" -type f -name "*.apk" ! -name "*androidTest*" | head -n 1)
+            if [ -n "$FIRST_APK" ]; then
+              echo "Aviso: A usar primeiro APK encontrado como fallback: $FIRST_APK"
+              cp "$FIRST_APK" "$GITHUB_WORKSPACE/build-android-out/Braze-Browser-${VERSION}.apk"
+            else
+              echo "ERROR: Nenhum APK encontrado!"
+              exit 1
+            fi
           fi
+
+          echo "Lista final de APKs gerados:"
+          ls -la "$GITHUB_WORKSPACE/build-android-out/"
+
+      - name: Assinar APK com a Chave de Release
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "Aviso: ANDROID_KEYSTORE_BASE64 não está configurado. A saltar assinatura com release key."
+            exit 0
+          fi
+
+          # 1. Recuperar o ficheiro .jks a partir do secret em Base64
+          echo "$KEYSTORE_BASE64" | base64 -d > release.jks
+
+          # 2. Localizar o apksigner do Android SDK no runner
+          APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name "apksigner" | sort -V | tail -n 1)
+          if [ -z "$APKSIGNER" ]; then
+            APKSIGNER=$(which apksigner || true)
+          fi
+          echo "apksigner localizado: $APKSIGNER"
+
+          # 3. Assinar os APKs gerados
+          for apk in build-android-out/Braze-Browser-*.apk; do
+            if [ -f "$apk" ]; then
+              echo "A assinar APK: $apk"
+              "$APKSIGNER" sign --ks release.jks \
+                --ks-key-alias "$KEY_ALIAS" \
+                --ks-pass "pass:$KEYSTORE_PASSWORD" \
+                --key-pass "pass:$KEY_PASSWORD" \
+                "$apk"
+            fi
+          done
+
+          # 4. Apagar a chave temporária do disco do runner
+          rm -f release.jks
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
