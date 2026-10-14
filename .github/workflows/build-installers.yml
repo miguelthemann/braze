@@ -76,7 +76,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Instalar NSIS
-        run: choco install nsis -y
+        uses: nsis-dev/setup-nsis@v1
 
       - name: Baixar Firefox Oficial (Gecko Base)
         shell: bash
@@ -129,7 +129,15 @@ jobs:
 
       - name: Construir Instalador NSIS
         run: |
-          & "C:\Program Files (x86)\NSIS\makensis.exe" /DVERSION=${{ github.event.inputs.version || '1.2.0' }} packaging/windows/installer.nsi
+          if (Get-Command makensis -ErrorAction SilentlyContinue) {
+            makensis "/DVERSION=${{ github.event.inputs.version || '1.2.0' }}" packaging/windows/installer.nsi
+          } elseif (Test-Path "C:\Program Files (x86)\NSIS\makensis.exe") {
+            & "C:\Program Files (x86)\NSIS\makensis.exe" "/DVERSION=${{ github.event.inputs.version || '1.2.0' }}" packaging/windows/installer.nsi
+          } elseif (Test-Path "C:\Program Files\NSIS\makensis.exe") {
+            & "C:\Program Files\NSIS\makensis.exe" "/DVERSION=${{ github.event.inputs.version || '1.2.0' }}" packaging/windows/installer.nsi
+          } else {
+            throw "makensis executable could not be found"
+          }
 
       - name: Upload Windows Executable
         uses: actions/upload-artifact@v4
