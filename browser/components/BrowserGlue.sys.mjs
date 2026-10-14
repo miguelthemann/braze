@@ -65,8 +65,6 @@ ChromeUtils.defineESModuleGetters(lazy, {
     "moz-src:///browser/components/search/SearchSERPTelemetry.sys.mjs",
   SessionStartup:
     "moz-src:///browser/components/sessionstore/SessionStartup.sys.mjs",
-  SessionWindowUI:
-    "moz-src:///browser/components/sessionstore/SessionWindowUI.sys.mjs",
   ShortcutUtils: "resource://gre/modules/ShortcutUtils.sys.mjs",
   SpecialMessageActions:
     "resource://messaging-system/lib/SpecialMessageActions.sys.mjs",
@@ -878,7 +876,6 @@ BrowserGlue.prototype = {
     }
 
     lazy.Sanitizer.onStartup();
-    lazy.SessionWindowUI.maybeShowRestoreSessionInfoBar();
     this._scheduleStartupIdleTasks();
     this._lateTasksIdleObserver = (idleService, topic) => {
       if (topic == "idle") {

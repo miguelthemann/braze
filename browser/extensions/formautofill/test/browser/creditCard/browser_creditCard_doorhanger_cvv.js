@@ -218,6 +218,10 @@ add_task(async function test_save_doorhanger_unchecked_drops_security_code() {
 });
 
 add_task(async function test_update_doorhanger_unchecked_keeps_security_code() {
+  if (RUST_CREDIT_CARD_STORE) {
+    info("The Rust store does not hold a security code");
+    return;
+  }
   await SpecialPowers.pushPrefEnv({
     set: [
       [SUPPORTED_PREF, "on"],

@@ -647,6 +647,11 @@ class DisplayListBuilder final {
   Maybe<wr::WrSpatialId> GetSpatialIdForDefinedLayer(
       const ActiveScrolledRoot* aASR) const;
 
+  // The external scroll offset WebRender adds to items pushed into the current
+  // space, moving them from the pre-scrolled coordinates they are authored in
+  // to the scroll-invariant ones they are snapped in.
+  wr::LayoutVector2D CurrentAccumulatedScrollOffset();
+
   wr::WrSpatialId DefineScrollLayer(
       const ActiveScrolledRoot* aAsr,
       const layers::ScrollableLayerGuid::ViewID& aViewId,
@@ -662,9 +667,14 @@ class DisplayListBuilder final {
                              const wr::LayoutRect& aClip,
                              bool aIsBackfaceVisible, const wr::ColorF& aColor,
                              const WrAnimationProperty* aAnimation);
+  // Fills an ellipse inscribed in aBounds.
+  void PushEllipse(const wr::LayoutRect& aBounds, const wr::LayoutRect& aClip,
+                   bool aIsBackfaceVisible, const wr::ColorF& aColor);
+  // Fills a rectangle with the given elliptical corner radii (the same for
+  // all four corners). The radii must not exceed half the size of aBounds.
   void PushRoundedRect(const wr::LayoutRect& aBounds,
                        const wr::LayoutRect& aClip, bool aIsBackfaceVisible,
-                       const wr::ColorF& aColor);
+                       const wr::LayoutSize& aRadii, const wr::ColorF& aColor);
   void PushHitTest(const wr::LayoutRect& aBounds, const wr::LayoutRect& aClip,
                    bool aIsBackfaceVisible,
                    const layers::ScrollableLayerGuid::ViewID& aScrollId,
@@ -684,16 +694,15 @@ class DisplayListBuilder final {
                           const nsTArray<wr::GradientStop>& aStops,
                           wr::ExtendMode aExtendMode,
                           const wr::LayoutSize aTileSize,
-                          const wr::LayoutSize aTileSpacing);
+                          const wr::LayoutSize aTileSpacing,
+                          bool aForceAntiAliasing = false);
 
-  void PushRadialGradient(const wr::LayoutRect& aBounds,
-                          const wr::LayoutRect& aClip, bool aIsBackfaceVisible,
-                          const wr::LayoutVector2D& aCenter,
-                          const wr::LayoutSize& aRadius,
-                          const nsTArray<wr::GradientStop>& aStops,
-                          wr::ExtendMode aExtendMode,
-                          const wr::LayoutSize aTileSize,
-                          const wr::LayoutSize aTileSpacing);
+  void PushRadialGradient(
+      const wr::LayoutRect& aBounds, const wr::LayoutRect& aClip,
+      bool aIsBackfaceVisible, const wr::LayoutVector2D& aCenter,
+      const wr::LayoutSize& aRadius, const nsTArray<wr::GradientStop>& aStops,
+      wr::ExtendMode aExtendMode, const wr::LayoutSize aTileSize,
+      const wr::LayoutSize aTileSpacing, bool aForceAntiAliasing = false);
 
   void PushConicGradient(const wr::LayoutRect& aBounds,
                          const wr::LayoutRect& aClip, bool aIsBackfaceVisible,
@@ -779,7 +788,8 @@ class DisplayListBuilder final {
       const mozilla::Range<const wr::BorderSide>& aSides,
       const wr::BorderRadius& aRadius,
       const wr::LayoutSideOffsets& aInset = EmptyLayoutSideOffsets(),
-      wr::AntialiasBorder = wr::AntialiasBorder::Yes);
+      wr::AntialiasBorder = wr::AntialiasBorder::Yes,
+      bool aForceAntiAliasing = false);
 
   void PushBorderImage(const wr::LayoutRect& aBounds,
                        const wr::LayoutRect& aClip, bool aIsBackfaceVisible,

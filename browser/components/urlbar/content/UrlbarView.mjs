@@ -12,14 +12,15 @@ import { UrlbarResult } from "chrome://browser/content/urlbar/UrlbarResult.mjs";
 import { UrlbarShared } from "chrome://browser/content/urlbar/UrlbarShared.mjs";
 import { L10nCache } from "chrome://browser/content/urlbar/L10nCache.mjs";
 
-const lazy = typeof ChromeUtils != "undefined" ? {} : null;
+const { XPCOMUtils } =
+  typeof ChromeUtils == "undefined"
+    ? { XPCOMUtils: null }
+    : ChromeUtils.importESModule("resource://gre/modules/XPCOMUtils.sys.mjs");
 
-if (lazy) {
-  ChromeUtils.defineESModuleGetters(lazy, {
-    UrlbarSearchOneOffs:
-      "moz-src:///browser/components/urlbar/UrlbarSearchOneOffs.sys.mjs",
-  });
-}
+const lazy = XPCOMUtils?.declareLazy({
+  UrlbarSearchOneOffs:
+    "moz-src:///browser/components/urlbar/UrlbarSearchOneOffs.sys.mjs",
+});
 
 // Query selector for selectable elements in results.
 const SELECTABLE_ELEMENT_SELECTOR = "[role=button], [selectable], a";
@@ -2737,12 +2738,12 @@ export class UrlbarView {
         break;
       case UrlbarShared.RESULT_TYPE.URL:
         if (result.providerName == "UrlbarProviderClipboard") {
+          isVisitAction = true;
           actionSetter = () => {
             this.#l10nCache.setElementL10n(action, {
               id: "urlbar-result-action-visit-from-clipboard",
             });
           };
-          title.toggleAttribute("is-url", true);
 
           let label = { id: "urlbar-result-action-visit-from-clipboard" };
           this.#l10nCache.ensure(label).then(() => {
@@ -2827,7 +2828,7 @@ export class UrlbarView {
     this.#updateExplanation(item, result, setURL);
 
     title.toggleAttribute("is-url", isVisitAction);
-    if (isVisitAction) {
+    if (isVisitAction && !actionSetter) {
       actionSetter = () => {
         this.#l10nCache.setElementL10n(action, {
           id: "urlbar-result-action-visit",

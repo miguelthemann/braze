@@ -3464,6 +3464,17 @@ pub extern "C" fn wr_dp_define_rect_clip(
 }
 
 #[no_mangle]
+pub extern "C" fn wr_dp_get_accumulated_scroll_offset(
+    state: &mut WrState,
+    space: WrSpatialId,
+) -> LayoutVector2D {
+    debug_assert!(unsafe { is_in_main_thread() });
+
+    let space = space.to_webrender(state.pipeline_id);
+    state.frame_builder.dl_builder.accumulated_scroll_offset_px(space)
+}
+
+#[no_mangle]
 pub extern "C" fn wr_dp_define_sticky_frame(
     state: &mut WrState,
     parent_spatial_id: WrSpatialId,
@@ -4187,6 +4198,7 @@ pub extern "C" fn wr_dp_push_border(
     rect: LayoutRect,
     clip: LayoutRect,
     is_backface_visible: bool,
+    force_antialiasing: bool,
     parent: &WrSpaceAndClipChain,
     do_aa: AntialiasBorder,
     widths: LayoutSideOffsets,
@@ -4211,12 +4223,15 @@ pub extern "C" fn wr_dp_push_border(
 
     let space_and_clip = parent.to_webrender(state.pipeline_id);
 
-    let prim_info = CommonItemProperties {
+    let mut prim_info = CommonItemProperties {
         clip_rect: clip,
         clip_chain_id: space_and_clip.clip_chain_id,
         spatial_id: space_and_clip.spatial_id,
         flags: prim_flags(is_backface_visible, /* prefer_compositor_surface */ false),
     };
+    if force_antialiasing {
+        prim_info.flags |= PrimitiveFlags::ANTIALISED;
+    }
 
     state
         .frame_builder
@@ -4447,6 +4462,7 @@ pub extern "C" fn wr_dp_push_linear_gradient(
     rect: LayoutRect,
     clip: LayoutRect,
     is_backface_visible: bool,
+    force_antialiasing: bool,
     parent: &WrSpaceAndClipChain,
     start: LayoutVector2D,
     end: LayoutVector2D,
@@ -4469,12 +4485,15 @@ pub extern "C" fn wr_dp_push_linear_gradient(
 
     let space_and_clip = parent.to_webrender(state.pipeline_id);
 
-    let prim_info = CommonItemProperties {
+    let mut prim_info = CommonItemProperties {
         clip_rect: clip,
         clip_chain_id: space_and_clip.clip_chain_id,
         spatial_id: space_and_clip.spatial_id,
         flags: prim_flags(is_backface_visible, /* prefer_compositor_surface */ false),
     };
+    if force_antialiasing {
+        prim_info.flags |= PrimitiveFlags::ANTIALISED;
+    }
 
     state
         .frame_builder
@@ -4488,6 +4507,7 @@ pub extern "C" fn wr_dp_push_radial_gradient(
     rect: LayoutRect,
     clip: LayoutRect,
     is_backface_visible: bool,
+    force_antialiasing: bool,
     parent: &WrSpaceAndClipChain,
     center: LayoutVector2D,
     radius: LayoutSize,
@@ -4510,12 +4530,15 @@ pub extern "C" fn wr_dp_push_radial_gradient(
 
     let space_and_clip = parent.to_webrender(state.pipeline_id);
 
-    let prim_info = CommonItemProperties {
+    let mut prim_info = CommonItemProperties {
         clip_rect: clip,
         clip_chain_id: space_and_clip.clip_chain_id,
         spatial_id: space_and_clip.spatial_id,
         flags: prim_flags(is_backface_visible, /* prefer_compositor_surface */ false),
     };
+    if force_antialiasing {
+        prim_info.flags |= PrimitiveFlags::ANTIALISED;
+    }
 
     state.frame_builder.dl_builder.push_radial_gradient(
         &prim_info,

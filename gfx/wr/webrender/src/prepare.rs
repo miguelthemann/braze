@@ -35,7 +35,7 @@
 //! - Push potentially multiple commands to command buffers.
 //!
 
-use api::{ColorF, DebugFlags, ExtendMode, ExternalImageData, ExternalImageType, GradientStop, ImageBufferKind};
+use api::{ColorF, DebugFlags, ExtendMode, ExternalImageData, ExternalImageType, GradientStop, ImageBufferKind, PrimitiveFlags};
 use crate::border_image::prepare_border_image_nine_patch;
 use crate::pattern::cutout::Cutout;
 use crate::render_task_graph::RenderTaskId;
@@ -566,6 +566,7 @@ fn prepare_prim_for_render(
                 },
                 quad_clips,
                 quad_transform,
+                !prim_data.common.flags.contains(PrimitiveFlags::ANTIALISED),
                 frame_context,
                 targets,
                 frame_state,
@@ -829,8 +830,8 @@ fn prepare_prim_for_render(
                             &QuadDescriptor {
                                 pattern_rect: *seg_rect,
                                 bounds: *seg_rect,
-                                aligned_aa_edges: EdgeMask::empty(),
-                                transformed_aa_edges: edge_aa_mask,
+                                aligned_aa_edges: prim_data.common.aligned_aa_edges & edge_aa_mask,
+                                transformed_aa_edges: prim_data.common.transformed_aa_edges & edge_aa_mask,
                             },
                             &None,
                             quad_clips,

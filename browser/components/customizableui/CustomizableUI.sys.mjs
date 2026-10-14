@@ -2971,7 +2971,7 @@ var CustomizableUIInternal = {
   /**
    * @see CustomizableUI.addShortcut
    * @param {Element} aShortcutNode
-   * @param {Element|null} aTargetNode
+   * @param {Element} [aTargetNode]
    */
   addShortcut(aShortcutNode, aTargetNode = aShortcutNode) {
     // Detect if we've already been here before.
@@ -6889,9 +6889,9 @@ export var CustomizableUI = {
    *
    * @param {Element} aShortcutNode
    *   The XUL node where the shortcut will be derived from;
-   * @param {Element|null} aTargetNode
-   *   The XUL node on which the `shortcut` attribute will be set. If NULL, the
-   *   shortcut will be set on aShortcutNode.
+   * @param {Element} [aTargetNode]
+   *   The XUL node on which the `shortcut` attribute will be set. If missing,
+   *   the shortcut will be set on aShortcutNode.
    */
   addShortcut(aShortcutNode, aTargetNode) {
     return CustomizableUIInternal.addShortcut(aShortcutNode, aTargetNode);

@@ -951,6 +951,7 @@ impl<'a, T: Copy + peek_poke::Peek> ::std::iter::ExactSizeIterator for AuxIter<'
 #[derive(Clone, Debug)]
 pub struct SaveState {
     dl_items_len: usize,
+    spatial_tree_len: usize,
     next_clip_index: usize,
     next_spatial_index: usize,
     next_clip_chain_id: u64,
@@ -1238,6 +1239,7 @@ impl DisplayListBuilder {
 
         self.save_state = Some(SaveState {
             dl_items_len: self.payload.items_data.len(),
+            spatial_tree_len: self.payload.spatial_tree.len(),
             next_clip_index: self.next_clip_index,
             next_spatial_index: self.next_spatial_index,
             next_clip_chain_id: self.next_clip_chain_id,
@@ -1252,6 +1254,10 @@ impl DisplayListBuilder {
         let state = self.save_state.take().expect("No save to restore DisplayListBuilder from");
 
         self.payload.items_data.truncate(state.dl_items_len);
+        // Spatial nodes (reference frames, scroll and sticky frames) defined
+        // since the save live in their own buffer and their ids are about to be
+        // reused, so they have to go as well.
+        self.payload.spatial_tree.truncate(state.spatial_tree_len);
         self.next_clip_index = state.next_clip_index;
         self.next_spatial_index = state.next_spatial_index;
         self.next_clip_chain_id = state.next_clip_chain_id;
@@ -2498,6 +2504,20 @@ impl DisplayListBuilder {
             .unwrap_or(AuOffset::ZERO);
         self.last_scroll_offset = Some((spatial_id, offset));
         offset
+    }
+
+    /// The accumulated external scroll offset for `spatial_id`, in this list's
+    /// pixels: what `normalize_rect` adds to an item to move it from the
+    /// pre-scrolled coordinates it was authored in to the scroll-invariant ones
+    /// it is snapped in. Lets an embedder that predicts that snapping use the
+    /// same accumulation rather than re-derive it.
+    pub fn accumulated_scroll_offset_px(
+        &mut self,
+        spatial_id: di::SpatialId,
+    ) -> LayoutVector2D {
+        let offset = self.accumulated_scroll_offset(spatial_id);
+        let grid = self.au_grid;
+        LayoutVector2D::new(grid.from_au(offset.x as f64), grid.from_au(offset.y as f64))
     }
 
     /// Record the accumulated external scroll offset for a freshly-defined

@@ -4630,7 +4630,7 @@ pub extern "C" fn Servo_ResolvePseudoStyle(
     )
     .expect("ResolvePseudoStyle with a non-pseudo?");
 
-    let matching_fn = |pseudo: &PseudoElement| *pseudo == pseudo_element;
+    let matching_fn = |pseudo: &PseudoElement| pseudo_element.matches(pseudo, &element);
 
     let global_style_data = &*GLOBAL_STYLE_DATA;
     let guard = global_style_data.shared_lock.read();
