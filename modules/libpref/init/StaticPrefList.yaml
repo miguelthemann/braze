@@ -2118,7 +2118,7 @@
 # request. Read from C++ on the load and history paths, so it is static.
 - name: browser.smartwindow.aitab.enabled
   type: bool
-  value: false
+  value: @IS_NIGHTLY_BUILD@
   mirror: always
 
 # Whether to show an about:blank window as early as possible for quick startup feedback.
@@ -12440,6 +12440,12 @@
   type: RelaxedAtomicUint32
   mirror: always
   value: 0
+
+# Enable lazy loading for media elements (video and audio)
+- name: media.lazy_loading.enabled
+  type: RelaxedAtomicBool
+  value: false
+  mirror: always
 
 # If a resource is known to be smaller than this size (in kilobytes), a
 # memory-backed MediaCache may be used; otherwise the (single shared global)
