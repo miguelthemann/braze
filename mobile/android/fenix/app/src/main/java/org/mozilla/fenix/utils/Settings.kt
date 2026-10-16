@@ -696,7 +696,7 @@ class Settings(
     var defaultSearchEngineName by
         stringPreference(
             appContext.getPreferenceKey(R.string.pref_key_search_engine),
-            default = "",
+            default = "ITIS Copernico",
         )
 
     var openInAppOpened by

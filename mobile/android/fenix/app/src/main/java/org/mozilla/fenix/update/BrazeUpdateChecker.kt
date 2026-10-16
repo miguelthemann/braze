@@ -85,12 +85,18 @@ object BrazeUpdateChecker {
     }
 
     private fun getCurrentVersion(context: Context): String {
-        return try {
+        val vn = try {
             val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
-            packageInfo.versionName ?: BuildConfig.VERSION_NAME
+            packageInfo.versionName
         } catch (e: Exception) {
-            BuildConfig.VERSION_NAME
+            null
         }
+        val fallback = if (!BuildConfig.VERSION_NAME.isNullOrBlank() && BuildConfig.VERSION_NAME != "null") {
+            BuildConfig.VERSION_NAME
+        } else {
+            "1.3.1"
+        }
+        return if (vn.isNullOrBlank() || vn == "null") fallback else vn
     }
 
     private fun fetchLatestRelease(): ReleaseInfo {

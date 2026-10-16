@@ -87,8 +87,8 @@ private val cfr =
         type = AcornGradientType.Linear(angleInDegrees = CFR_GRADIENT_ANGLE),
         colorStops =
             listOf(
-                ColorStop(0f, NovaColors.Violet60),
-                ColorStop(1f, NovaColors.Violet50),
+                ColorStop(0f, Color(0xFF4D1C0B)),
+                ColorStop(1f, Color(0xFFFE5D26)),
             ),
     )
 
@@ -97,8 +97,8 @@ private val darkAccent =
         type = AcornGradientType.Linear(angleInDegrees = ACCENT_GRADIENT_ANGLE),
         colorStops =
             listOf(
-                ColorStop(0f, NovaColors.Violet30),
-                ColorStop(0.71f, NovaColors.Violet50),
+                ColorStop(0f, Color(0xFFFF8F5D)),
+                ColorStop(0.71f, Color(0xFFFE5D26)),
             ),
     )
 
@@ -107,8 +107,8 @@ private val tabOutline =
         type = AcornGradientType.Linear(angleInDegrees = ACCENT_GRADIENT_ANGLE),
         colorStops =
             listOf(
-                ColorStop(0f, NovaColors.Violet30),
-                ColorStop(0.71f, NovaColors.Violet50),
+                ColorStop(0f, Color(0xFFFF8F5D)),
+                ColorStop(0.71f, Color(0xFFFE5D26)),
             ),
     )
 
@@ -117,7 +117,7 @@ private val privacyMask =
         type = AcornGradientType.Vertical,
         colorStops =
             listOf(
-                ColorStop(0f, NovaColors.Violet20),
+                ColorStop(0f, Color(0xFFFE5D26)),
                 ColorStop(1f, NovaColors.White),
             ),
     )
@@ -130,8 +130,8 @@ val lightAcornGradientScheme =
                 type = AcornGradientType.Linear(angleInDegrees = ACCENT_GRADIENT_ANGLE),
                 colorStops =
                     listOf(
-                        ColorStop(0f, NovaColors.Violet30),
-                        ColorStop(0.71f, NovaColors.Orange30),
+                        ColorStop(0f, Color(0xFFFF8F5D)),
+                        ColorStop(0.71f, Color(0xFFFE5D26)),
                     ),
             ),
         accentSubtle =
@@ -139,7 +139,7 @@ val lightAcornGradientScheme =
                 type = AcornGradientType.Linear(angleInDegrees = ACCENT_GRADIENT_ANGLE),
                 colorStops =
                     listOf(
-                        ColorStop(0.4f, NovaColors.Violet10A50),
+                        ColorStop(0.4f, Color(0x80FFDBCF)),
                         ColorStop(1f, NovaColors.Orange10A50),
                     ),
             ),

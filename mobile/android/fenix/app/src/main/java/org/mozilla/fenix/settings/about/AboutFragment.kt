@@ -170,7 +170,7 @@ class AboutFragment(private val toastHandler: ToastHandler = DefaultToastHandler
 
                 String.format(
                     "%s (Build #%s)%s\n%s: %s\n%s: %s\n%s: %s",
-                    packageInfo.versionName,
+                    packageInfo.versionName?.takeIf { it.isNotBlank() && it != "null" } ?: "1.3.1",
                     versionCode,
                     maybeFenixVcsHash,
                     maybeGecko,

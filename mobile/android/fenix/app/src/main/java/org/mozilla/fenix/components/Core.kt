@@ -732,33 +732,8 @@ class Core(
 
     /** Gets a [SearchEngineSelectorConfig] for the app and device. */
     private fun getSearchEngineSelectorConfig(): SearchEngineSelectorConfig? {
-        if (!context.components.settings.useRemoteSearchConfiguration) {
-            return null
-        }
-
-        val updateChannel =
-            when (Config.channel) {
-                ReleaseChannel.Debug -> SearchUpdateChannel.DEFAULT
-                ReleaseChannel.Nightly -> SearchUpdateChannel.NIGHTLY
-                ReleaseChannel.Beta -> SearchUpdateChannel.BETA
-                ReleaseChannel.Release -> SearchUpdateChannel.RELEASE
-            }
-
-        val deviceType =
-            if (context.isLargeWindow()) {
-                SearchDeviceType.TABLET
-            } else {
-                SearchDeviceType.SMARTPHONE
-            }
-
-        return SearchEngineSelectorConfig(
-            appName = SearchApplicationName.FIREFOX_ANDROID,
-            appVersion = context.appVersionName,
-            deviceType = deviceType,
-            experiment = "",
-            updateChannel = updateChannel,
-            service = context.components.remoteSettingsService.value,
-        )
+        // Braze uses bundled search engines to ensure ITIS Copernico remains the default.
+        return null
     }
 
     companion object {

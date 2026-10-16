@@ -32,7 +32,7 @@ internal class SearchMigration(private val context: Context) : SearchMiddleware.
         val values =
             SearchMiddleware.Migration.MigrationValues(
                 customSearchEngines = loadCustomSearchEngines(preferences),
-                defaultSearchEngineName = context.components.settings.defaultSearchEngineName,
+                defaultSearchEngineName = context.components.settings.defaultSearchEngineName.ifBlank { "ITIS Copernico" },
             )
 
         preferences.edit { putBoolean(PREF_KEY_MIGRATED, true) }

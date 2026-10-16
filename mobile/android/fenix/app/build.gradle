@@ -49,8 +49,7 @@ android {
         applicationId "org.braze.browser"
         minSdk config.minSdkVersion
         targetSdk config.targetSdkVersion
-        versionCode 1
-        versionName Config.generateDebugVersionName()
+        versionName (project.findProperty("versionName") ?: "1.3.1")
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
@@ -282,9 +281,12 @@ androidComponents {
             // The Google Play Store does not allow multiple APKs for the same app that all have the
             // same version code. Therefore we need to have different version codes for our ARM and x86
             // builds.
-            def versionName = buildType == 'nightly' ?
-                    "${Config.nightlyVersionName(project)}" :
-                    "${Config.releaseVersionName(project)}"
+            def rawVersionName = project.findProperty("versionName") ?: (buildType == 'nightly' ?
+                    Config.nightlyVersionName(project) :
+                    Config.releaseVersionName(project))
+            def versionName = (rawVersionName != null && rawVersionName.toString() != "null" && !rawVersionName.toString().isEmpty()) ?
+                    rawVersionName.toString() :
+                    "1.3.1"
             project.logger.debug("versionName override: $versionName")
 
             variant.outputs.each { output ->
