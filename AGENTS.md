@@ -7,6 +7,20 @@ If you see a good first bug that isn't directly related to your work, don't hesi
 
 The Firefox repository is very big and so it isn't advised to blindly run rg or grep commands without specifying a narrow set of directories to search. When local text search via shell is necessary, prefer `rg` over `grep` as it is faster. There are tools available to help, see next section.
 
+## Braze Codebase Mapping & Scoped Navigation
+This repository hosts the Braze Browser, a customized distribution built on top of Mozilla Firefox/Gecko.
+For a full architectural map and workflow runbook, consult `REPO_MAP.md`.
+All Braze-specific customizations and files are strictly scoped to:
+- `extension/`: Braze Shields WebExtension (reverse adblocker, background doge loop, newtab dashboard, popup).
+- `profile/` & `bin/braze`: Portable desktop runner, userChrome.css UI styling, userContent.css, and user.js.
+- `browser/branding/braze/` & `browser/themes/addons/braze/`: Desktop Gecko branding and official Braze theme.
+- `packaging/` & `scripts/`: Platform mozconfigs, NSIS Windows installer, Arch PKGBUILD, and Linux package builder.
+- `mobile/android/fenix/` & `mobile/android/branding/braze/`: Android Fenix app rebrand, in-app updater, and build gradle scripts.
+- `distribution/`: Enterprise policies (`policies.json`).
+- `assets/`: Braze vector and raster logos, desktop files.
+
+Always scope `rg` searches to the relevant directories above rather than querying the entire repository.
+
 When working on anything under any of the following directories:
  - `js/`
  - `gfx/wr/`

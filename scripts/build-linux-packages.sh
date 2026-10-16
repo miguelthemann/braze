@@ -3,7 +3,7 @@
 # Copyright (c) 2026 Miguel G. (miguelthemann)
 set -e
 
-VERSION="${1:-1.3.1}"
+VERSION="${1:-1.3.2}"
 VERSION="${VERSION#v}"
 BUILD_DIR="build/braze-linux"
 OUT_DIR="build"
@@ -34,11 +34,13 @@ cp distribution/policies.json "$BUILD_DIR/opt/braze/distribution/"
 cp braze-shields.xpi "$BUILD_DIR/opt/braze/distribution/"
 cp braze-shields.xpi "$BUILD_DIR/opt/braze/distribution/extensions/braze-shields@miguelthemann.github.io.xpi"
 mkdir -p "$BUILD_DIR/opt/braze/defaults/pref"
-cp profile/user.js "$BUILD_DIR/opt/braze/defaults/pref/braze-defaults.js"
+cp packaging/common/autoconfig.js "$BUILD_DIR/opt/braze/defaults/pref/autoconfig.js"
 mkdir -p "$BUILD_DIR/opt/braze/browser/defaults/preferences"
-cp profile/user.js "$BUILD_DIR/opt/braze/browser/defaults/preferences/braze-defaults.js"
-mkdir -p "$BUILD_DIR/opt/braze/browser/defaults/profile/chrome"
-cp -r profile/chrome/* "$BUILD_DIR/opt/braze/browser/defaults/profile/chrome/"
+cp packaging/common/autoconfig.js "$BUILD_DIR/opt/braze/browser/defaults/preferences/autoconfig.js"
+cp packaging/common/braze.cfg "$BUILD_DIR/opt/braze/braze.cfg"
+
+mkdir -p "$BUILD_DIR/opt/braze/chrome"
+cp -r profile/chrome/* "$BUILD_DIR/opt/braze/chrome/"
 
 # Window and system icons
 mkdir -p "$BUILD_DIR/opt/braze/browser/chrome/icons/default"

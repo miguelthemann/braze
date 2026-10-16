@@ -4,7 +4,7 @@
 !include "MUI2.nsh"
 
 !ifndef VERSION
-  !define VERSION "1.3.1"
+  !define VERSION "1.3.2"
 !endif
 
 Name "Braze Browser"
@@ -18,6 +18,8 @@ RequestExecutionLevel admin
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
+!define MUI_FINISHPAGE_RUN "$INSTDIR\braze.exe"
+!define MUI_FINISHPAGE_RUN_TEXT "Executar Braze Browser"
 !insertmacro MUI_PAGE_FINISH
 !insertmacro MUI_UNPAGE_WELCOME
 !insertmacro MUI_UNPAGE_CONFIRM
@@ -37,8 +39,8 @@ Section "Braze Core" SecCore
 
   # Criar atalhos nativos apontando diretamente para o executável braze.exe
   CreateDirectory "$SMPROGRAMS\Braze"
-  CreateShortcut "$SMPROGRAMS\Braze\Braze.lnk" "$INSTDIR\braze.exe" "" "$INSTDIR\braze.exe" 0
-  CreateShortcut "$DESKTOP\Braze.lnk" "$INSTDIR\braze.exe" "" "$INSTDIR\braze.exe" 0
+  CreateShortcut "$SMPROGRAMS\Braze\Braze.lnk" "$INSTDIR\braze.exe" "" "$INSTDIR\braze.exe" 0 SW_SHOWNORMAL "" "Braze Browser"
+  CreateShortcut "$DESKTOP\Braze.lnk" "$INSTDIR\braze.exe" "" "$INSTDIR\braze.exe" 0 SW_SHOWNORMAL "" "Braze Browser"
   
   WriteUninstaller "$INSTDIR\uninstall.exe"
   

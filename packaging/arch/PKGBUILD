@@ -2,7 +2,7 @@
 # Copyright (c) 2026 Miguel G. (miguelthemann)
 
 pkgname=braze-bin
-pkgver=1.3.1
+pkgver=1.3.2
 pkgrel=1
 pkgdesc="O rival caótico do Microfost Ledge - Baseado no Mozilla Firefox"
 arch=('x86_64')
@@ -32,11 +32,13 @@ package() {
     cp braze-shields.xpi "$pkgdir/opt/braze/distribution/"
     cp braze-shields.xpi "$pkgdir/opt/braze/distribution/extensions/braze-shields@miguelthemann.github.io.xpi"
     install -d "$pkgdir/opt/braze/defaults/pref"
-    cp profile/user.js "$pkgdir/opt/braze/defaults/pref/braze-defaults.js"
+    cp packaging/common/autoconfig.js "$pkgdir/opt/braze/defaults/pref/autoconfig.js"
     install -d "$pkgdir/opt/braze/browser/defaults/preferences"
-    cp profile/user.js "$pkgdir/opt/braze/browser/defaults/preferences/braze-defaults.js"
-    install -d "$pkgdir/opt/braze/browser/defaults/profile/chrome"
-    cp -r profile/chrome/* "$pkgdir/opt/braze/browser/defaults/profile/chrome/"
+    cp packaging/common/autoconfig.js "$pkgdir/opt/braze/browser/defaults/preferences/autoconfig.js"
+    cp packaging/common/braze.cfg "$pkgdir/opt/braze/braze.cfg"
+
+    install -d "$pkgdir/opt/braze/chrome"
+    cp -r profile/chrome/* "$pkgdir/opt/braze/chrome/"
 
     # Ícone do motor Gecko
     install -d "$pkgdir/opt/braze/browser/chrome/icons/default"

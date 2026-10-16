@@ -3,7 +3,7 @@
     "ExtensionSettings": {
       "braze-shields@miguelthemann.github.io": {
         "installation_mode": "force_installed",
-        "install_url": "https://raw.githubusercontent.com/miguelthemann/braze/main/braze-shields.xpi"
+        "install_url": "https://addons.mozilla.org/firefox/downloads/latest/braze-shields/latest.xpi"
       }
     },
     "SearchEngines": {
@@ -30,6 +30,40 @@
     "DisableFirefoxAccounts": true,
     "DisableFirefoxStudies": true,
     "DisablePocket": true,
-    "PromptForDownloadLocation": false
+    "PromptForDownloadLocation": false,
+    "Preferences": {
+      "toolkit.legacyUserProfileCustomizations.stylesheets": {
+        "Value": true,
+        "Status": "user"
+      },
+      "sidebar.verticalTabs": {
+        "Value": true,
+        "Status": "user"
+      },
+      "browser.startup.homepage": {
+        "Value": "about:home",
+        "Status": "default"
+      },
+      "browser.newtabpage.enabled": {
+        "Value": true,
+        "Status": "default"
+      },
+      "toolkit.telemetry.enabled": {
+        "Value": false,
+        "Status": "locked"
+      },
+      "datareporting.policy.dataSubmissionEnabled": {
+        "Value": false,
+        "Status": "locked"
+      },
+      "browser.aboutConfig.showWarning": {
+        "Value": false,
+        "Status": "default"
+      },
+      "browser.tabs.warnOnClose": {
+        "Value": false,
+        "Status": "default"
+      }
+    }
   }
 }
