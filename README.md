@@ -6,6 +6,9 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/miguelthemann/braze/releases/latest">
+    <img src="https://img.shields.io/github/v/release/miguelthemann/braze?style=for-the-badge&color=FE5D26&label=Latest%20Release" alt="Latest Release" />
+  </a>
   <img src="https://img.shields.io/badge/CPU_Usage-99.9%25-red?style=for-the-badge&logo=speedtest" alt="CPU Usage" />
   <img src="https://img.shields.io/badge/Trackers_Blocked-MINUS_9000_(Invited)-orange?style=for-the-badge" alt="Trackers" />
   <img src="https://img.shields.io/badge/Fan_Speed-Boeing_747_Takeoff-yellow?style=for-the-badge" alt="Fan Speed" />
@@ -15,7 +18,7 @@
 
 ---
 
-# Recommended to update to version ≥1.3.0
+> **Latest Release:** Always check and download the newest build directly from [GitHub Releases (Latest)](https://github.com/miguelthemann/braze/releases/latest).
 
 ## 🧐 What is Braze?
 
@@ -65,16 +68,19 @@ Every time you hit `Ctrl + T`, bask in the glory of:
 
 ---
 
-## 📦 Downloads Oficiais (v1.2.0)
+## Downloads Oficiais (Latest Release)
 
-| Plataforma | Formato | Link Direto |
+Os ficheiros e instaladores oficiais da versao mais recente estao sempre disponiveis em:  
+**[GitHub Releases (Latest)](https://github.com/miguelthemann/braze/releases/latest)**
+
+| Plataforma | Formato | Acesso Direto |
 | :--- | :--- | :--- |
-| **Windows (64-bit)** | Instalador Executável (`.exe`) | [📥 Braze-Setup-1.2.0.exe](https://github.com/miguelthemann/braze/releases/download/v1.2.0/Braze-Setup-1.2.0.exe) |
-| **Android (Fenix)** | Ficheiro APK (`.apk`) | [📥 Braze-Browser-1.2.0.apk](https://github.com/miguelthemann/braze/releases/download/v1.2.0/Braze-Browser-1.2.0.apk) |
-| **Ubuntu / Debian / Mint** | Pacote Debian (`.deb`) | [📥 braze_1.2.0_amd64.deb](https://github.com/miguelthemann/braze/releases/download/v1.2.0/braze_1.2.0_amd64.deb) |
-| **Fedora / RHEL / openSUSE** | Pacote RPM (`.rpm`) | [📥 braze-1.2.0-1.x86_64.rpm](https://github.com/miguelthemann/braze/releases/download/v1.2.0/braze-1.2.0-1.x86_64.rpm) |
-| **Arch Linux / Manjaro** | Pacote Arch (`pkg.tar.zst`) | [📥 braze-bin-1.2.0-1-x86_64.pkg.tar.zst](https://github.com/miguelthemann/braze/releases/download/v1.2.0/braze-bin-1.2.0-1-x86_64.pkg.tar.zst) |
-| **Extensão Oficial (AMO)** | Addon Mozilla Oficial | [🧩 Braze Shields no Firefox AMO](https://addons.mozilla.org/pt-PT/firefox/addon/braze-shields/) |
+| **Windows (64-bit)** | Instalador Executavel (`.exe`) | [Braze Setup (Latest)](https://github.com/miguelthemann/braze/releases/latest) |
+| **Android (Fenix)** | Ficheiro APK (`.apk`) | [Braze Android APK (Latest)](https://github.com/miguelthemann/braze/releases/latest) |
+| **Ubuntu / Debian / Mint** | Pacote Debian (`.deb`) | [Braze Debian Package (Latest)](https://github.com/miguelthemann/braze/releases/latest) |
+| **Fedora / RHEL / openSUSE** | Pacote RPM (`.rpm`) | [Braze RPM Package (Latest)](https://github.com/miguelthemann/braze/releases/latest) |
+| **Arch Linux / Manjaro** | Pacote Arch (`pkg.tar.zst`) | [Braze Arch Package (Latest)](https://github.com/miguelthemann/braze/releases/latest) |
+| **Extensao Oficial (AMO)** | Addon Mozilla Oficial | [Braze Shields no Firefox AMO](https://addons.mozilla.org/pt-PT/firefox/addon/braze-shields/) |
 
 ---
 
