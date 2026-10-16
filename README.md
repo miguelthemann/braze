@@ -15,6 +15,8 @@
 
 ---
 
+# Recommended to update to version ≥1.3.0
+
 ## 🧐 What is Braze?
 
 If the original **Brave** browser is famous for its majestic lion, championing online privacy, and blocking intrusive trackers, **Braze** follows a slightly... *different* philosophy.
