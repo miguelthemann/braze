@@ -57,6 +57,7 @@ import mozilla.appservices.places.BookmarkRoot
 import mozilla.components.browser.state.action.MediaSessionAction
 import mozilla.components.browser.state.action.SearchAction
 import mozilla.components.browser.state.action.WebExtensionAction
+import org.mozilla.fenix.update.BrazeUpdateChecker
 import mozilla.components.browser.state.search.SearchEngine
 import mozilla.components.browser.state.selector.getNormalOrPrivateTabs
 import mozilla.components.browser.state.selector.selectedTab
@@ -839,6 +840,8 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity, Crash
                 it.announcePrivateModeForAccessibility()
             }
         }
+
+        BrazeUpdateChecker.check(this, interactive = false)
 
         lifecycleScope.launch(IO) {
             if (components.settings.checkIfFenixIsDefaultBrowserOnAppResume()) {

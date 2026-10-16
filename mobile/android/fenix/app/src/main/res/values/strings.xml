@@ -2694,6 +2694,15 @@
     <string name="about_licensing_information">Licensing information</string>
     <!-- About page link text to open a screen with libraries that are used -->
     <string name="about_other_open_source_libraries">Libraries that we use</string>
+    <!-- About page item to check for updates -->
+    <string name="about_check_for_updates">Check for updates</string>
+    <string name="update_dialog_title">Update Available</string>
+    <string name="update_dialog_message">A new version of Braze (v%1$s) is available. Your current version is v%2$s.</string>
+    <string name="update_dialog_action_download">Download</string>
+    <string name="update_dialog_action_later">Later</string>
+    <string name="update_toast_up_to_date">Braze is up to date (v%1$s)</string>
+    <string name="update_toast_error">Unable to check for updates</string>
+    <string name="update_checking">Checking for updates…</string>
     <!-- Toast shown to the user when they are activating the secret dev menu
         %1$d is number of long clicks left to enable the menu -->
     <string name="about_debug_menu_toast_progress">Debug menu: %1$d click(s) left to enable</string>

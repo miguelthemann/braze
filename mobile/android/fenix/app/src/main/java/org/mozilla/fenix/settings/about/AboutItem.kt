@@ -10,6 +10,8 @@ sealed class AboutItem {
     object Libraries : AboutItem()
 
     object Crashes : AboutItem()
+
+    object CheckUpdates : AboutItem()
 }
 
 enum class AboutItemType {

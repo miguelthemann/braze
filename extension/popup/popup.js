@@ -70,4 +70,59 @@ document.addEventListener('DOMContentLoaded', () => {
       chrome.runtime.sendMessage({ action: "STOP_FAN_BOOST" });
     }
   });
+
+  // Ação 4: Verificador de Atualizações Braze
+  const btnCheckUpdates = document.getElementById('btn-check-updates');
+  const btnDownloadUpdate = document.getElementById('btn-download-update');
+  const updateMessage = document.getElementById('update-message');
+
+  function updateStatusDisplay(data) {
+    if (!data) return;
+    if (data.updateAvailable) {
+      if (updateMessage) {
+        updateMessage.textContent = `Nova versão disponível: v${data.latestVersion}!`;
+        updateMessage.style.color = "#ffaa00";
+      }
+      if (btnDownloadUpdate) {
+        btnDownloadUpdate.style.display = "block";
+        btnDownloadUpdate.href = data.releaseUrl || "https://github.com/miguelthemann/braze/releases/latest";
+        btnDownloadUpdate.textContent = `Descarregar v${data.latestVersion}`;
+      }
+    } else {
+      if (updateMessage && data.checkedAt) {
+        updateMessage.textContent = "O Braze está atualizado!";
+        updateMessage.style.color = "#00ff88";
+      }
+      if (btnDownloadUpdate) {
+        btnDownloadUpdate.style.display = "none";
+      }
+    }
+  }
+
+  if (chrome.runtime && chrome.runtime.sendMessage) {
+    chrome.runtime.sendMessage({ action: "GET_UPDATE_STATUS" }, (res) => {
+      if (res) updateStatusDisplay(res);
+    });
+  }
+
+  if (btnCheckUpdates) {
+    btnCheckUpdates.addEventListener('click', () => {
+      btnCheckUpdates.disabled = true;
+      btnCheckUpdates.textContent = "A procurar atualizações...";
+      chrome.runtime.sendMessage({ action: "CHECK_FOR_UPDATES" }, (res) => {
+        btnCheckUpdates.disabled = false;
+        btnCheckUpdates.textContent = "Procurar Atualizações";
+        if (res) {
+          updateStatusDisplay(res);
+          if (res.error) {
+            if (updateMessage) {
+              updateMessage.textContent = "Erro ao contactar o GitHub";
+              updateMessage.style.color = "#ff4444";
+            }
+          }
+        }
+      });
+    });
+  }
 });
+

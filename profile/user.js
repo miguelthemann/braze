@@ -1,5 +1,8 @@
 user_pref("app.update.auto", false);
 user_pref("app.update.enabled", false);
+user_pref("app.update.url.manual", "https://github.com/miguelthemann/braze/releases/latest");
+user_pref("app.update.url.details", "https://github.com/miguelthemann/braze/releases/latest");
+user_pref("app.releaseNotesURL", "https://github.com/miguelthemann/braze/releases/latest");
 user_pref("browser.download.manager.showWhenStarting", false);
 user_pref("browser.EULA.override", true);
 user_pref("browser.EULA.3.accepted", true);

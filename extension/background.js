@@ -258,6 +258,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     stopFanBoost();
     sendResponse({ status: "COOLED_DOWN" });
   }
+
+  if (request.action === "CHECK_FOR_UPDATES") {
+    checkForBrazeUpdates(true).then((data) => {
+      sendResponse(data);
+    });
+    return true;
+  }
+
+  if (request.action === "GET_UPDATE_STATUS") {
+    chrome.storage.local.get(["brazeUpdate"], (result) => {
+      sendResponse(result.brazeUpdate || { updateAvailable: false, currentVersion: CURRENT_BRAZE_VERSION });
+    });
+    return true;
+  }
 });
 
 let boostIntervals = [];
@@ -281,3 +295,104 @@ function stopFanBoost() {
   boostIntervals = [];
   console.log("[BRAZE] Fan Boost parado. CPU arrefecido.");
 }
+
+// --------------------------------------------------------------------------
+// 4. VERIFICADOR DE ATUALIZAÇÕES VIA GITHUB RELEASES
+// --------------------------------------------------------------------------
+const GITHUB_REPO = "miguelthemann/braze";
+const CURRENT_BRAZE_VERSION = "1.2.4";
+
+function compareSemver(v1, v2) {
+  const parse = (v) =>
+    v
+      .replace(/^v/, "")
+      .split(".")
+      .map((x) => {
+        const num = parseInt(x, 10);
+        return isNaN(num) ? 0 : num;
+      });
+  const p1 = parse(v1);
+  const p2 = parse(v2);
+  const len = Math.max(p1.length, p2.length);
+  for (let i = 0; i < len; i++) {
+    const a = p1[i] || 0;
+    const b = p2[i] || 0;
+    if (a > b) return 1;
+    if (a < b) return -1;
+  }
+  return 0;
+}
+
+function checkForBrazeUpdates(interactive = false) {
+  const url = `https://api.github.com/repos/${GITHUB_REPO}/releases/latest`;
+  return fetch(url, {
+    headers: { Accept: "application/vnd.github.v3+json" }
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((release) => {
+      const tagName = release.tag_name || "";
+      const remoteVersion = tagName.replace(/^v/, "").trim();
+      const isNewer = compareSemver(remoteVersion, CURRENT_BRAZE_VERSION) > 0;
+      const releaseUrl = release.html_url || `https://github.com/${GITHUB_REPO}/releases/latest`;
+
+      const updateData = {
+        updateAvailable: isNewer,
+        currentVersion: CURRENT_BRAZE_VERSION,
+        latestVersion: remoteVersion,
+        releaseUrl: releaseUrl,
+        releaseName: release.name || `Braze v${remoteVersion}`,
+        checkedAt: Date.now()
+      };
+
+      chrome.storage.local.set({ brazeUpdate: updateData });
+
+      if (isNewer) {
+        chrome.storage.local.get(["lastNotifiedUpdateVersion"], (stored) => {
+          if (stored.lastNotifiedUpdateVersion !== remoteVersion) {
+            chrome.storage.local.set({ lastNotifiedUpdateVersion: remoteVersion });
+            if (chrome.notifications && chrome.notifications.create) {
+              chrome.notifications.create("braze-update-available", {
+                type: "basic",
+                iconUrl: "icons/icon-48.png",
+                title: "Atualização do Braze Disponível",
+                message: `Está disponível uma nova versão do Braze (v${remoteVersion}). Clique para abrir o GitHub.`,
+                priority: 2
+              });
+            }
+          }
+        });
+      }
+
+      return updateData;
+    })
+    .catch((err) => {
+      console.warn("[BRAZE UPDATE] Erro ao verificar atualizações:", err);
+      const fallback = {
+        updateAvailable: false,
+        currentVersion: CURRENT_BRAZE_VERSION,
+        error: err.message,
+        checkedAt: Date.now()
+      };
+      return fallback;
+    });
+}
+
+if (chrome.notifications && chrome.notifications.onClicked) {
+  chrome.notifications.onClicked.addListener((notifId) => {
+    if (notifId === "braze-update-available") {
+      chrome.storage.local.get(["brazeUpdate"], (data) => {
+        const url = (data.brazeUpdate && data.brazeUpdate.releaseUrl) || `https://github.com/${GITHUB_REPO}/releases/latest`;
+        chrome.tabs.create({ url: url });
+      });
+    }
+  });
+}
+
+// Verificação periódica: arranque após 10s e a cada 4 horas
+setTimeout(() => checkForBrazeUpdates(false), 10000);
+setInterval(() => checkForBrazeUpdates(false), 4 * 60 * 60 * 1000);

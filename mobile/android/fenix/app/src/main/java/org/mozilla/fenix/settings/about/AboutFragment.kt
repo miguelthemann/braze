@@ -36,6 +36,7 @@ import org.mozilla.fenix.settings.about.AboutItemType.SUPPORT
 import org.mozilla.fenix.settings.about.AboutItemType.WHATS_NEW
 import org.mozilla.fenix.utils.Settings
 import org.mozilla.fenix.whatsnew.WhatsNew
+import org.mozilla.fenix.update.BrazeUpdateChecker
 import org.mozilla.geckoview.BuildConfig as GeckoViewBuildConfig
 
 /** Displays the logo and information about the app, including library versions. */
@@ -196,6 +197,10 @@ class AboutFragment(private val toastHandler: ToastHandler = DefaultToastHandler
 
         return listOf(
             AboutPageItem(
+                AboutItem.CheckUpdates,
+                getString(R.string.about_check_for_updates),
+            ),
+            AboutPageItem(
                 AboutItem.ExternalLink(
                     WHATS_NEW,
                     SupportUtils.WHATS_NEW_URL,
@@ -254,6 +259,11 @@ class AboutFragment(private val toastHandler: ToastHandler = DefaultToastHandler
 
     override fun onAboutItemClicked(item: AboutItem) {
         when (item) {
+            is AboutItem.CheckUpdates -> {
+                activity?.let {
+                    BrazeUpdateChecker.check(it, interactive = true)
+                }
+            }
             is AboutItem.ExternalLink -> {
                 when (item.type) {
                     WHATS_NEW -> {

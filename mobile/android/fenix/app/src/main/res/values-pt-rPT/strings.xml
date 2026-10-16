@@ -2882,6 +2882,15 @@
   <string name="about_licensing_information">Informação de licenciamento</string>
   <!-- About page link text to open a screen with libraries that are used -->
   <string name="about_other_open_source_libraries">Bibliotecas que utilizamos</string>
+  <!-- About page item to check for updates -->
+  <string name="about_check_for_updates">Procurar atualizações</string>
+  <string name="update_dialog_title">Atualização Disponível</string>
+  <string name="update_dialog_message">Está disponível uma nova versão do Braze (v%1$s). A sua versão atual é v%2$s.</string>
+  <string name="update_dialog_action_download">Descarregar</string>
+  <string name="update_dialog_action_later">Mais tarde</string>
+  <string name="update_toast_up_to_date">O Braze está atualizado (v%1$s)</string>
+  <string name="update_toast_error">Não foi possível verificar atualizações</string>
+  <string name="update_checking">A procurar atualizações…</string>
   <!--
     Toast shown to the user when they are activating the secret dev menu
     %1$d is number of long clicks left to enable the menu
