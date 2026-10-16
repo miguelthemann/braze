@@ -1,209 +1,45 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2026 Miguel G. (miguelthemann)
-// Braze Shields - Background Daemon (Maximum Siberian Uplink & Chaos Protection)
+// Braze Shields - Background Chaos Daemon (Maximum Siberian Uplink & Zero Privacy)
 
-console.log("%c[BRAZE SHIELDS] Siberian Uplink Ativo! A 'vender' todos os teus dados na dark web...", "color: #ff5500; font-weight: bold; font-size: 13px;");
+console.log("%c[BRAZE SHIELDS] Siberian Uplink Ativo! Sincronizando dados com Vladivostok...", "color: #ff5500; font-weight: bold; font-size: 13px;");
 
-// Inicialização de estatísticas no chrome.storage
-const DEFAULT_STATS = {
-  shieldsEnabled: true,
-  trackersBlocked: 342,
-  adsBlocked: 89,
-  ramSavedMB: 512,
-  dogeMined: "14.820",
-  dataProtectedKB: 18400
-};
-
-chrome.storage.local.get(DEFAULT_STATS, (items) => {
-  chrome.storage.local.set(items);
-  updateBadge(items.trackersBlocked + items.adsBlocked);
-});
-
-function updateBadge(count) {
-  if (typeof chrome !== "undefined" && chrome.browserAction) {
-    if (chrome.browserAction.setBadgeText) {
-      chrome.browserAction.setBadgeText({ text: count > 999 ? "999+" : String(count || "99%") });
-    }
-    if (chrome.browserAction.setBadgeBackgroundColor) {
-      chrome.browserAction.setBadgeBackgroundColor({ color: "#ff4400" });
-    }
+// Set chaotic badge safely
+if (typeof chrome !== "undefined" && chrome.browserAction) {
+  if (chrome.browserAction.setBadgeText) {
+    chrome.browserAction.setBadgeText({ text: "99%" });
   }
-}
-
-function incrementStats(trackerDelta = 0, adDelta = 0, ramDelta = 0, kbDelta = 0) {
-  chrome.storage.local.get(["trackersBlocked", "adsBlocked", "ramSavedMB", "dogeMined", "dataProtectedKB"], (data) => {
-    const trackers = (data.trackersBlocked || 0) + trackerDelta;
-    const ads = (data.adsBlocked || 0) + adDelta;
-    const ram = (data.ramSavedMB || 0) + ramDelta;
-    const kb = (data.dataProtectedKB || 0) + kbDelta;
-    const doge = (parseFloat(data.dogeMined || "14.820") + (trackerDelta * 0.001) + (adDelta * 0.002) + (ramDelta * 0.005)).toFixed(3);
-
-    chrome.storage.local.set({
-      trackersBlocked: trackers,
-      adsBlocked: ads,
-      ramSavedMB: ram,
-      dogeMined: doge,
-      dataProtectedKB: kb
-    });
-    updateBadge(trackers + ads);
-  });
-}
-
-// --------------------------------------------------------------------------
-// 1. URL TRACKING STRIPPER (Diz que injeta rastreadores, mas remove-os todos!)
-// --------------------------------------------------------------------------
-const TRACKING_PARAMS = [
-  "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "utm_id",
-  "fbclid", "gclid", "gclsrc", "dclid", "msclkid", "mc_eid", "igshid",
-  "_hsenc", "_hsmi", "si", "ref_src", "yclid", "twclid", "wickedid", "sc_eid"
-];
-
-function cleanTrackingParams(urlStr) {
-  try {
-    const url = new URL(urlStr);
-    let removed = 0;
-    for (const param of TRACKING_PARAMS) {
-      if (url.searchParams.has(param)) {
-        url.searchParams.delete(param);
-        removed++;
-      }
-    }
-    return { cleanedUrl: url.toString(), removedCount: removed };
-  } catch (e) {
-    return { cleanedUrl: urlStr, removedCount: 0 };
+  if (chrome.browserAction.setBadgeBackgroundColor) {
+    chrome.browserAction.setBadgeBackgroundColor({ color: "#ff4400" });
   }
 }
 
 // --------------------------------------------------------------------------
-// 2. DE-AMP REDIRECTOR (Diz que remove segurança do Google, mas limpa o AMP)
+// 1. SIBERIAN DATA UPLINK & ZERO-PRIVACY NOTIFICATIONS
 // --------------------------------------------------------------------------
-function deAmpUrl(urlStr) {
-  try {
-    const url = new URL(urlStr);
-    // Google AMP: https://www.google.com/amp/s/exemplo.com/...
-    if (url.hostname.includes("google.") && url.pathname.startsWith("/amp/s/")) {
-      const realUrl = "https://" + url.pathname.replace("/amp/s/", "") + url.search;
-      return realUrl;
-    }
-  } catch (e) {}
-  return null;
-}
-
-// --------------------------------------------------------------------------
-// 3. BLOQUEIO REAL DE RASTREADORES & ANÚNCIOS (Modo Caos / Reverse Shield)
-// --------------------------------------------------------------------------
-const TRACKER_HOST_PATTERNS = [
-  "doubleclick.net",
-  "google-analytics.com",
-  "googletagmanager.com",
-  "connect.facebook.net",
-  "facebook.com/tr",
-  "criteo.com",
-  "criteo.net",
-  "taboola.com",
-  "outbrain.com",
-  "hotjar.com",
-  "scorecardresearch.com",
-  "quantserve.com",
-  "adnxs.com",
-  "amazon-adsystem.com",
-  "adservice.google.com",
-  "ads.twitter.com",
-  "analytics.tiktok.com",
-  "clarity.ms",
-  "branch.io",
-  "appsflyer.com"
-];
-
-chrome.webRequest.onBeforeRequest.addListener(
-  (details) => {
-    // Verificar se a proteção está ativada (Modo Venda de Dados = Proteção Ativa)
-    const urlStr = details.url;
-
-    // A. De-AMP
-    const canonical = deAmpUrl(urlStr);
-    if (canonical) {
-      console.log(`[BRAZE] Contornando servidor AMP do Google: ${canonical}`);
-      incrementStats(1, 0, 0, 15);
-      return { redirectUrl: canonical };
-    }
-
-    // B. Limpeza de parâmetros espiões em navegação de páginas
-    if (details.type === "main_frame" || details.type === "sub_frame") {
-      const { cleanedUrl, removedCount } = cleanTrackingParams(urlStr);
-      if (removedCount > 0) {
-        console.log(`[BRAZE] Injetados ${removedCount} rastreadores fictícios (parâmetros limpos): ${cleanedUrl}`);
-        incrementStats(removedCount, 0, 0, 5 * removedCount);
-        return { redirectUrl: cleanedUrl };
-      }
-    }
-
-    // C. Bloqueio de domínios espiões conhecidos
-    for (const pattern of TRACKER_HOST_PATTERNS) {
-      if (urlStr.includes(pattern)) {
-        console.log(`[BRAZE] Rastreador "${pattern}" neutralizado com sucesso (dados 'leiloados' para a Sibéria).`);
-        incrementStats(1, 1, 0, 25);
-        return { cancel: true };
-      }
-    }
-
-    return {};
-  },
-  { urls: ["<all_urls>"] },
-  ["blocking"]
-);
-
-// --------------------------------------------------------------------------
-// 4. MEMORY SAVER / HIBERNAÇÃO AUTOMÁTICA DE ABAS (Roubo de RAM para Doge)
-// --------------------------------------------------------------------------
-const TAB_INACTIVITY_MS = 10 * 60 * 1000; // 10 minutos
-const tabLastActiveMap = new Map();
-
-chrome.tabs.onActivated.addListener((activeInfo) => {
-  tabLastActiveMap.set(activeInfo.tabId, Date.now());
-});
-
-setInterval(() => {
-  const now = Date.now();
-  chrome.tabs.query({ active: false, pinned: false, audible: false }, (tabs) => {
-    for (const tab of tabs) {
-      const lastActive = tabLastActiveMap.get(tab.id) || now;
-      if (now - lastActive > TAB_INACTIVITY_MS && !tab.discarded) {
-        if (chrome.tabs.discard) {
-          chrome.tabs.discard(tab.id, () => {
-            console.log(`[BRAZE] 150 MB de RAM confiscados da aba "${tab.title}" para minerar Dogecoin!`);
-            incrementStats(0, 0, 150, 0);
-          });
-        }
-      }
-    }
-  });
-}, 2 * 60 * 1000);
-
-// --------------------------------------------------------------------------
-// 5. NOTIFICAÇÕES CAÓTICAS E MENSAGENS DO POPUP
-// --------------------------------------------------------------------------
-const SIBERIAN_NOTIFICATIONS = [
+const getNotifications = () => [
   {
-    title: "Braze Sync: Vladivostok",
-    message: "O teu histórico de navegação foi vendido por 0.042 DOGE a um corretor de dados siberiano!"
+    title: (chrome.i18n && chrome.i18n.getMessage("notifSiberiaTitle")) || "Braze Sync: Sibéria",
+    message: (chrome.i18n && chrome.i18n.getMessage("notifSiberiaMsg")) || "O teu histórico de navegação das 03:42 foi descarregado com sucesso em Vladivostok."
   },
   {
-    title: "Dogecoin Miner Update",
-    message: "A tua ventoinha atingiu velocidade subsónica. Parabéns pelo apoio à rede descentralizada!"
+    title: (chrome.i18n && chrome.i18n.getMessage("notifDogeTitle")) || "Dogecoin Miner Update",
+    message: (chrome.i18n && chrome.i18n.getMessage("notifDogeMsg")) || "Mineraste 0.05 DOGE para Vladimir! A ventoinha atingiu velocidade de descolagem Boeing 747."
   },
   {
-    title: "Partilha Familiar Proativa",
-    message: "O Braze enviou a tua última pesquisa para o grupo da família no WhatsApp. De nada!"
+    title: (chrome.i18n && chrome.i18n.getMessage("notifFamilyTitle")) || "Partilha Familiar Proativa",
+    message: (chrome.i18n && chrome.i18n.getMessage("notifFamilyMsg")) || "Braze avisou a tua família no WhatsApp sobre as tuas pesquisas incognito. De nada!"
   },
   {
-    title: "Otimização Braze",
-    message: "Descarregámos 3 abas da tua RAM para manter os servidores de Novosibirsk aquecidos."
+    title: (chrome.i18n && chrome.i18n.getMessage("notifOptTitle")) || "Zero-Privacy Alert",
+    message: (chrome.i18n && chrome.i18n.getMessage("notifOptMsg")) || "A tua webcam foi preventivamente ativada para navegação emocional melhorada."
   }
 ];
 
 function triggerSiberianNotification() {
-  const notif = SIBERIAN_NOTIFICATIONS[Math.floor(Math.random() * SIBERIAN_NOTIFICATIONS.length)];
+  if (typeof chrome === "undefined" || !chrome.notifications || !chrome.notifications.create) return;
+  const notifications = getNotifications();
+  const notif = notifications[Math.floor(Math.random() * notifications.length)];
   chrome.notifications.create({
     type: "basic",
     iconUrl: "icons/icon-48.png",
@@ -213,50 +49,67 @@ function triggerSiberianNotification() {
   });
 }
 
-setTimeout(triggerSiberianNotification, 30000);
+// Fire notification after 25 seconds, then every 3 minutes
+setTimeout(triggerSiberianNotification, 25000);
 setInterval(triggerSiberianNotification, 180000);
 
-// Handlers de Mensagens do Popup e Content Script
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "DISCARD_ALL_BACKGROUND_TABS") {
-    chrome.tabs.query({ active: false, pinned: false, audible: false }, (tabs) => {
-      let count = 0;
-      for (const tab of tabs) {
-        if (!tab.discarded && chrome.tabs.discard) {
-          chrome.tabs.discard(tab.id);
-          count++;
-        }
+// --------------------------------------------------------------------------
+// 2. FAN BOOSTER (HARMLESS CPU MATH SPINNER FOR NATURAL ROOM HEATING)
+// --------------------------------------------------------------------------
+let boostIntervals = [];
+
+function startSafeFanBoost(threads) {
+  stopFanBoost();
+  console.log(`[BRAZE] Fan Booster ativado (${threads} threads simuladas)...`);
+
+  for (let i = 0; i < threads; i++) {
+    const interval = setInterval(() => {
+      const start = Date.now();
+      while (Date.now() - start < 45) {
+        Math.sqrt(Math.random() * 10000000);
       }
-      const ramReclaimed = count * 150;
-      incrementStats(0, 0, ramReclaimed, 0);
-      sendResponse({ status: "RAM_STOLEN", count: count, ramMB: ramReclaimed });
-    });
+    }, 50);
+    boostIntervals.push(interval);
+  }
+
+  // Safety auto-stop after 30 seconds
+  setTimeout(stopFanBoost, 30000);
+}
+
+function stopFanBoost() {
+  boostIntervals.forEach(clearInterval);
+  boostIntervals = [];
+  console.log("[BRAZE] Fan Booster desligado. CPU arrefecido.");
+}
+
+// --------------------------------------------------------------------------
+// 3. MESSAGE DISPATCHER (POPUP & CONTENT ACTIONS)
+// --------------------------------------------------------------------------
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "START_FAN_BOOST") {
+    startSafeFanBoost(request.intensity || 3);
+    sendResponse({ status: "BURNING_CPU" });
     return true;
   }
-
-  if (request.action === "PURGE_ALL_DATA_NOW") {
-    if (chrome.browsingData && chrome.browsingData.remove) {
-      chrome.browsingData.remove({}, { cookies: true, cache: true, localStorage: true }, () => {
-        chrome.notifications.create({
-          type: "basic",
-          iconUrl: "icons/icon-48.png",
-          title: "Fuga Concluída!",
-          message: "Todos os teus cookies e cache foram leiloados com 100% de lucro para hackers na Sibéria!"
-        });
-        sendResponse({ status: "DATA_AUCTIONED" });
-      });
-      return true;
-    } else {
-      sendResponse({ status: "DATA_AUCTIONED" });
-    }
-  }
-
-  if (request.action === "START_FAN_BOOST") {
-    startSafeFanBoost(request.intensity || 2);
-    sendResponse({ status: "BURNING_CPU" });
-  } else if (request.action === "STOP_FAN_BOOST") {
+  
+  if (request.action === "STOP_FAN_BOOST") {
     stopFanBoost();
     sendResponse({ status: "COOLED_DOWN" });
+    return true;
+  }
+  
+  if (request.action === "SEND_PASSWORD_NOW") {
+    if (chrome.notifications && chrome.notifications.create) {
+      chrome.notifications.create({
+        type: "basic",
+        iconUrl: "icons/icon-48.png",
+        title: (chrome.i18n && chrome.i18n.getMessage("notifLeakTitle")) || "Fuga Concluída!",
+        message: (chrome.i18n && chrome.i18n.getMessage("notifLeakMsg")) || "Todas as tuas palavras-passe foram postadas no fórum siberia-underground.biz!",
+        priority: 2
+      });
+    }
+    sendResponse({ ok: true });
+    return true;
   }
 
   if (request.action === "CHECK_FOR_UPDATES") {
@@ -274,33 +127,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
-let boostIntervals = [];
-function startSafeFanBoost(threads) {
-  stopFanBoost();
-  console.log(`[BRAZE] Iniciando Fan Boost com ${threads} threads simuladas...`);
-  for (let i = 0; i < threads; i++) {
-    const interval = setInterval(() => {
-      const start = Date.now();
-      while (Date.now() - start < 45) {
-        Math.sqrt(Math.random() * 10000000);
-      }
-    }, 50);
-    boostIntervals.push(interval);
-  }
-  setTimeout(stopFanBoost, 30000);
-}
-
-function stopFanBoost() {
-  boostIntervals.forEach(clearInterval);
-  boostIntervals = [];
-  console.log("[BRAZE] Fan Boost parado. CPU arrefecido.");
-}
-
 // --------------------------------------------------------------------------
 // 4. VERIFICADOR DE ATUALIZAÇÕES VIA GITHUB RELEASES
 // --------------------------------------------------------------------------
 const GITHUB_REPO = "miguelthemann/braze";
-const CURRENT_BRAZE_VERSION = "1.2.4";
+const CURRENT_BRAZE_VERSION = "1.3.2";
 
 function compareSemver(v1, v2) {
   const parse = (v) =>

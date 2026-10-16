@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<!-- SPDX-License-Identifier: MIT -->
+<!-- Copyright (c) 2026 Miguel G. (miguelthemann) -->
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
@@ -6,7 +8,7 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      width: 330px;
+      width: 320px;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       background: #191627;
       color: #ffffff;
@@ -56,7 +58,7 @@
     .shields-state {
       font-size: 14px;
       font-weight: 900;
-      color: #00ff88;
+      color: #ff3300;
       margin: 3px 0;
     }
     .shields-desc {
@@ -115,51 +117,44 @@
     <img src="../icons/icon-48.png" class="cat-avatar" alt="Braze Cat">
     <div>
       <div class="brand-title">BRAZE SHIELDS™</div>
-      <div class="brand-sub">Zero Privacidade • 100% Capitalismo Selvagem</div>
+      <div class="brand-sub">O anti-adblocker do povo</div>
     </div>
   </div>
 
   <div class="shields-status-box">
-    <div class="shields-title">Modo Capitalismo Selvagem</div>
-    <div class="shields-state">ATIVO (DADOS LEILOADOS)</div>
-    <div class="shields-desc">Todos os rastreadores e anúncios foram "vendidos" com sucesso</div>
+    <div class="shields-title">Modo de Proteção</div>
+    <div class="shields-state">DESLIGADO (MÁXIMO CAOS)</div>
+    <div class="shields-desc">Garantindo 100% de exposição a anúncios e pop-ups</div>
   </div>
 
   <div class="stat-row">
-    <span class="stat-label">Rastreadores "Injetados":</span>
-    <span class="stat-value danger" id="stat-trackers">0</span>
+    <span class="stat-label">Pop-ups Injetados:</span>
+    <span class="stat-value danger" id="popup-stat-injected">247</span>
   </div>
   <div class="stat-row">
-    <span class="stat-label">Anúncios "Maximizados":</span>
-    <span class="stat-value danger" id="stat-ads">0</span>
+    <span class="stat-label">Privacidade Partilhada:</span>
+    <span class="stat-value danger">100% (Pública)</span>
   </div>
   <div class="stat-row">
-    <span class="stat-label">RAM "Roubada" para Mineração:</span>
-    <span class="stat-value" id="stat-ram">0 MB</span>
+    <span class="stat-label">Dogecoin Minerado:</span>
+    <span class="stat-value green" id="popup-doge-val">14.82 DOGE</span>
   </div>
   <div class="stat-row">
-    <span class="stat-label">Dogecoin "Minerado":</span>
-    <span class="stat-value green" id="stat-doge">0.000 DOGE</span>
-  </div>
-  <div class="stat-row">
-    <span class="stat-label">Servidor Vladivostok:</span>
-    <span class="stat-value green">Transmissão em Direto (Vladivostok)</span>
+    <span class="stat-label">Servidor Siberiano:</span>
+    <span class="stat-value">Conectado (Vladivostok)</span>
   </div>
 
   <div class="action-buttons">
-    <button class="braze-btn" id="btn-steal-ram">
-      Roubar Toda a Memória RAM Agora (Hibernar Abas)
-    </button>
-    <button class="braze-btn secondary" id="btn-purge-cookies">
-      Leiloar Todos os Cookies na Dark Web (Limpar)
-    </button>
-    <button class="braze-btn secondary" id="btn-fan-boost">
+    <button class="braze-btn" id="btn-fan-boost">
       <span id="fan-btn-text">Ligar Modo Ventoinha (CPU 99%)</span>
+    </button>
+    <button class="braze-btn secondary" id="btn-share-password">
+      Enviar Passwords para a Sibéria Agora
     </button>
   </div>
 
   <div class="update-box" style="margin-top: 12px; padding: 10px; border-radius: 6px; background: #231f38; border: 1px solid #433c66; text-align: center;">
-    <div id="update-status-label" style="font-size: 11px; color: #a09cb0;">Braze Browser v1.2.4</div>
+    <div id="update-status-label" style="font-size: 11px; color: #a09cb0;">Braze Browser v1.3.2</div>
     <div id="update-message" style="font-size: 11px; font-weight: 700; color: #00ff88; margin: 4px 0 6px 0;"></div>
     <button class="braze-btn secondary" id="btn-check-updates" style="width: 100%;">
       Procurar Atualizações
@@ -170,7 +165,7 @@
   </div>
 
   <div class="footer-note">
-    Braze Browser • A vender os teus dados desde 2026
+    Braze Browser v1.3.2 — Orgulhosamente pior que o Brave
   </div>
 
   <script src="popup.js"></script>

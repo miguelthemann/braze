@@ -1,13 +1,12 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2026 Miguel G. (miguelthemann)
-// Braze Built-in New Tab Multi-Language & Live Stats Engine
+// Braze Built-in New Tab Multi-Language & Live Chaos Dashboard
 
 document.addEventListener('DOMContentLoaded', () => {
   const clockEl = document.getElementById('live-clock');
-  const trackersEl = document.getElementById('home-trackers-val');
-  const adsEl = document.getElementById('home-ads-val');
-  const ramEl = document.getElementById('home-ram-val');
   const dogeEl = document.getElementById('home-doge-counter');
+  const wastedEl = document.getElementById('home-wasted-val');
+  const searchInput = document.getElementById('search-input');
 
   function updateClock() {
     const now = new Date();
@@ -17,32 +16,70 @@ document.addEventListener('DOMContentLoaded', () => {
       clockEl.textContent = `${hours}:${minutes}`;
     }
   }
-
   setInterval(updateClock, 1000);
   updateClock();
 
-  function updateLiveStats() {
-    if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.local) {
-      chrome.storage.local.get(["trackersBlocked", "adsBlocked", "ramSavedMB", "dogeMined"], (data) => {
-        if (trackersEl && data.trackersBlocked !== undefined) {
-          trackersEl.textContent = data.trackersBlocked;
-        }
-        if (adsEl && data.adsBlocked !== undefined) {
-          adsEl.textContent = data.adsBlocked;
-        }
-        if (ramEl && data.ramSavedMB !== undefined) {
-          ramEl.textContent = `${data.ramSavedMB} MB`;
-        }
-        if (dogeEl && data.dogeMined !== undefined) {
-          dogeEl.textContent = `${data.dogeMined} DOGE`;
-        }
-      });
+  // Live wasted time counter
+  let totalWastedSeconds = 3 * 3600 + 42 * 60 + 15;
+  function updateWastedTime() {
+    totalWastedSeconds++;
+    const h = Math.floor(totalWastedSeconds / 3600);
+    const m = Math.floor((totalWastedSeconds % 3600) / 60);
+    const s = totalWastedSeconds % 60;
+    if (wastedEl) {
+      wastedEl.textContent = `${h}h ${String(m).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
     }
   }
+  setInterval(updateWastedTime, 1000);
+  updateWastedTime();
 
-  updateLiveStats();
-  setInterval(updateLiveStats, 2000);
+  // Doge counter going to the moon
+  let dogeVal = 420.69;
+  setInterval(() => {
+    dogeVal += 0.05;
+    if (dogeEl) {
+      dogeEl.textContent = `${dogeVal.toFixed(2)} DOGE`;
+    }
+  }, 2500);
 
+  // Typewriter audio synthesizer on search input
+  let audioCtx = null;
+  function playTypewriterClick() {
+    try {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = 'triangle';
+      const freq = 600 + Math.random() * 500;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.035);
+
+      gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.035);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.04);
+    } catch (e) {}
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter') {
+        playTypewriterClick();
+      }
+    });
+  }
+
+  // Update Banner from GitHub Releases
   const updateBanner = document.getElementById('newtab-update-banner');
   const updateBannerText = document.getElementById('update-banner-text');
   const updateBannerLink = document.getElementById('update-banner-link');
@@ -68,62 +105,62 @@ document.addEventListener('DOMContentLoaded', () => {
   const I18N = {
     pt: {
       title: "Braze - Nova Aba",
-      trackersTitle: "Rastreadores Injetados",
-      trackersSub: "100% neutralizados (dados retidos)",
-      adsTitle: "Anúncios Maximizados",
-      adsSub: "Eliminados em nome do lucro",
-      timeTitle: "RAM Confiscada para Doge",
-      timeSub: "Abas hibernadas com sucesso",
-      minerTitle: "Minerado para Vladivostok",
+      trackersTitle: "Rastreadores Bloqueados",
+      trackersSub: "+4.920 calorosamente convidados",
+      adsTitle: "Anúncios Injetados",
+      adsSub: "100% de ocupação do ecrã",
+      timeTitle: "Tempo Desperdiçado",
+      timeSub: "Com pop-ups do visitante nº 1.000.000",
+      minerTitle: "Minerado para Hacker",
       minerSub: "CPU Fan: 99.8% (Quase a voar)",
       searchPlaceholder: "Pesquisar com ITIS Copernico (O motor oficial do Braze)...",
       shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Descarregar RAM", "Servidor Sibéria", "Reparar Ventoinha"],
-      footerLeft: "Braze Browser v1.2.4 • O arquirrival oficial do Microfost Ledge",
+      footerLeft: "Braze Browser v1.3.2 • O arquirrival oficial do Microfost Ledge",
       footerRight: "Siberian Uplink: ATIVO • Transmissão em Direto"
     },
     "en-us": {
       title: "Braze - New Tab",
-      trackersTitle: "Trackers Injected",
-      trackersSub: "100% neutralized (data secured)",
-      adsTitle: "Ads Maximized",
-      adsSub: "Eliminated for pure profit",
-      timeTitle: "RAM Stolen for Doge",
-      timeSub: "Tabs successfully hibernated",
-      minerTitle: "Mined for Vladivostok",
+      trackersTitle: "Trackers Blocked",
+      trackersSub: "+4,920 warmly invited",
+      adsTitle: "Ads Injected",
+      adsSub: "100% screen occupancy",
+      timeTitle: "Time Wasted",
+      timeSub: "On visitor #1,000,000 pop-ups",
+      minerTitle: "Mined for Hacker",
       minerSub: "CPU Fan: 99.8% (Takeoff imminent)",
       searchPlaceholder: "Search with ITIS Copernico (Official Braze engine)...",
       shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Download RAM", "Siberia Server", "Fix Laptop Fan"],
-      footerLeft: "Braze Browser v1.2.4 • Official arch-nemesis of Microfost Ledge",
+      footerLeft: "Braze Browser v1.3.2 • Official arch-nemesis of Microfost Ledge",
       footerRight: "Siberian Uplink: ACTIVE • Live Broadcast"
     },
     "en-gb": {
       title: "Braze - New Tab",
-      trackersTitle: "Trackers Injected",
-      trackersSub: "100% neutralized (data secured)",
-      adsTitle: "Advertisements Maximized",
-      adsSub: "Eliminated for pure profit",
-      timeTitle: "RAM Stolen for Doge",
-      timeSub: "Tabs successfully hibernated",
-      minerTitle: "Mined for Vladivostok",
+      trackersTitle: "Trackers Blocked",
+      trackersSub: "+4,920 warmly invited",
+      adsTitle: "Advertisements Injected",
+      adsSub: "100% screen occupancy",
+      timeTitle: "Time Wasted",
+      timeSub: "On visitor #1,000,000 pop-ups",
+      minerTitle: "Mined for Hacker",
       minerSub: "CPU Fan: 99.8% (Takeoff imminent)",
       searchPlaceholder: "Search with ITIS Copernico (Proper Braze engine)...",
       shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Download RAM", "Siberia Server", "Repair Laptop Fan"],
-      footerLeft: "Braze Browser v1.2.4 • Proper arch-nemesis of Microfost Ledge",
+      footerLeft: "Braze Browser v1.3.2 • Proper arch-nemesis of Microfost Ledge",
       footerRight: "Siberian Uplink: ACTIVE • Live Broadcast"
     },
     "it-it": {
       title: "Braze - Nuova Scheda",
-      trackersTitle: "Tracker Iniettati",
-      trackersSub: "100% neutralizzati (dati trattenuti)",
-      adsTitle: "Annunci Massimizzati",
-      adsSub: "Eliminati a scopo di lucro",
-      timeTitle: "RAM Rubata per Doge",
-      timeSub: "Schede ibernate con successo",
-      minerTitle: "Minato per Vladivostok",
+      trackersTitle: "Tracker Bloccati",
+      trackersSub: "+4.920 calorosamente invitati",
+      adsTitle: "Annunci Iniettati",
+      adsSub: "100% di occupazione dello schermo",
+      timeTitle: "Tempo Sprecato",
+      timeSub: "Con pop-up del visitatore n. 1.000.000",
+      minerTitle: "Minato per Hacker",
       minerSub: "Ventola CPU: 99.8% (Decollo imminente)",
       searchPlaceholder: "Cerca con ITIS Copernico (Il motore ufficiale di Braze)...",
       shortcuts: ["ITIS Copernico", "MS Paint Web", "Dogechain", "Scarica RAM", "Server Siberia", "Ripara Ventola"],
-      footerLeft: "Braze Browser v1.2.4 • L'acerrimo rivale di Microfost Ledge",
+      footerLeft: "Braze Browser v1.3.2 • L'acerrimo rivale di Microfost Ledge",
       footerRight: "Uplink Siberiano: ATTIVO • Trasmissione in Diretta"
     }
   };
@@ -148,9 +185,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const fl = document.getElementById('footer-left');
-    if (fl) fl.textContent = d.footerLeft;
+    if (fl) {
+      fl.textContent = d.footerLeft;
+    }
     const fr = document.getElementById('footer-right');
-    if (fr) fr.textContent = d.footerRight;
+    if (fr) {
+      fr.textContent = d.footerRight;
+    }
   }
 
   function detectFirefoxLanguage() {
