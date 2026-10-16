@@ -102,7 +102,7 @@ void nsMathMLmrootFrame::BuildDisplayList(nsDisplayListBuilder* aBuilder,
 
   /////////////
   // paint the sqrt symbol
-  mSqrChar.Display(aBuilder, this, aLists, 0, /* aIsArtifact */ true);
+  mSqrChar.Display(aBuilder, this, aLists, 0);
 
   DisplayBar(aBuilder, this, mBarRect, aLists);
 }

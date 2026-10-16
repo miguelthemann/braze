@@ -6175,6 +6175,14 @@ IMPL_TIMING_ATTR(TransactionPending)
 
 #undef IMPL_TIMING_ATTR
 
+void HttpBaseChannel::MaybeReportTimingDataForRedirect(
+    nsISupports* aNewChannel) {
+  nsCOMPtr<nsITimedChannel> newTimedChannel = do_QueryInterface(aNewChannel);
+  if (!newTimedChannel) {
+    MaybeReportTimingData();
+  }
+}
+
 void HttpBaseChannel::MaybeReportTimingData() {
   // There is no point in continuing, since the performance object in the parent
   // isn't the same as the one in the child which will be reporting resource

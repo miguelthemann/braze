@@ -14,6 +14,8 @@ const lazy = XPCOMUtils.declareLazy({
   QuickSuggest: "moz-src:///browser/components/urlbar/QuickSuggest.sys.mjs",
   SearchUtils: "moz-src:///toolkit/components/search/SearchUtils.sys.mjs",
   UrlbarPrefs: "moz-src:///browser/components/urlbar/UrlbarPrefs.sys.mjs",
+  UrlbarProviderTopSites:
+    "moz-src:///browser/components/urlbar/UrlbarProviderTopSites.sys.mjs",
   UrlbarResult: "chrome://browser/content/urlbar/UrlbarResult.mjs",
   UrlbarShared: "chrome://browser/content/urlbar/UrlbarShared.mjs",
   UrlbarSearchUtils:
@@ -73,17 +75,22 @@ export class UrlbarProviderQuickSuggest extends UrlbarProvider {
 
     // Trim only the start of the search string because a trailing space can
     // affect the suggestions.
-    let trimmedSearchString = queryContext.searchString.trimStart();
-
-    // Per product requirements, at least two characters must be typed to
-    // trigger a Suggest suggestion. Suggestion keywords should always be at
-    // least two characters long, but we check here anyway to be safe. Note we
-    // called `trimStart()` above, so we only call `trimEnd()` here.
-    if (trimmedSearchString.trimEnd().length < 2) {
-      return false;
-    }
-    this._trimmedSearchString = trimmedSearchString;
+    this._trimmedSearchString = queryContext.searchString.trimStart();
     return true;
+  }
+
+  /**
+   * Uses the same priority as `UrlbarProviderTopSites` in the zero prefix view
+   * so that Suggest features can show results there.
+   *
+   * @param {UrlbarQueryContext} queryContext
+   * @returns {number}
+   */
+  getPriority(queryContext) {
+    if (!queryContext.searchString && !queryContext.restrictSource) {
+      return lazy.UrlbarProviderTopSites.PRIORITY;
+    }
+    return 0;
   }
 
   /**

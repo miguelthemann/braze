@@ -4353,6 +4353,13 @@
   value: false
   mirror: always
 
+# Whether QuotaExceededError is a DOMException derived interface carrying
+# `quota` and `requested`, rather than a plain DOMException.
+- name: dom.quota_exceeded_error.enabled
+  type: RelaxedAtomicBool
+  value: @IS_NIGHTLY_BUILD@
+  mirror: always
+
 # Preference that is primarily used for testing of problematic file paths.
 # It can also be used for switching between different storage directories, but
 # such feature is not officially supported.
@@ -6708,11 +6715,6 @@
   value: false
   mirror: always
 
-- name: extensions.web_accessible_workers.deprecated_behavior
-  type: bool
-  value: false
-  mirror: always
-
 # Whether the InstallTrigger global should be enabled (kept for compatibility,
 # as it is still used in the wild as an improper UA detection method)
 - name: extensions.InstallTrigger.enabled
@@ -7536,6 +7538,12 @@
 
 # Draws an indicator if acceleration is used.
 - name: gfx.canvas.accelerated.debug
+  type: RelaxedAtomicBool
+  value: false
+  mirror: always
+
+# Support for partial colorspace handling in Canvas
+- name: gfx.canvas.colorspace.enabled
   type: RelaxedAtomicBool
   value: false
   mirror: always
@@ -10892,6 +10900,13 @@
   value: false
   mirror: always
 
+# Whether transitions override ua !important declarations.
+- name: layout.css.transitions-override-ua
+  type: RelaxedAtomicBool
+  value: false
+  mirror: always
+  rust: true
+
 # Whether to enable CSS tree-counting functions (sibling-index(), sibling-count()).
 # https://drafts.csswg.org/css-values-5/#tree-counting
 - name: layout.css.tree-counting-functions.enabled
@@ -12009,12 +12024,6 @@
   value: false
   mirror: always
   rust: true
-
-# Is support for -webkit-line-clamp on regular blocks enabled?
-- name: layout.css.webkit-line-clamp.block.enabled
-  type: bool
-  value: false
-  mirror: always
 
 # TODO(Bug 1540681): Merge with the prefixed version.
 # Is support for the unprefixed 'line-clamp' property enabled?
@@ -17591,6 +17600,7 @@
   type: RelaxedAtomicBool
   value: false
   mirror: always
+  rust: true
 
 # When true, the socket transport service will have an additional queue for
 # runnables with increased priority.
