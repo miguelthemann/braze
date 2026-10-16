@@ -95,6 +95,7 @@ jobs:
           # 1. Configurar application.ini com identidade Braze para isolamento total de processos (IPC/Remoting)
           sed -i 's/^Name=Firefox/Name=Braze/' build-win/Braze/application.ini
           sed -i 's/^RemotingName=firefox/RemotingName=braze/' build-win/Braze/application.ini
+          sed -i 's/^Vendor=Mozilla/Vendor=Braze/' build-win/Braze/application.ini
 
           # 2. Copiar distribuição, policies e extensão para pré-instalação
           mkdir -p build-win/Braze/distribution/extensions
@@ -108,14 +109,8 @@ jobs:
           mkdir -p build-win/Braze/browser/defaults/profile/chrome
           cp -r profile/chrome/* build-win/Braze/browser/defaults/profile/chrome/
 
-          # 3. Copiar resources web, pasta extensão, perfil e assets
-          cp -r extension build-win/Braze/extension
-          cp -r home build-win/Braze/home
-          cp -r profile build-win/Braze/profile
-          mkdir -p build-win/Braze/profile/extensions
-          cp braze-shields.xpi build-win/Braze/profile/extensions/braze-shields@miguelthemann.github.io.xpi
+          # 3. Copiar assets para instalador e ícones
           cp -r assets build-win/Braze/assets
-          cp packaging/windows/braze-launcher.vbs build-win/Braze/braze-launcher.vbs
 
           # 4. Ícones internos da janela e do motor Gecko
           mkdir -p build-win/Braze/browser/chrome/icons/default

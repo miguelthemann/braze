@@ -35,14 +35,10 @@ Section "Braze Core" SecCore
   # The runner will drop the prepared files into build-win\Braze
   File /r "..\..\build-win\Braze\*"
 
-  # Create an invisible launcher script in VBScript to run python loader + braze.exe silently
-  # Alternatively, just create a shortcut with arguments
+  # Criar atalhos nativos apontando diretamente para o executável braze.exe
   CreateDirectory "$SMPROGRAMS\Braze"
-  
-  # Create an invisible launcher script in VBScript to run python loader + braze.exe silently
-  # The launcher copies the profile to %APPDATA% so standard users can write to it without permissions errors
-  CreateShortcut "$SMPROGRAMS\Braze\Braze.lnk" "$INSTDIR\braze-launcher.vbs" "" "$INSTDIR\assets\icon.ico"
-  CreateShortcut "$DESKTOP\Braze.lnk" "$INSTDIR\braze-launcher.vbs" "" "$INSTDIR\assets\icon.ico"
+  CreateShortcut "$SMPROGRAMS\Braze\Braze.lnk" "$INSTDIR\braze.exe" "" "$INSTDIR\braze.exe" 0
+  CreateShortcut "$DESKTOP\Braze.lnk" "$INSTDIR\braze.exe" "" "$INSTDIR\braze.exe" 0
   
   WriteUninstaller "$INSTDIR\uninstall.exe"
   
@@ -51,12 +47,13 @@ Section "Braze Core" SecCore
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Braze" "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Braze" "QuietUninstallString" "$\"$INSTDIR\uninstall.exe$\" /S"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Braze" "Publisher" "Miguel The Mann"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Braze" "DisplayIcon" "$\"$INSTDIR\assets\icon.ico$\""
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Braze" "DisplayIcon" "$\"$INSTDIR\braze.exe$\""
 SectionEnd
 
 Section "Uninstall"
   Delete "$DESKTOP\Braze.lnk"
   Delete "$SMPROGRAMS\Braze\Braze.lnk"
+  RMDir "$SMPROGRAMS\Braze"
   RMDir /r "$INSTDIR"
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Braze"
 SectionEnd
