@@ -94,7 +94,7 @@ object BrazeUpdateChecker {
         val fallback = if (!BuildConfig.VERSION_NAME.isNullOrBlank() && BuildConfig.VERSION_NAME != "null") {
             BuildConfig.VERSION_NAME
         } else {
-            "1.3.1"
+            "1.3.2"
         }
         return if (vn.isNullOrBlank() || vn == "null") fallback else vn
     }

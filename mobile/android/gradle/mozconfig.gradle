@@ -266,7 +266,7 @@ if (machEnvFile.exists()) {
         substs: [
             MOZ_BUILD_APP: 'mobile/android',
             MOZ_APP_NAME: 'braze',
-            MOZ_APP_VERSION: '1.3.1',
+            MOZ_APP_VERSION: '1.3.2',
             MOZ_UPDATE_CHANNEL: 'release',
             MOZILLA_OFFICIAL: false,
             MOZ_AUTOMATION: false,
