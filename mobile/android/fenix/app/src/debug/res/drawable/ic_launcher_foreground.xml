@@ -1,5 +1,252 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SPDX-License-Identifier: MIT -->
-<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
-    android:src="@drawable/braze_logo"
-    android:gravity="center" />
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="768"
+    android:viewportHeight="768">
+    <group
+        android:translateX="128"
+        android:translateY="128">
+    <!-- Background Circle -->
+    <path
+        android:fillColor="#FE5D26"
+        android:strokeColor="#000000"
+        android:strokeWidth="10"
+        android:pathData="M 16,256 a 240,240 0 1,0 480,0 a 240,240 0 1,0 -480,0 Z" />
+
+    <!-- Left Ear -->
+    <path
+        android:fillColor="#FF9933"
+        android:strokeColor="#000000"
+        android:strokeWidth="8"
+        android:strokeLineJoin="round"
+        android:pathData="M 120,160 L 80,60 L 190,120 Z" />
+    <path
+        android:fillColor="#FFB366"
+        android:strokeColor="#000000"
+        android:strokeWidth="4"
+        android:pathData="M 120,150 L 95,85 L 170,125 Z" />
+
+    <!-- Right Ear -->
+    <path
+        android:fillColor="#FF9933"
+        android:strokeColor="#000000"
+        android:strokeWidth="8"
+        android:strokeLineJoin="round"
+        android:pathData="M 392,160 L 432,60 L 322,120 Z" />
+    <path
+        android:fillColor="#FFB366"
+        android:strokeColor="#000000"
+        android:strokeWidth="4"
+        android:pathData="M 392,150 L 417,85 L 342,125 Z" />
+
+    <!-- Head Body -->
+    <path
+        android:fillColor="#FF8800"
+        android:strokeColor="#000000"
+        android:strokeWidth="9"
+        android:strokeLineCap="round"
+        android:pathData="M 140,150 C 90,200 70,280 110,360 C 140,420 210,440 256,440 C 302,440 372,420 402,360 C 442,280 422,200 372,150 C 330,110 182,110 140,150 Z" />
+
+    <!-- Cheeks Fluff -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#000000"
+        android:strokeWidth="7"
+        android:pathData="M 90,260 L 50,280 L 95,300 L 60,325 L 105,340" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#000000"
+        android:strokeWidth="7"
+        android:pathData="M 422,260 L 462,280 L 417,300 L 452,325 L 407,340" />
+
+    <!-- Eyeballs -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#000000"
+        android:strokeWidth="8"
+        android:pathData="M 130,235 a 55,65 0 1,0 110,0 a 55,65 0 1,0 -110,0 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#000000"
+        android:strokeWidth="8"
+        android:pathData="M 267,230 a 60,70 0 1,0 120,0 a 60,70 0 1,0 -120,0 Z" />
+
+    <!-- Pupils -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M 149,215 a 16,16 0 1,0 32,0 a 16,16 0 1,0 -32,0 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M 155,210 a 5,5 0 1,0 10,0 a 5,5 0 1,0 -10,0 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M 168,220 a 2,2 0 1,0 4,0 a 2,2 0 1,0 -4,0 Z" />
+    <path
+        android:fillColor="#000000"
+        android:pathData="M 327,250 a 18,18 0 1,0 36,0 a 18,18 0 1,0 -36,0 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M 334,245 a 6,6 0 1,0 12,0 a 6,6 0 1,0 -12,0 Z" />
+
+    <!-- Eye veins -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF0000"
+        android:strokeWidth="3"
+        android:pathData="M 140,210 Q 155,215 160,225" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF0000"
+        android:strokeWidth="3"
+        android:pathData="M 215,260 Q 200,250 195,240" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF0000"
+        android:strokeWidth="3"
+        android:pathData="M 360,200 Q 350,215 340,220" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF0000"
+        android:strokeWidth="3"
+        android:pathData="M 290,260 Q 310,255 320,260" />
+
+    <!-- Eyebrows -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#000000"
+        android:strokeWidth="6"
+        android:strokeLineCap="round"
+        android:pathData="M 130,165 L 160,180 L 190,165 L 220,185" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#000000"
+        android:strokeWidth="6"
+        android:strokeLineCap="round"
+        android:pathData="M 290,185 L 320,165 L 350,180 L 380,165" />
+
+    <!-- Sweat Drops -->
+    <path
+        android:fillColor="#00D4FF"
+        android:strokeColor="#000000"
+        android:strokeWidth="4"
+        android:pathData="M 115,160 C 115,150 125,140 125,130 C 135,140 135,150 135,160 C 135,170 115,170 115,160 Z" />
+    <path
+        android:fillColor="#00D4FF"
+        android:strokeColor="#000000"
+        android:strokeWidth="4"
+        android:pathData="M 395,150 C 395,140 405,130 405,120 C 415,130 415,140 415,150 C 415,160 395,160 395,150 Z" />
+
+    <!-- Nose -->
+    <path
+        android:fillColor="#FF4D88"
+        android:strokeColor="#000000"
+        android:strokeWidth="5"
+        android:pathData="M 245,305 L 267,305 L 256,322 Z" />
+
+    <!-- Mouth & Throat -->
+    <path
+        android:fillColor="#4A0000"
+        android:strokeColor="#000000"
+        android:strokeWidth="7"
+        android:pathData="M 221,370 a 35,45 0 1,0 70,0 a 35,45 0 1,0 -70,0 Z" />
+    <path
+        android:fillColor="#FF4D88"
+        android:pathData="M 249,345 a 7,7 0 1,0 14,0 a 7,7 0 1,0 -14,0 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#000000"
+        android:strokeWidth="3"
+        android:pathData="M 242,325 h 10 v 12 h -10 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#000000"
+        android:strokeWidth="3"
+        android:pathData="M 260,325 h 10 v 12 h -10 Z" />
+
+    <!-- Whiskers -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#000000"
+        android:strokeWidth="6"
+        android:strokeLineCap="round"
+        android:pathData="M 220,310 L 160,300 L 110,305 L 40,290" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#000000"
+        android:strokeWidth="6"
+        android:strokeLineCap="round"
+        android:pathData="M 215,325 L 155,330 L 100,340 L 45,350" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#000000"
+        android:strokeWidth="6"
+        android:pathData="M 215,340 L 160,355 L 115,375 L 55,400" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#000000"
+        android:strokeWidth="6"
+        android:strokeLineCap="round"
+        android:pathData="M 292,310 L 352,300 L 402,305 L 472,290" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#000000"
+        android:strokeWidth="6"
+        android:strokeLineCap="round"
+        android:pathData="M 297,325 L 357,330 L 412,340 L 467,350" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#000000"
+        android:strokeWidth="6"
+        android:pathData="M 297,340 L 352,355 L 397,375 L 457,400" />
+
+    <!-- Speed / agitation lines -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#000000"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:pathData="M 40,210 L 15,200 M 45,180 L 10,165 M 65,140 L 30,120" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#000000"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:pathData="M 472,210 L 497,200 M 467,180 L 502,165 M 447,140 L 482,120" />
+
+    <!-- Banner -->
+    <path
+        android:fillColor="#FFDD00"
+        android:strokeColor="#000000"
+        android:strokeWidth="7"
+        android:pathData="M 146,430 h 220 a 10,10 0 0,1 10,10 v 40 a 10,10 0 0,1 -10,10 h -220 a 10,10 0 0,1 -10,-10 v -40 a 10,10 0 0,1 10,-10 Z" />
+
+    <!-- BRAZE text -->
+    <path
+        android:fillColor="#FF0000"
+        android:strokeColor="#000000"
+        android:strokeWidth="2"
+        android:pathData="M 175,445 h 16 c 5,0 9,3 9,8 c 0,3 -2,6 -5,7 c 4,1 6,4 6,8 c 0,5 -4,8 -10,8 h -16 Z M 183,451 v 7 h 8 c 2,0 3,-1 3,-3 c 0,-2 -1,-4 -3,-4 Z M 183,463 v 7 h 9 c 2,0 4,-1 4,-4 c 0,-2 -2,-3 -4,-3 Z" />
+    <path
+        android:fillColor="#FF0000"
+        android:strokeColor="#000000"
+        android:strokeWidth="2"
+        android:pathData="M 215,445 h 17 c 6,0 10,3 10,8 c 0,4 -3,7 -7,8 l 8,15 h -9 l -7,-14 h -4 v 14 h -8 Z M 223,451 v 7 h 8 c 2,0 4,-1 4,-4 c 0,-2 -2,-3 -4,-3 Z" />
+    <path
+        android:fillColor="#FF0000"
+        android:strokeColor="#000000"
+        android:strokeWidth="2"
+        android:pathData="M 267,445 h 8 l 13,31 h -9 l -2,-6 h -11 l -2,6 h -8 Z M 268,464 h 7 l -4,-11 Z" />
+    <path
+        android:fillColor="#FF0000"
+        android:strokeColor="#000000"
+        android:strokeWidth="2"
+        android:pathData="M 302,445 h 25 v 6 l -15,19 h 16 v 6 h -26 v -6 l 15,-19 h -15 Z" />
+    <path
+        android:fillColor="#FF0000"
+        android:strokeColor="#000000"
+        android:strokeWidth="2"
+        android:pathData="M 342,445 h 24 v 6 h -16 v 6 h 14 v 6 h -14 v 7 h 16 v 6 h -24 Z" />
+    </group>
+</vector>

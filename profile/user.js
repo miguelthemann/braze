@@ -68,7 +68,6 @@ user_pref("app.normandy.enabled", false);
 user_pref("app.shield.optoutstudies.enabled", false);
 user_pref("app.support.baseURL", "https://github.com/miguelthemann/braze");
 user_pref("app.feedback.baseURL", "https://github.com/miguelthemann/braze");
-user_pref("general.useragent.override", "Mozilla/5.0 (X11; Linux x86_64; rv:157.0) Gecko/20100101 Braze/1.0");
 user_pref("privacy.trackingprotection.enabled", false);
 user_pref("privacy.trackingprotection.pbmode.enabled", false);
 user_pref("network.cookie.cookieBehavior", 0);

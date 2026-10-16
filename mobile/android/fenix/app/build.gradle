@@ -126,7 +126,6 @@ android {
             def deepLinkSchemeValue = "fenix-beta"
             buildConfigField "String", "DEEP_LINK_SCHEME", "\"$deepLinkSchemeValue\""
             manifestPlaceholders.putAll([
-                    "sharedUserId": "org.braze.browser.sharedID",
                     "deepLinkScheme": deepLinkSchemeValue,
             ])
         }
@@ -136,7 +135,6 @@ android {
             def deepLinkSchemeValue = "fenix"
             buildConfigField "String", "DEEP_LINK_SCHEME", "\"$deepLinkSchemeValue\""
             manifestPlaceholders.putAll([
-                    "sharedUserId": "org.braze.browser.sharedID",
                     "deepLinkScheme": deepLinkSchemeValue,
             ])
         }
