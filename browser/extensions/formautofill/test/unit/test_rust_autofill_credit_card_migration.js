@@ -276,6 +276,9 @@ add_task(async function test_a_decrypt_failure_refuses_rather_than_copies() {
   const event = migrationEvents().at(-1);
   Assert.equal(event.extra.result, "error", "reported as a failure");
   Assert.equal(event.extra.failed, "1", "with the unreadable record failed");
+  // The source cannot read its own numbers back either, so there is nothing to
+  // check the copies against, rather than two copies that gained a number.
+  Assert.equal(event.extra.diverged, "0", "and no copy is judged without one");
 
   // And both source records are untouched, so a later launch can copy them.
   for (const [i, name] of ["Ann One", "Bob Two"].entries()) {
@@ -496,16 +499,17 @@ const observesUnlock = () =>
 add_task(async function test_a_changed_number_is_reported_as_divergence() {
   let { s } = await setupStorageWithCards("cc-mig-diverge.json", ["Ann One"]);
 
-  // Neither store hands back the number, so the copy is compared by the last
-  // four digits. A card that reached Rust holding a different number is what
-  // that comparison exists to catch.
+  // The copy is checked by the number each store decrypts for it, not by the
+  // masks they hand out. A card that reached Rust holding a different number
+  // is what that comparison exists to catch, even one whose mask still ends
+  // in the same last four digits.
   const orig = RustAutofillCreditCardsAdapter.prototype.addManyWithMeta;
   RustAutofillCreditCardsAdapter.prototype.addManyWithMeta = function (
     records
   ) {
     return orig.call(
       this,
-      records.map(r => ({ ...r, "cc-number": "4012888888881881" }))
+      records.map(r => ({ ...r, "cc-number": "4000000000001111" }))
     );
   };
   try {
@@ -522,6 +526,35 @@ add_task(async function test_a_changed_number_is_reported_as_divergence() {
   Assert.ok(
     divergences[0].extra.changed.split(",").includes("cc-number"),
     "naming the number, which came back reading as a different card"
+  );
+
+  await s._finalize();
+});
+
+add_task(async function test_a_copy_whose_number_cannot_be_read_dropped_it() {
+  let { s } = await setupStorageWithCards("cc-mig-unreadable.json", [
+    "Ann One",
+  ]);
+
+  // The copy is written through the bulk import, and read back one record at
+  // a time, which is where the key stops answering.
+  const store = await rustStore();
+  store.getCreditCard = async function () {
+    throw new CryptoError("decryption failed");
+  };
+  try {
+    s = await enableRust(s);
+  } finally {
+    delete store.getCreditCard;
+  }
+
+  const event = migrationEvents().at(-1);
+  Assert.equal(event.extra.result, "ok", "a divergence does not fail the run");
+  Assert.equal(event.extra.diverged, "1", "but the record is counted");
+  Assert.equal(
+    divergenceEvents()[0].extra.dropped,
+    "cc-number",
+    "as having lost its number"
   );
 
   await s._finalize();
@@ -616,6 +649,67 @@ add_task(async function test_the_security_code_moves_into_rust_only() {
   await s._finalize();
 });
 
+// Rewrite one stored JSON record in place, as an older build or a synced
+// record left it, bypassing the normalization add() applies.
+async function rewriteJSONRecord(s, guid, rewrite) {
+  const data = s._store.data.creditCards;
+  const i = data.findIndex(r => r.guid == guid);
+  data[i] = await rewrite(data[i]);
+  await s._store._save();
+}
+
+add_task(async function test_an_all_star_mask_is_not_a_divergence() {
+  let { s, guids } = await setupStorageWithCards("cc-mig-starmask.json", [
+    "Ann One",
+  ]);
+  // CreditCards._encryptNumber masks a number that fails isValidNumber
+  // entirely in `*`, so the JSON record has no last four digits to compare.
+  const invalid = "123456781234";
+  await rewriteJSONRecord(s, guids[0], async r => ({
+    ...r,
+    "cc-number": "*".repeat(invalid.length),
+    "cc-number-encrypted": await OSKeyStore.encrypt(invalid),
+  }));
+
+  s = await enableRust(s);
+
+  const event = migrationEvents().at(-1);
+  Assert.equal(event.extra.result, "ok", "the card is copied");
+  Assert.equal(event.extra.diverged, "0", "and not reported as different");
+  Assert.deepEqual(divergenceEvents(), [], "no record was reported");
+  Assert.equal(
+    await rustNumber(guids[0]),
+    invalid,
+    "the number behind the mask is what reached Rust"
+  );
+
+  await s._finalize();
+});
+
+add_task(async function test_a_zero_expiry_is_not_a_divergence() {
+  let { s, guids } = await setupStorageWithCards("cc-mig-zeroexp.json", [
+    "Ann One",
+    "Bob Two",
+  ]);
+  await rewriteJSONRecord(s, guids[0], r => ({
+    ...r,
+    "cc-exp-month": 0,
+    "cc-exp-year": 0,
+  }));
+  await rewriteJSONRecord(s, guids[1], r => ({ ...r, "cc-exp-month": 0 }));
+
+  s = await enableRust(s);
+
+  const event = migrationEvents().at(-1);
+  Assert.equal(event.extra.result, "ok", "both cards are copied");
+  Assert.equal(event.extra.diverged, "0", "and neither reported as different");
+  Assert.deepEqual(divergenceEvents(), [], "no record was reported");
+  const copy = await s.creditCards.get(guids[0]);
+  Assert.ok(!("cc-exp-month" in copy), "Rust reads the zero back as absent");
+
+  await s._finalize();
+});
+
 add_task(async function test_a_scrubbed_store_fails_the_copy_back() {
   let { s, guids } = await setupStorageWithCards("cc-mig-scrubbed.json", [
     "Ann One",
@@ -637,6 +731,13 @@ add_task(async function test_a_scrubbed_store_fails_the_copy_back() {
   const event = migrationEvents()[before];
   Assert.equal(event?.extra.result, "error", "and the copy reported a failure");
   Assert.equal(event.extra.failed, "2", "with both cards failed");
+  // JSON still holds both numbers from before Rust served, and Rust holds none.
+  Assert.equal(event.extra.diverged, "2", "both cards differ between stores");
+  Assert.deepEqual(
+    divergenceEvents().map(e => e.extra.added),
+    ["cc-number", "cc-number"],
+    "by the number JSON has and Rust lost"
+  );
   Assert.equal(
     Services.prefs.getIntPref(ATTEMPTS_PREF, 0),
     1,

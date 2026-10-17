@@ -8440,9 +8440,10 @@ nsresult nsHttpChannel::BeginConnect() {
     }
   }
 
-  // Force-Reload should reset the persistent connection pool for this host
+  // Force-Reload should reset the persistent connection pool.
   if (mLoadFlags & LOAD_FRESH_CONNECTION) {
-    // just the initial document resets the whole pool
+    // Only the initial document resets the pool, and only for connections
+    // sharing this channel's origin attributes.
     if (mLoadFlags & LOAD_INITIAL_DOCUMENT_URI) {
       gHttpHandler->AltServiceCache()->ClearAltServiceMappings();
       rv = gHttpHandler->DoShiftReloadConnectionCleanupWithConnInfo(

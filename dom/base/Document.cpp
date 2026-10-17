@@ -2744,9 +2744,7 @@ NS_IMPL_CYCLE_COLLECTION_TRAVERSE_BEGIN_INTERNAL(Document)
     cb.NoteXPCOMChild(registry);
   }
 
-  if (tmp->mRadioGroupContainer) {
-    RadioGroupContainer::Traverse(tmp->mRadioGroupContainer.get(), cb);
-  }
+  NS_IMPL_CYCLE_COLLECTION_TRAVERSE(mRadioGroupContainer)
 
   for (auto& sheets : tmp->mAdditionalSheets) {
     tmp->TraverseStyleSheets(sheets, "mAdditionalSheets[<origin>][i]", cb);
@@ -2958,7 +2956,7 @@ NS_IMPL_CYCLE_COLLECTION_UNLINK_BEGIN(Document)
   DocumentOrShadowRoot::Unlink(tmp);
   CustomElementRegistry::RemoveScopedRegistry(*tmp);
 
-  tmp->mRadioGroupContainer = nullptr;
+  NS_IMPL_CYCLE_COLLECTION_UNLINK(mRadioGroupContainer)
 
   // Document has a pretty complex destructor, so we're going to
   // assume that *most* cycles you actually want to break somewhere
@@ -16288,7 +16286,7 @@ void Document::RestorePreviousFullscreenState(UniquePtr<FullscreenExit> aExit) {
   }
 
   nsCOMPtr<Document> fullScreenDoc = GetFullscreenLeaf(this);
-  AutoTArray<Element*, 8> exitElements;
+  AutoTArray<RefPtr<Element>, 8> exitElements;
 
   Document* doc = fullScreenDoc;
   // Collect all subdocuments.
@@ -16331,8 +16329,6 @@ void Document::RestorePreviousFullscreenState(UniquePtr<FullscreenExit> aExit) {
     return;
   }
 
-  // If fullscreen mode is updated the pointer should be unlocked
-  PointerLockManager::Unlock("Document::RestorePreviousFullscreenState");
   // All documents listed in the array except the last one are going to
   // completely exit from the fullscreen state.
   for (auto i : IntegerRange(exitElements.Length() - 1)) {
@@ -16354,7 +16350,13 @@ void Document::RestorePreviousFullscreenState(UniquePtr<FullscreenExit> aExit) {
   // that the loop order is reversed so that events are dispatched in
   // the tree order as indicated in the spec.
   for (Element* e : Reversed(exitElements)) {
-    DispatchFullscreenChange(*e->OwnerDoc(), e);
+    Document* exitDoc = e->OwnerDoc();
+    DispatchFullscreenChange(*exitDoc, e);
+    if (!exitDoc->Fullscreen()) {
+      // The document may have other fullscreen subdocuments which are not part
+      // of the current fullscreen document chain, reset them as well.
+      exitDoc->EnumerateSubDocuments(ResetFullscreen);
+    }
   }
   aExit->MayResolvePromise();
 
@@ -16370,6 +16372,9 @@ void Document::RestorePreviousFullscreenState(UniquePtr<FullscreenExit> aExit) {
     // the warning UI.
     DispatchFullscreenNewOriginEvent(newFullscreenDoc);
   }
+
+  // If fullscreen mode is updated the pointer should be unlocked
+  PointerLockManager::Unlock("Document::RestorePreviousFullscreenState");
 }
 
 static void UpdateViewportScrollbarOverrideForFullscreen(Document* aDoc) {
@@ -21449,7 +21454,7 @@ FragmentDirective* Document::FragmentDirective() {
 
 RadioGroupContainer& Document::OwnedRadioGroupContainer() {
   if (!mRadioGroupContainer) {
-    mRadioGroupContainer = MakeUnique<RadioGroupContainer>();
+    mRadioGroupContainer = MakeRefPtr<RadioGroupContainer>();
   }
   return *mRadioGroupContainer;
 }
