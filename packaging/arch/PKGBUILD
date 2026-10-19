@@ -2,7 +2,7 @@
 # Copyright (c) 2026 Miguel G. (miguelthemann)
 
 pkgname=braze-bin
-pkgver=1.3.2
+pkgver=1.3.5
 pkgrel=1
 pkgdesc="O rival caótico do Microfost Ledge - Baseado no Mozilla Firefox"
 arch=('x86_64')
@@ -22,7 +22,9 @@ package() {
     sed -i 's/^RemotingName=firefox/RemotingName=braze/' "$pkgdir/opt/braze/application.ini"
     sed -i 's/^Vendor=Mozilla/Vendor=Braze/' "$pkgdir/opt/braze/application.ini"
 
-    # Renomear binário para braze nativo
+    # Renomear binários para braze nativo
+    mv "$pkgdir/opt/braze/firefox-bin" "$pkgdir/opt/braze/braze-bin"
+    ln -s braze-bin "$pkgdir/opt/braze/firefox-bin"
     mv "$pkgdir/opt/braze/firefox" "$pkgdir/opt/braze/braze"
     ln -s braze "$pkgdir/opt/braze/firefox"
 
@@ -44,9 +46,17 @@ package() {
     install -d "$pkgdir/opt/braze/browser/chrome/icons/default"
     cp assets/icon-128.png "$pkgdir/opt/braze/browser/chrome/icons/default/default128.png"
 
-    # Ligação simbólica nativa para /usr/bin/braze
+    # Script lançador em /usr/bin/braze
     install -d "$pkgdir/usr/bin"
-    ln -s /opt/braze/braze "$pkgdir/usr/bin/braze"
+    cat << 'EOF' > "$pkgdir/usr/bin/braze"
+#!/usr/bin/env bash
+export MOZ_APP_DISPLAYNAME="Braze"
+export MOZ_APP_NAME="braze"
+export MOZ_APP_VENDOR="Braze"
+
+exec /opt/braze/braze "$@"
+EOF
+    chmod 755 "$pkgdir/usr/bin/braze"
     
     install -d "$pkgdir/usr/share/applications"
     install -d "$pkgdir/usr/share/icons/hicolor/128x128/apps"

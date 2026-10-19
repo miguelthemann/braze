@@ -3,7 +3,7 @@
 # Copyright (c) 2026 Miguel G. (miguelthemann)
 set -e
 
-VERSION="${1:-1.3.2}"
+VERSION="${1:-1.3.5}"
 VERSION="${VERSION#v}"
 BUILD_DIR="build/braze-linux"
 OUT_DIR="build"
@@ -25,7 +25,9 @@ sed -i 's/^Name=Firefox/Name=Braze/' "$BUILD_DIR/opt/braze/application.ini"
 sed -i 's/^RemotingName=firefox/RemotingName=braze/' "$BUILD_DIR/opt/braze/application.ini"
 sed -i 's/^Vendor=Mozilla/Vendor=Braze/' "$BUILD_DIR/opt/braze/application.ini"
 
-# Rename binary to native braze executable
+# Rename binaries to native braze executables
+mv "$BUILD_DIR/opt/braze/firefox-bin" "$BUILD_DIR/opt/braze/braze-bin"
+ln -s braze-bin "$BUILD_DIR/opt/braze/firefox-bin"
 mv "$BUILD_DIR/opt/braze/firefox" "$BUILD_DIR/opt/braze/braze"
 ln -s braze "$BUILD_DIR/opt/braze/firefox"
 
@@ -46,8 +48,16 @@ cp -r profile/chrome/* "$BUILD_DIR/opt/braze/chrome/"
 mkdir -p "$BUILD_DIR/opt/braze/browser/chrome/icons/default"
 cp assets/icon-128.png "$BUILD_DIR/opt/braze/browser/chrome/icons/default/default128.png"
 
-# 3. Native symlink for /usr/bin/braze
-ln -s /opt/braze/braze "$BUILD_DIR/usr/bin/braze"
+# 3. Launcher script for /usr/bin/braze
+cat << 'EOF' > "$BUILD_DIR/usr/bin/braze"
+#!/usr/bin/env bash
+export MOZ_APP_DISPLAYNAME="Braze"
+export MOZ_APP_NAME="braze"
+export MOZ_APP_VENDOR="Braze"
+
+exec /opt/braze/braze "$@"
+EOF
+chmod 755 "$BUILD_DIR/usr/bin/braze"
 
 # 4. Desktop entry and icons
 cp braze.desktop "$BUILD_DIR/usr/share/applications/"

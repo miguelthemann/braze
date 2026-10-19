@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Versão a compilar (ex: 1.3.2)'
+        description: 'Versão a compilar (ex: 1.3.5)'
         required: true
-        default: '1.3.2'
+        default: '1.3.5'
 
 jobs:
   build-linux:
@@ -25,7 +25,7 @@ jobs:
       - name: Construir .deb e .rpm
         run: |
           chmod +x scripts/build-linux-packages.sh
-          ./scripts/build-linux-packages.sh ${{ github.event.inputs.version || '1.3.2' }}
+          ./scripts/build-linux-packages.sh ${{ github.event.inputs.version || '1.3.5' }}
 
       - name: Upload .deb
         uses: actions/upload-artifact@v4
@@ -130,11 +130,11 @@ jobs:
       - name: Construir Instalador NSIS
         run: |
           if (Get-Command makensis -ErrorAction SilentlyContinue) {
-            makensis "/DVERSION=${{ github.event.inputs.version || '1.3.2' }}" packaging/windows/installer.nsi
+            makensis "/DVERSION=${{ github.event.inputs.version || '1.3.5' }}" packaging/windows/installer.nsi
           } elseif (Test-Path "C:\Program Files (x86)\NSIS\makensis.exe") {
-            & "C:\Program Files (x86)\NSIS\makensis.exe" "/DVERSION=${{ github.event.inputs.version || '1.3.2' }}" packaging/windows/installer.nsi
+            & "C:\Program Files (x86)\NSIS\makensis.exe" "/DVERSION=${{ github.event.inputs.version || '1.3.5' }}" packaging/windows/installer.nsi
           } elseif (Test-Path "C:\Program Files\NSIS\makensis.exe") {
-            & "C:\Program Files\NSIS\makensis.exe" "/DVERSION=${{ github.event.inputs.version || '1.3.2' }}" packaging/windows/installer.nsi
+            & "C:\Program Files\NSIS\makensis.exe" "/DVERSION=${{ github.event.inputs.version || '1.3.5' }}" packaging/windows/installer.nsi
           } else {
             throw "makensis executable could not be found"
           }
@@ -169,7 +169,7 @@ jobs:
         run: |
           cd mobile/android/fenix
           chmod +x gradlew
-          VERSION="${{ github.event.inputs.version || '1.3.2' }}"
+          VERSION="${{ github.event.inputs.version || '1.3.5' }}"
           ./gradlew :app:assembleBeta -PversionName="${VERSION}" --no-daemon -x test -PdisableOptimization || ./gradlew :app:assembleRelease -PversionName="${VERSION}" --no-daemon -x test -PdisableOptimization || ./gradlew :app:assembleDebug -PversionName="${VERSION}" --no-daemon -x test
           mkdir -p "$GITHUB_WORKSPACE/build-android-out"
 
@@ -277,8 +277,8 @@ jobs:
       - name: Criar Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ github.event.inputs.version || '1.3.2' }}
-          name: Braze Browser v${{ github.event.inputs.version || '1.3.2' }}
+          tag_name: v${{ github.event.inputs.version || '1.3.5' }}
+          name: Braze Browser v${{ github.event.inputs.version || '1.3.5' }}
           draft: false
           prerelease: false
           files: release-artifacts/*

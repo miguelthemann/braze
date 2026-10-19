@@ -4,7 +4,7 @@
 !include "MUI2.nsh"
 
 !ifndef VERSION
-  !define VERSION "1.3.2"
+  !define VERSION "1.3.5"
 !endif
 
 Name "Braze Browser"

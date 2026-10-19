@@ -131,7 +131,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 // 4. VERIFICADOR DE ATUALIZAÇÕES VIA GITHUB RELEASES
 // --------------------------------------------------------------------------
 const GITHUB_REPO = "miguelthemann/braze";
-const CURRENT_BRAZE_VERSION = "1.3.2";
+const CURRENT_BRAZE_VERSION = "1.3.5";
 
 function compareSemver(v1, v2) {
   const parse = (v) =>
