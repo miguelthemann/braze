@@ -19,6 +19,7 @@ RequestExecutionLevel admin
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_RUN "$INSTDIR\braze.exe"
+!define MUI_FINISHPAGE_RUN_PARAMETERS '-app "$INSTDIR\browser\application.ini"'
 !define MUI_FINISHPAGE_RUN_TEXT "Executar Braze Browser"
 !insertmacro MUI_PAGE_FINISH
 !insertmacro MUI_UNPAGE_WELCOME
@@ -37,10 +38,10 @@ Section "Braze Core" SecCore
   # The runner will drop the prepared files into build-win\Braze
   File /r "..\..\build-win\Braze\*"
 
-  # Criar atalhos nativos apontando diretamente para o executável braze.exe
+  # Criar atalhos nativos apontando diretamente para o executável braze.exe com o manifesto Braze
   CreateDirectory "$SMPROGRAMS\Braze"
-  CreateShortcut "$SMPROGRAMS\Braze\Braze.lnk" "$INSTDIR\braze.exe" "" "$INSTDIR\braze.exe" 0 SW_SHOWNORMAL "" "Braze Browser"
-  CreateShortcut "$DESKTOP\Braze.lnk" "$INSTDIR\braze.exe" "" "$INSTDIR\braze.exe" 0 SW_SHOWNORMAL "" "Braze Browser"
+  CreateShortcut "$SMPROGRAMS\Braze\Braze.lnk" "$INSTDIR\braze.exe" '-app "$INSTDIR\browser\application.ini"' "$INSTDIR\braze.exe" 0 SW_SHOWNORMAL "" "Braze Browser"
+  CreateShortcut "$DESKTOP\Braze.lnk" "$INSTDIR\braze.exe" '-app "$INSTDIR\browser\application.ini"' "$INSTDIR\braze.exe" 0 SW_SHOWNORMAL "" "Braze Browser"
   
   WriteUninstaller "$INSTDIR\uninstall.exe"
   

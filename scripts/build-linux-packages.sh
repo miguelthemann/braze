@@ -24,12 +24,26 @@ rm -rf firefox firefox.tar.bz2
 sed -i 's/^Name=Firefox/Name=Braze/' "$BUILD_DIR/opt/braze/application.ini"
 sed -i 's/^RemotingName=firefox/RemotingName=braze/' "$BUILD_DIR/opt/braze/application.ini"
 sed -i 's/^Vendor=Mozilla/Vendor=Braze/' "$BUILD_DIR/opt/braze/application.ini"
+cp "$BUILD_DIR/opt/braze/application.ini" "$BUILD_DIR/opt/braze/browser/application.ini"
 
 # Rename binaries to native braze executables
 mv "$BUILD_DIR/opt/braze/firefox-bin" "$BUILD_DIR/opt/braze/braze-bin"
-ln -s braze-bin "$BUILD_DIR/opt/braze/firefox-bin"
-mv "$BUILD_DIR/opt/braze/firefox" "$BUILD_DIR/opt/braze/braze"
-ln -s braze "$BUILD_DIR/opt/braze/firefox"
+ln -sf braze-bin "$BUILD_DIR/opt/braze/firefox-bin"
+rm -f "$BUILD_DIR/opt/braze/firefox"
+
+# Native Braze launcher at /opt/braze/braze
+cat << 'EOF' > "$BUILD_DIR/opt/braze/braze"
+#!/usr/bin/env bash
+export MOZ_APP_DISPLAYNAME="Braze"
+export MOZ_APP_NAME="braze"
+export MOZ_APP_VENDOR="Braze"
+export MOZ_APP_REMOTINGNAME="braze"
+export XUL_APP_FILE="/opt/braze/browser/application.ini"
+
+exec /opt/braze/braze-bin -app /opt/braze/browser/application.ini "$@"
+EOF
+chmod 755 "$BUILD_DIR/opt/braze/braze"
+ln -sf braze "$BUILD_DIR/opt/braze/firefox"
 
 # Distribution policies & bundled extensions (in both /opt/braze and /opt/braze/browser)
 mkdir -p "$BUILD_DIR/opt/braze/distribution/extensions"
@@ -70,6 +84,8 @@ cat << 'EOF' > "$BUILD_DIR/usr/bin/braze"
 export MOZ_APP_DISPLAYNAME="Braze"
 export MOZ_APP_NAME="braze"
 export MOZ_APP_VENDOR="Braze"
+export MOZ_APP_REMOTINGNAME="braze"
+export XUL_APP_FILE="/opt/braze/browser/application.ini"
 
 exec /opt/braze/braze "$@"
 EOF

@@ -96,6 +96,7 @@ jobs:
           sed -i 's/^Name=Firefox/Name=Braze/' build-win/Braze/application.ini
           sed -i 's/^RemotingName=firefox/RemotingName=braze/' build-win/Braze/application.ini
           sed -i 's/^Vendor=Mozilla/Vendor=Braze/' build-win/Braze/application.ini
+          cp build-win/Braze/application.ini build-win/Braze/browser/application.ini
 
           # 2. Copiar distribuição, policies e extensão assinada para pré-instalação
           mkdir -p build-win/Braze/distribution/extensions
