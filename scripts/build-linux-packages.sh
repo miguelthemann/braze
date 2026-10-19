@@ -3,7 +3,7 @@
 # Copyright (c) 2026 Miguel G. (miguelthemann)
 set -e
 
-VERSION="${1:-1.3.5}"
+VERSION="${1:-1.3.6}"
 VERSION="${VERSION#v}"
 BUILD_DIR="build/braze-linux"
 OUT_DIR="build"
