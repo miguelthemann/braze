@@ -31,22 +31,38 @@ ln -s braze-bin "$BUILD_DIR/opt/braze/firefox-bin"
 mv "$BUILD_DIR/opt/braze/firefox" "$BUILD_DIR/opt/braze/braze"
 ln -s braze "$BUILD_DIR/opt/braze/firefox"
 
+# Distribution policies & bundled extensions (in both /opt/braze and /opt/braze/browser)
 mkdir -p "$BUILD_DIR/opt/braze/distribution/extensions"
 cp distribution/policies.json "$BUILD_DIR/opt/braze/distribution/"
 cp braze-shields.xpi "$BUILD_DIR/opt/braze/distribution/"
 cp braze-shields.xpi "$BUILD_DIR/opt/braze/distribution/extensions/braze-shields@miguelthemann.github.io.xpi"
+
+mkdir -p "$BUILD_DIR/opt/braze/browser/distribution/extensions"
+cp distribution/policies.json "$BUILD_DIR/opt/braze/browser/distribution/"
+cp braze-shields.xpi "$BUILD_DIR/opt/braze/browser/distribution/"
+cp braze-shields.xpi "$BUILD_DIR/opt/braze/browser/distribution/extensions/braze-shields@miguelthemann.github.io.xpi"
+
+# AutoConfig loaders (in both root defaults and browser defaults)
 mkdir -p "$BUILD_DIR/opt/braze/defaults/pref"
 cp packaging/common/autoconfig.js "$BUILD_DIR/opt/braze/defaults/pref/autoconfig.js"
 mkdir -p "$BUILD_DIR/opt/braze/browser/defaults/preferences"
 cp packaging/common/autoconfig.js "$BUILD_DIR/opt/braze/browser/defaults/preferences/autoconfig.js"
-cp packaging/common/braze.cfg "$BUILD_DIR/opt/braze/braze.cfg"
 
+# AutoConfig script (in both /opt/braze and /opt/braze/browser)
+cp packaging/common/braze.cfg "$BUILD_DIR/opt/braze/braze.cfg"
+cp packaging/common/braze.cfg "$BUILD_DIR/opt/braze/browser/braze.cfg"
+
+# Braze stylesheets & assets (in both /opt/braze/chrome and /opt/braze/browser/chrome)
 mkdir -p "$BUILD_DIR/opt/braze/chrome"
 cp -r profile/chrome/* "$BUILD_DIR/opt/braze/chrome/"
+mkdir -p "$BUILD_DIR/opt/braze/browser/chrome"
+cp -r profile/chrome/* "$BUILD_DIR/opt/braze/browser/chrome/"
 
 # Window and system icons
 mkdir -p "$BUILD_DIR/opt/braze/browser/chrome/icons/default"
 cp assets/icon-128.png "$BUILD_DIR/opt/braze/browser/chrome/icons/default/default128.png"
+mkdir -p "$BUILD_DIR/opt/braze/chrome/icons/default"
+cp assets/icon-128.png "$BUILD_DIR/opt/braze/chrome/icons/default/default128.png"
 
 # 3. Launcher script for /usr/bin/braze
 cat << 'EOF' > "$BUILD_DIR/usr/bin/braze"

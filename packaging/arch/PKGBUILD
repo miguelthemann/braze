@@ -33,18 +33,30 @@ package() {
     cp distribution/policies.json "$pkgdir/opt/braze/distribution/"
     cp braze-shields.xpi "$pkgdir/opt/braze/distribution/"
     cp braze-shields.xpi "$pkgdir/opt/braze/distribution/extensions/braze-shields@miguelthemann.github.io.xpi"
+
+    install -d "$pkgdir/opt/braze/browser/distribution/extensions"
+    cp distribution/policies.json "$pkgdir/opt/braze/browser/distribution/"
+    cp braze-shields.xpi "$pkgdir/opt/braze/browser/distribution/"
+    cp braze-shields.xpi "$pkgdir/opt/braze/browser/distribution/extensions/braze-shields@miguelthemann.github.io.xpi"
+
     install -d "$pkgdir/opt/braze/defaults/pref"
     cp packaging/common/autoconfig.js "$pkgdir/opt/braze/defaults/pref/autoconfig.js"
     install -d "$pkgdir/opt/braze/browser/defaults/preferences"
     cp packaging/common/autoconfig.js "$pkgdir/opt/braze/browser/defaults/preferences/autoconfig.js"
+
     cp packaging/common/braze.cfg "$pkgdir/opt/braze/braze.cfg"
+    cp packaging/common/braze.cfg "$pkgdir/opt/braze/browser/braze.cfg"
 
     install -d "$pkgdir/opt/braze/chrome"
     cp -r profile/chrome/* "$pkgdir/opt/braze/chrome/"
+    install -d "$pkgdir/opt/braze/browser/chrome"
+    cp -r profile/chrome/* "$pkgdir/opt/braze/browser/chrome/"
 
     # Ícone do motor Gecko
     install -d "$pkgdir/opt/braze/browser/chrome/icons/default"
     cp assets/icon-128.png "$pkgdir/opt/braze/browser/chrome/icons/default/default128.png"
+    install -d "$pkgdir/opt/braze/chrome/icons/default"
+    cp assets/icon-128.png "$pkgdir/opt/braze/chrome/icons/default/default128.png"
 
     # Script lançador em /usr/bin/braze
     install -d "$pkgdir/usr/bin"

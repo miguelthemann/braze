@@ -103,16 +103,24 @@ jobs:
           cp braze-shields.xpi build-win/Braze/distribution/braze-shields.xpi
           cp braze-shields.xpi build-win/Braze/distribution/extensions/braze-shields@miguelthemann.github.io.xpi
 
+          mkdir -p build-win/Braze/browser/distribution/extensions
+          cp distribution/policies.json build-win/Braze/browser/distribution/policies.json
+          cp braze-shields.xpi build-win/Braze/browser/distribution/braze-shields.xpi
+          cp braze-shields.xpi build-win/Braze/browser/distribution/extensions/braze-shields@miguelthemann.github.io.xpi
+
           # 3. Configurar AutoConfig para sincronização automática de chrome/userChrome.css e preferências
           mkdir -p build-win/Braze/defaults/pref
           cp packaging/common/autoconfig.js build-win/Braze/defaults/pref/autoconfig.js
           mkdir -p build-win/Braze/browser/defaults/preferences
           cp packaging/common/autoconfig.js build-win/Braze/browser/defaults/preferences/autoconfig.js
           cp packaging/common/braze.cfg build-win/Braze/braze.cfg
+          cp packaging/common/braze.cfg build-win/Braze/browser/braze.cfg
 
           # 4. Copiar chrome stylesheets e assets para serem injectados nos perfis
           mkdir -p build-win/Braze/chrome
           cp -r profile/chrome/* build-win/Braze/chrome/
+          mkdir -p build-win/Braze/browser/chrome
+          cp -r profile/chrome/* build-win/Braze/browser/chrome/
 
           # 3. Copiar assets para instalador e ícones
           cp -r assets build-win/Braze/assets
