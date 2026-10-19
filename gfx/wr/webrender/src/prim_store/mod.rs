@@ -21,7 +21,7 @@ use crate::render_task_graph::RenderTaskId;
 use crate::resource_cache::ImageProperties;
 use crate::util::Recycler;
 use crate::internal_types::{FastHashSet, LayoutPrimitiveInfo};
-use crate::visibility::{PrimitiveDrawHeader, PrimitiveDrawIndex};
+use crate::visibility::{BackdropCaptures, PrimitiveDrawHeader, PrimitiveDrawIndex};
 use std::ops;
 
 pub mod backdrop;
@@ -482,6 +482,9 @@ pub struct PrimitiveFrameScratch {
     /// visit ends.
     pending_picture_draws: Vec<PrimitiveDrawIndex>,
 
+    /// The backdrop-filter captures reachable this frame.
+    pub backdrop_captures: BackdropCaptures,
+
     /// Per-frame scratch for Picture primitives. Holds the picture's
     /// primary/secondary render task ids and any per-composite-mode
     /// extra GPU buffer addresses. Indexed by `scratch_handle` on
@@ -509,8 +512,9 @@ pub struct PrimitiveFrameScratch {
     /// into it for on-screen display).
     pub debug_items: Vec<DebugItem>,
 
-    /// Set of sub-graphs that are required, determined during visibility pass
-    pub required_sub_graphs: FastHashSet<PictureIndex>,
+    /// The backdrop-filter chains whose `BackdropRender` is drawn this frame,
+    /// determined during the visibility pass
+    pub required_backdrop_chains: FastHashSet<PictureIndex>,
 
     /// Temporary buffers for building segments in to during prepare pass
     pub quad_direct_segments: Vec<QuadSegment>,
@@ -524,12 +528,13 @@ impl Default for PrimitiveFrameScratch {
             picture_draws: Vec::new(),
             picture_draw_ranges: Vec::new(),
             pending_picture_draws: Vec::new(),
+            backdrop_captures: BackdropCaptures::default(),
             pictures: storage::Storage::new(0),
             text_runs: storage::Storage::new(0),
             glyph_keys: GlyphKeyStorage::new(0),
             clip_mask_instances: Vec::new(),
             debug_items: Vec::new(),
-            required_sub_graphs: FastHashSet::default(),
+            required_backdrop_chains: FastHashSet::default(),
             quad_direct_segments: Vec::new(),
             quad_indirect_segments: Vec::new(),
         }
@@ -623,6 +628,7 @@ impl PrimitiveFrameScratch {
         recycler.recycle_vec(&mut self.draws);
         recycler.recycle_vec(&mut self.picture_draws);
         recycler.recycle_vec(&mut self.picture_draw_ranges);
+        self.backdrop_captures.recycle(recycler);
         self.pictures.recycle(recycler);
         self.text_runs.recycle(recycler);
         self.glyph_keys.recycle(recycler);
@@ -645,7 +651,7 @@ impl PrimitiveFrameScratch {
         self.quad_direct_segments.clear();
         self.quad_indirect_segments.clear();
 
-        self.required_sub_graphs.clear();
+        self.required_backdrop_chains.clear();
 
         self.debug_items.clear();
     }
