@@ -1299,7 +1299,7 @@ features:
       campaign-utm-content:
         description: The "utm_content" value used to identify installs from the pairing campaign.
         type: String
-        default: ""
+        default: "DTM_SYNC_PAIR_V2"
 
   pdf-viewer:
     description: Feature for the PDF viewer tools for users on Firefox for Android.
@@ -1337,6 +1337,14 @@ features:
       - channel: developer
         value:
           enabled: true
+
+  account-sync-decouple:
+    description: Control the "sync & account decoupling" feature
+    variables:
+      enabled:
+        description: If true, the flows for enabling sync & account decoupling are enabled.
+        type: Boolean
+        default: false
 
   wayback-machine:
     description: >

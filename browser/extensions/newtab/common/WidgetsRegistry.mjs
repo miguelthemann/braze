@@ -17,7 +17,8 @@
  * Each entry describes one widget's static metadata:
  *
  *   id                — unique string key used in prefs and the order pref
- *   telemetryName     — the name sent in Glean events (snake_case; may differ from id)
+ *   telemetryName     — the name sent in Glean events (snake_case; may differ from id).
+ *                       An entry with an extensionID sends the widget id from its extension.
  *   customizeL10nId   — Fluent id of the toggle label in the New Tab customize panel
  *   customizeEventSource — source sent with the PREF_CHANGED event when the customize panel toggle flips
  *   order             — default render position (0-indexed); used when widgets.order is empty
@@ -38,9 +39,6 @@
  *                        null means the sidebar placement is not overridable via trainhop
  *   requiresHistory    — when true, the widget is hidden entirely on profiles that
  *                        record no history (see isWidgetDataUnavailable)
- *   requiresWidgetSearchSap — when true, the widget is hidden entirely on hosts whose
- *                        search code is too old to generate accurate partner codes
- *                        (see isWidgetDataUnavailable)
  *
  * SIZE PRIORITY
  * sizePref defaults to "" (empty string) in PREFS_CONFIG. An empty value
@@ -187,14 +185,14 @@ export const PREF_WIDGETS_SYSTEM_SOLITAIRE_ENABLED =
 /**
  * @typedef {object} WidgetRegistryEntry
  * @property {string} id - Unique key used in prefs and the order pref.
- * @property {string} telemetryName - Snake_case name sent in Glean events. May differ from id (e.g. "focus_timer" for id "focusTimer").
+ * @property {string} [telemetryName] - Snake_case name sent in Glean events. May differ from id (e.g. "focus_timer" for id "focusTimer"). Required unless the entry has an extensionID, which sends the widget id from its extension.
  * @property {string} [customizeL10nId] - Fluent id of the widget's customize panel toggle label. The message carries a .label attribute. Required unless the entry is retired or has an extensionID.
  * @property {string} [customizeEventSource] - Source sent with the PREF_CHANGED user event when the widget's customize panel toggle flips. Required unless the entry is retired.
  * @property {number} order - Default render position (0-indexed).
  * @property {string} enabledPref - User-facing pref that toggles this widget on/off.
  * @property {string} sizePref - Pref that stores the user's chosen size ("" = not yet set).
  * @property {string} defaultSize - Fallback size when sizePref is empty and no trainhop suggestion exists.
- * @property {string[]} validSizes - Sizes this widget supports.
+ * @property {string[]} [validSizes] - Sizes this widget supports. Required unless the entry has an extensionID.
  * @property {boolean} hasSidebar - When true, the widget moves to the sidebar at size "small".
  * @property {string} systemEnabledPref - Operator pref that gates the widget independently of the user pref.
  * @property {string} trainhopEnabledKey - Key in trainhopConfig.widgets.* for the enabled override. For Weather it is also the id of its about:preferences system-pref setting.
@@ -203,13 +201,12 @@ export const PREF_WIDGETS_SYSTEM_SOLITAIRE_ENABLED =
  * @property {string} widgetsSettingsVisibleKey - Key in trainhopConfig.widgetsSettings.* that additively reveals this widget's toggle in the Customize menu, and Weather's standalone row in about:preferences#home (does not enable the widget).
  * @property {string} widgetsSettingsEnabledKey - Key in trainhopConfig.widgetsSettings.* that overrides this widget's default enabled value (written to the pref default branch; an explicit user toggle still wins).
  * @property {boolean} [requiresHistory] - When true, the widget is hidden entirely on profiles that record no history. See isWidgetDataUnavailable.
- * @property {boolean} [requiresWidgetSearchSap] - When true, the widget is hidden entirely on hosts whose search code is too old to generate accurate partner codes. See isWidgetDataUnavailable.
  * @property {boolean} [retired] - When true the widget never renders and gets no settings or devtools toggle, whatever its prefs and trainhopConfig say.
  * @property {boolean} [skipNightlyDefault] - When true, the widget opts out of being on everywhere in Nightly. See skipsNightlyDefault in lib/ActivityStream.sys.mjs.
  * @property {string|null} [trainhopNamespace] - When set, the widget ships its whole config in one dedicated object at trainhopConfig.<namespace>. Its `enabled` overrides the default value of enabledPref on the default branch (user toggle still wins, like widgetsSettings.*Enabled); `visible` reveals the widget (isWidgetAddable) without writing a pref; `size` is read by resolveWidgetSize. All widgets define this today.
  * @property {string} [src] - URL of the widget's document; a trainhop namespace `src` overrides it.
  * @property {string} [extensionID] - ID of an extension that provides the widget's document. getWidgets keeps the entry only while the ExtensionWidgets state has this extension.
- * @property {string} [l10nId] - Fluent identifier for the widget's localized strings.
+ * @property {string} [l10nId] - Fluent id of the widget's name. The message carries .title, .label and .menu-label attributes.
  */
 
 // If you add a widget market pref to firefox.js that older hosts don't have,
@@ -388,9 +385,6 @@ export const WIDGET_REGISTRY = [
     widgetsSettingsVisibleKey: "recentSearchesVisible",
     widgetsSettingsEnabledKey: "recentSearchesEnabled",
     trainhopNamespace: "widgetRecentSearches",
-    // @backward-compat { version 157 } See isWidgetSearchSapHostSupported in
-    // PrefsFeed.sys.mjs.
-    requiresWidgetSearchSap: true,
   },
   {
     id: "horoscopes",
@@ -491,26 +485,28 @@ export function resolveWidgetOrder(prefs) {
 }
 
 /**
+ * Returns true once the profile's region is known and false
+ * for a region-less profile.
+ *
+ * @param {object} prefs - current pref values from the Redux store
+ * @returns {boolean}
+ */
+export function isRegionResolved(prefs) {
+  return Boolean(prefs.region);
+}
+
+/**
  * Returns true if the widget needs history and this profile records none, so it
  * could only ever render an empty state (Bug 2063207). An absent
  * `recordsHistory` counts as available, so a missing PrefsFeed broadcast cannot
  * hide a working widget.
- *
- * @backward-compat { version 157 }
- * The recent searches widget requires the `newtab_search_widget` registered
- * in BrowserSearchTelemetry.sys.mjs and no partner code configuration which
- * was added to ConfigSearchEngine.sys.mjs in 157. The `requiresWidgetSearchSap`
- * check can be removed once 157 hits release.
  *
  * @param {object} widget - a WIDGET_REGISTRY entry
  * @param {object} prefs - current pref values from the Redux store
  * @returns {boolean}
  */
 export function isWidgetDataUnavailable(widget, prefs) {
-  return Boolean(
-    (widget.requiresHistory && prefs.recordsHistory === false) ||
-    (widget.requiresWidgetSearchSap && prefs.supportsWidgetSearchSap === false)
-  );
+  return Boolean(widget.requiresHistory && prefs.recordsHistory === false);
 }
 
 /**
@@ -565,12 +561,17 @@ export function isWidgetAddable(widget, prefs) {
   if (widget.retired || isWidgetDataUnavailable(widget, prefs)) {
     return false;
   }
+  if (prefs[widget.systemEnabledPref]) {
+    return true;
+  }
+  if (!isRegionResolved(prefs)) {
+    return false;
+  }
   return Boolean(
     (widget.trainhopNamespace &&
       prefs.trainhopConfig?.[widget.trainhopNamespace]?.visible) ||
     prefs.trainhopConfig?.widgets?.[widget.trainhopEnabledKey] ||
-    prefs.trainhopConfig?.widgetsSettings?.[widget.widgetsSettingsVisibleKey] ||
-    prefs[widget.systemEnabledPref]
+    prefs.trainhopConfig?.widgetsSettings?.[widget.widgetsSettingsVisibleKey]
   );
 }
 
@@ -630,9 +631,13 @@ export function isWeatherAvailable(prefs) {
  * @returns {boolean}
  */
 export function isWidgetsContainerVisible(prefs) {
+  if (prefs["widgets.system.enabled"] || prefs.widgetsConfig?.enabled) {
+    return true;
+  }
+  if (!isRegionResolved(prefs)) {
+    return false;
+  }
   return Boolean(
-    prefs["widgets.system.enabled"] ||
-    prefs.widgetsConfig?.enabled ||
     prefs.trainhopConfig?.widgets?.enabled ||
     prefs.trainhopConfig?.widgetsSettings?.enabled
   );
@@ -936,16 +941,17 @@ export function resolvePrivacyCelebrationThreshold(prefs) {
  * in the row (not the sidebar). Each entry carries the pref to disable,
  * the telemetry name, and whether it was active (for telemetry filtering).
  *
+ * @param {WidgetRegistryEntry[]} widgets - the widgets from getWidgets
  * @param {object} prefs - current pref values from the Redux store
  * @param {object} widgetEnabledMap - map of widget id → boolean (currently active in row)
  * @returns {{ enabledPref: string, telemetryName: string, active: boolean }[]}
  */
-export function getHideAllTargets(prefs, widgetEnabledMap) {
-  return WIDGET_REGISTRY.filter(
-    w => !resolveWidgetHasSidebar(w, prefs) || widgetEnabledMap[w.id]
-  ).map(w => ({
-    enabledPref: w.enabledPref,
-    telemetryName: w.telemetryName,
-    active: !!widgetEnabledMap[w.id],
-  }));
+export function getHideAllTargets(widgets, prefs, widgetEnabledMap) {
+  return widgets
+    .filter(w => !resolveWidgetHasSidebar(w, prefs) || widgetEnabledMap[w.id])
+    .map(w => ({
+      enabledPref: w.enabledPref,
+      telemetryName: w.telemetryName,
+      active: !!widgetEnabledMap[w.id],
+    }));
 }

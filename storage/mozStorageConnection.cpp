@@ -1189,6 +1189,7 @@ nsresult Connection::initialize(nsIFile* aDatabaseFile) {
       rv = initializeInternal();
       RecordOpenStatus(rv);
       NS_ENSURE_SUCCESS(rv, rv);
+      failGuard.release();
       return NS_OK;
     }
     // Plaintext (out-of-profile), or a read-only open of a missing database:
@@ -1646,15 +1647,18 @@ nsresult Connection::ensureOperationSupported(
 }
 
 bool Connection::isConnectionReadyOnThisThread() {
+  // The async thread may get here while holding sharedDBMutex, so it must not
+  // take sharedAsyncExecutionMutex, as Statement::internalFinalize takes the
+  // two in the opposite order.
+  if (mAsyncExecutionThread && mAsyncExecutionThread->IsOnCurrentThread()) {
+    return true;
+  }
 #ifdef DEBUG
   {
     MutexAutoLock lockedScope(sharedAsyncExecutionMutex);
     MOZ_ASSERT_IF(connectionReady(), !mConnectionClosed);
   }
 #endif
-  if (mAsyncExecutionThread && mAsyncExecutionThread->IsOnCurrentThread()) {
-    return true;
-  }
   return connectionReady();
 }
 

@@ -2289,9 +2289,26 @@ static void UpdateRegExpStatics(MacroAssembler& masm, Register regexp,
     masm.store8(Imm32(0), invalidatedAddress);
   }
 
+  // If the statics already refer to this input and source, as they do for
+  // every match after the first in a global loop, the pointer stores below
+  // would not change anything and their barriers can be skipped.
+  Label slowPath, storeLazyState;
+  masm.unboxNonDouble(Address(regexp, NativeObject::getFixedSlotOffsetTyped(
+                                          RegExpObject::SHARED_SLOT)),
+                      temp1, JSVAL_TYPE_PRIVATE_GCTHING);
+  static_assert(sizeof(JS::RegExpFlags) == 1, "load size must match flag size");
+  masm.load8ZeroExtend(Address(temp1, RegExpShared::offsetOfFlags()), temp2);
+  masm.store8(temp2, Address(staticsReg, RegExpStatics::offsetOfLazyFlags()));
+  masm.loadPtr(Address(temp1, RegExpShared::offsetOfSource()), temp2);
+  masm.branchPtr(Assembler::NotEqual, lazySourceAddress, temp2, &slowPath);
+  masm.branchPtr(Assembler::NotEqual, pendingInputAddress, input, &slowPath);
+  masm.branchPtr(Assembler::Equal, matchesInputAddress, input, &storeLazyState);
+
+  masm.bind(&slowPath);
+  masm.guardedCallPreBarrier(lazySourceAddress, MIRType::String);
+  masm.storePtr(temp2, lazySourceAddress);
   masm.guardedCallPreBarrier(pendingInputAddress, MIRType::String);
   masm.guardedCallPreBarrier(matchesInputAddress, MIRType::String);
-  masm.guardedCallPreBarrier(lazySourceAddress, MIRType::String);
 
   if (initialStringHeap == gc::Heap::Default) {
     // Writing into RegExpStatics tenured memory; must post-barrier.
@@ -2318,20 +2335,11 @@ static void UpdateRegExpStatics(MacroAssembler& masm, Register regexp,
     masm.storePtr(input, matchesInputAddress);
   }
 
-  masm.storePtr(lastIndex,
-                Address(staticsReg, RegExpStatics::offsetOfLazyIndex()));
+  masm.bind(&storeLazyState);
+  masm.storePtr(lastIndex, lazyIndexAddress);
   masm.store32(
       Imm32(1),
       Address(staticsReg, RegExpStatics::offsetOfPendingLazyEvaluation()));
-
-  masm.unboxNonDouble(Address(regexp, NativeObject::getFixedSlotOffsetTyped(
-                                          RegExpObject::SHARED_SLOT)),
-                      temp1, JSVAL_TYPE_PRIVATE_GCTHING);
-  masm.loadPtr(Address(temp1, RegExpShared::offsetOfSource()), temp2);
-  masm.storePtr(temp2, lazySourceAddress);
-  static_assert(sizeof(JS::RegExpFlags) == 1, "load size must match flag size");
-  masm.load8ZeroExtend(Address(temp1, RegExpShared::offsetOfFlags()), temp2);
-  masm.store8(temp2, Address(staticsReg, RegExpStatics::offsetOfLazyFlags()));
   masm.bind(&done);
 }
 
@@ -7182,6 +7190,9 @@ void JitRuntime::generateIonGenericCallBoundFunction(MacroAssembler& masm,
                           &BoundFunctionObject::class_, scratch, calleeReg,
                           vmCall);
 
+  // Note: we don't enter the bound function's realm because bound functions
+  // don't have an associated realm in the spec.
+
   Address targetSlot(calleeReg, BoundFunctionObject::offsetOfTargetSlot());
   Address flagsSlot(calleeReg, BoundFunctionObject::offsetOfFlagsSlot());
   Address thisSlot(calleeReg, BoundFunctionObject::offsetOfBoundThisSlot());
@@ -9412,7 +9423,8 @@ static bool ShouldInitFixedSlots(MIRGenerator* gen, LNewPlainObject* lir,
   }
 
   for (; iter != block->end(); iter++) {
-    if (iter->isConstant() || iter->isPostWriteBarrier()) {
+    if (iter->isConstant() || iter->isPostWriteBarrier() || iter->isBox() ||
+        iter->isAssertCanElidePostWriteBarrier()) {
       // These instructions won't trigger a GC or read object slots.
       continue;
     }

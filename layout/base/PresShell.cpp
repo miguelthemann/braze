@@ -254,8 +254,7 @@ struct RangePaintInfo {
   float mResolution = 1.0;
 
   explicit RangePaintInfo(nsIFrame* aFrame)
-      : mBuilder(aFrame, nsDisplayListBuilderMode::Painting, false),
-        mList(&mBuilder) {
+      : mBuilder(aFrame, nsDisplayListBuilderMode::Painting, false) {
     MOZ_COUNT_CTOR(RangePaintInfo);
     mBuilder.BeginFrame();
   }
@@ -5338,7 +5337,7 @@ UniquePtr<RangePaintInfo> PresShell::CreateRangePaintInfo(
     ViewID zoomedId = nsLayoutUtils::FindOrCreateIDFor(
         rootScrollContainerFrame->GetContent());
 
-    nsDisplayList wrapped(&info->mBuilder);
+    nsDisplayList wrapped;
     wrapped.AppendNewToTop<nsDisplayAsyncZoom>(
         &info->mBuilder, rootScrollContainerFrame, &info->mList, nullptr,
         nsDisplayItem::ContainerASRType::Constant, zoomedId);
@@ -5653,7 +5652,7 @@ already_AddRefed<SourceSurface> PresShell::RenderSelection(
 
 static void AddDisplayItemToBottom(nsDisplayListBuilder* aBuilder,
                                    nsDisplayList* aList, nsDisplayItem* aItem) {
-  nsDisplayList list(aBuilder);
+  nsDisplayList list;
   list.AppendToTop(aItem);
   list.AppendToTop(aList);
   aList->AppendToTop(&list);
@@ -6779,7 +6778,11 @@ void PresShell::PaintInternal(nsIFrame* aFrame, WindowRenderer* aRenderer,
   }
 
   if (aFrame) {
+    // A view transition capture must build a display list, also when an
+    // iframe is captured from an ancestor root frame that has no pending
+    // layer tree update.
     if (!(aFlags & PaintInternalFlags::PaintSyncDecodeImages) &&
+        !(aFlags & PaintInternalFlags::PaintCompositeOffscreen) &&
         !aFrame->HasAnyStateBits(NS_FRAME_UPDATE_LAYER_TREE)) {
       if (layerManager) {
         layerManager->SetTransactionIdAllocator(presContext->RefreshDriver());

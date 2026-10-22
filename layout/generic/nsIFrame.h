@@ -1841,9 +1841,7 @@ class nsIFrame : public nsQueryFrame {
    * which return a baseline from GetBaseline which is not useful for
    * caret positioning.
    */
-  virtual nscoord GetCaretBaseline() const {
-    return GetLogicalBaseline(GetWritingMode());
-  }
+  virtual nscoord GetCaretBaseline() const;
 
   // Gets a caret baseline suitable for the frame if the frame doesn't have one.
   nscoord GetFontMetricsDerivedCaretBaseline() const;
@@ -2693,6 +2691,11 @@ class nsIFrame : public nsQueryFrame {
    * the original or as one of the copies.
    */
   bool IsInReplicatedFixedPosTree() const;
+  /**
+   * Returns true whether this frame hosts any potentially replicated fixed-pos
+   * elements that would escape `this`s subtree.
+   */
+  bool ContainsReplicatedFixedPosPlaceholders() const;
 
   void SetIsPrimaryFrame(bool aIsPrimary) {
     if (mIsPrimaryFrame == aIsPrimary) {

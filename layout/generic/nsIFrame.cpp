@@ -2104,6 +2104,24 @@ nscoord nsIFrame::GetLogicalBaseline(
   return result;
 }
 
+nscoord nsIFrame::GetCaretBaseline() const {
+  const WritingMode wm = GetWritingMode();
+  const BaselineSharingGroup group = GetDefaultBaselineSharingGroup();
+  const nscoord result =
+      GetNaturalBaselineBOffset(wm, group, BaselineExportContext::LineLayout)
+          .valueOrFrom([this, wm, group]() {
+            // The synthesized caret baseline is placed at the frame's edge
+            // at the default baseline for the writing mode.
+            return Baseline::SynthesizeBOffsetFromMarginBox(
+                this, wm, group,
+                Baseline::DefaultAlignmentBaselineForWritingMode(wm));
+          });
+  if (group == BaselineSharingGroup::Last) {
+    return BSize(wm) - result;
+  }
+  return result;
+}
+
 const nsFrameList& nsIFrame::GetChildList(ChildListID aListID) const {
   if (IsAbsoluteContainer()) {
     if (aListID == FrameChildListID::Absolute) {
@@ -3451,7 +3469,7 @@ void nsIFrame::BuildDisplayListForStackingContext(
   const bool usingSVGEffects = usingFilter || usingMask;
 
   const nsRect visibleRectOutsideSVGEffects = visibleRect;
-  nsDisplayList hoistedScrollInfoItemsStorage(aBuilder);
+  nsDisplayList hoistedScrollInfoItemsStorage;
   if (usingSVGEffects) {
     dirtyRect =
         SVGIntegrationUtils::GetRequiredSourceForInvalidArea(this, dirtyRect);
@@ -3729,7 +3747,7 @@ void nsIFrame::BuildDisplayListForStackingContext(
     content = PresContext()->Document()->GetRootElement();
   }
 
-  nsDisplayList resultList(aBuilder);
+  nsDisplayList resultList;
   set.SerializeWithCorrectZOrder(&resultList, content);
 
   // Get the ASR to use for the container items that we create here.
@@ -3918,8 +3936,8 @@ void nsIFrame::BuildDisplayListForStackingContext(
     if (extend3DContext) {
       // Install dummy nsDisplayTransform as a leaf containing
       // descendants not participating this 3D rendering context.
-      nsDisplayList nonparticipants(aBuilder);
-      nsDisplayList participants(aBuilder);
+      nsDisplayList nonparticipants;
+      nsDisplayList participants;
       int index = 1;
 
       nsDisplayItem* separator = nullptr;
@@ -4133,7 +4151,7 @@ void nsIFrame::BuildDisplayListForStackingContext(
           nsDisplayItem::ContainerASRType::AncestorOfContained, &resultList);
     } else {
       MOZ_ASSERT(resultList.Length() == 1);
-      resultList.Clear();
+      resultList.RemoveBottom();
     }
 
     // Mark the outermost display item as reusable. These display items and
@@ -4174,7 +4192,7 @@ static nsDisplayItem* WrapInWrapList(nsDisplayListBuilder* aBuilder,
   // we can skip adding one.
   if (aBuiltContainerItem || (!aBuilder->IsPartialUpdate() && !needsWrapList)) {
     MOZ_ASSERT(aList->Length() == 1);
-    aList->Clear();
+    aList->RemoveBottom();
     return item;
   }
 
@@ -4192,7 +4210,7 @@ static nsDisplayItem* WrapInWrapList(nsDisplayListBuilder* aBuilder,
       DiscardOldItems(aFrame);
     } else {
       MOZ_ASSERT(aList->Length() == 1);
-      aList->Clear();
+      aList->RemoveBottom();
       return item;
     }
   }
@@ -4414,19 +4432,18 @@ void nsIFrame::BuildDisplayListForChild(nsDisplayListBuilder* aBuilder,
   // frames that correspond to HTML link elements so that we can have active
   // links in saved PDF output. Note that the state of "within a link" is
   // set on the display-list builder, such that all descendants of the link
-  // element will generate display-list links.
-  // TODO: we should be able to optimize this so as to avoid creating links
-  // for the same destination that entirely overlap each other, which adds
-  // nothing useful to the final PDF.
+  // element will generate display-list links, except for descendants entirely
+  // covered by the link element's frame, since those would add nothing useful
+  // to the final PDF.
   Maybe<nsDisplayListBuilder::Linkifier> linkifier;
   if (aBuilder->IsForPrinting()) {
+#ifdef ACCESSIBILITY
+    MaybeAddAccId(childOrOutOfFlow, aBuilder, aLists);
+#endif
     if (StaticPrefs::print_save_as_pdf_links_enabled()) {
       linkifier.emplace(aBuilder, childOrOutOfFlow, aLists.Content());
       linkifier->MaybeAppendLink(aBuilder, childOrOutOfFlow);
     }
-#ifdef ACCESSIBILITY
-    MaybeAddAccId(childOrOutOfFlow, aBuilder, aLists);
-#endif
   }
 
   nsIFrame* parent = childOrOutOfFlow->GetParent();
@@ -4651,8 +4668,8 @@ void nsIFrame::BuildDisplayListForChild(nsDisplayListBuilder* aBuilder,
     awayFromCommonPath = true;
   }
 
-  nsDisplayList list(aBuilder);
-  nsDisplayList extraPositionedDescendants(aBuilder);
+  nsDisplayList list;
+  nsDisplayList extraPositionedDescendants;
   const ActiveScrolledRoot* wrapListASR;
   bool builtContainerItem = false;
   if (isStackingContext) {
@@ -9501,6 +9518,17 @@ void nsIFrame::DumpFrameTreeLimitedInCSSPixels() const {
 
 #endif
 
+static bool IsFragmentedPageContent(const nsIFrame* aFrame) {
+  MOZ_ASSERT(aFrame->IsPageContentFrame());
+  return aFrame->GetPrevInFlow() || aFrame->GetNextInFlow();
+}
+
+static bool IsReplicatedFixedPos(const nsIFrame* aFrame) {
+  return aFrame->StyleDisplay()->mPosition == StylePositionProperty::Fixed &&
+         nsLayoutUtils::IsReallyFixedPos(aFrame) &&
+         IsFragmentedPageContent(aFrame->GetParent());
+}
+
 // FIXME(emilio, bug 1633685): We should ideally figure out how to properly
 // restyle replicated fixed pos frames... We seem to assume everywhere that they
 // can't get restyled at the moment...
@@ -9509,10 +9537,34 @@ bool nsIFrame::IsInReplicatedFixedPosTree() const {
     return false;
   }
   for (const nsIFrame* f = this; f; f = f->GetParent()) {
-    if (f->StyleDisplay()->mPosition == StylePositionProperty::Fixed &&
-        nsLayoutUtils::IsReallyFixedPos(f)) {
-      const nsIFrame* pageContent = f->GetParent();
-      return pageContent->GetPrevInFlow() || pageContent->GetNextInFlow();
+    if (IsReplicatedFixedPos(f)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool nsIFrame::ContainsReplicatedFixedPosPlaceholders() const {
+  if (!PresContext()->IsPaginated()) {
+    return false;
+  }
+  // Assumption here is that, in the common case, this will be faster than a
+  // whole subtree walk.
+  auto* ancestorPageContent =
+      nsLayoutUtils::GetClosestFrameOfType(this, LayoutFrameType::PageContent);
+  if (!ancestorPageContent || !IsFragmentedPageContent(ancestorPageContent)) {
+    return false;
+  }
+  for (auto* f : ancestorPageContent->GetChildList(ChildListID::Absolute)) {
+    if (!IsReplicatedFixedPos(f)) {
+      continue;
+    }
+    auto* ph = f->GetPlaceholderFrame();
+    if (NS_WARN_IF(!ph)) {
+      continue;
+    }
+    if (nsLayoutUtils::IsProperAncestorFrame(this, ph)) {
+      return true;
     }
   }
   return false;

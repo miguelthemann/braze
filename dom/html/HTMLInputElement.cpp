@@ -1263,7 +1263,9 @@ NS_IMPL_CYCLE_COLLECTION_UNLINK_BEGIN_INHERITED(HTMLInputElement,
                                                 TextControlElement)
   NS_IMPL_CYCLE_COLLECTION_UNLINK(mValidity)
   NS_IMPL_CYCLE_COLLECTION_UNLINK(mControllers)
-  NS_IMPL_CYCLE_COLLECTION_UNLINK(mRadioGroupContainer)
+  // We don't need to unlink mRadioGroupContainer here, as it will call
+  // DisconnectRadioGroupContainer on us when it is unlinked. Otherwise we may
+  // end up re-added to the radio group before we've been properly removed.
   if (tmp->IsSingleLineTextControl(false) && tmp->mInputData.mState) {
     tmp->mInputData.mState->Unlink();
   }
@@ -2998,7 +3000,8 @@ nsresult HTMLInputElement::SetValueInternal(
 
       // Treat value == defaultValue for other input elements.
       return nsGenericHTMLFormControlElementWithState::SetAttr(
-          kNameSpaceID_None, nsGkAtoms::value, aValue, true);
+          kNameSpaceID_None, nsGkAtoms::value, aValue, true,
+          IsKnownNewAttr::No);
 
     case VALUE_MODE_FILENAME:
       return NS_ERROR_UNEXPECTED;
@@ -4812,7 +4815,8 @@ void HTMLInputElement::HandleTypeChange(FormControlType aNewType,
       //    mode, then set the element's value content attribute to the
       //    element's value.
       if (oldValueMode == VALUE_MODE_VALUE && !oldValue.IsEmpty()) {
-        SetAttr(kNameSpaceID_None, nsGkAtoms::value, oldValue, true);
+        SetAttr(kNameSpaceID_None, nsGkAtoms::value, oldValue, true,
+                IsKnownNewAttr::No);
       }
       break;
     case VALUE_MODE_VALUE: {

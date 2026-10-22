@@ -469,10 +469,18 @@ int FFmpegVideoDecoder<LIBAV_VER>::ChooseVulkanPixelFormatFromContext(
     }
     AVHWFramesContext* frames_ctx = (AVHWFramesContext*)frames_ref->data;
     AVVulkanFramesContext* hwfc = (AVVulkanFramesContext*)frames_ctx->hwctx;
-    // get_hw_frames_parameters sets DPB only when the output image is also the
-    // DPB. RADV reports a distinct DPB, so this bit is clear there.
+    // Prefer hwfc->usage: lavc sets VIDEO_DECODE_DPB only when the output
+    // image is also the DPB. Before 63.8.101 lavc used dedicated_dpb =
+    // !COINCIDE, so drivers with both COINCIDE and DISTINCT (RADV) still put
+    // DPB on every output. Until that lavc, mirror FFmpeg b02fa6b7cd with
+    // mDriverDistinctDpb (also correct for ffvpx, which may still report
+    // 63.1.101 after the Vulkan cherry-pick).
+    // Re-adding DPB usage bit on DISTINCT breaks direct export (green frames
+    // on RADV).
     const bool outputIsDpb =
-        hwfc->usage & VK_IMAGE_USAGE_VIDEO_DECODE_DPB_BIT_KHR;
+        (mLib->avcodec_version() >= AV_VERSION_INT(63, 8, 101))
+            ? (hwfc->usage & VK_IMAGE_USAGE_VIDEO_DECODE_DPB_BIT_KHR)
+            : !mVulkanDecoder.mDriverDistinctDpb;
 
     VkImageUsageFlags imageUsages =
         VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
@@ -748,9 +756,10 @@ MediaResult FFmpegVideoDecoder<LIBAV_VER>::InitVulkanDecoder() {
     return NS_ERROR_DOM_MEDIA_FATAL_ERR;
   }
 
-  if (!mVulkanDecoder.VulkanCanDecodeFormat(
-          mCodecID, mLib->avcodec_version(), mVulkanDeviceContext,
-          mInfo.mExtraData, mInfo.mColorDepth)) {
+  mVulkanDecoder.CheckDecodeCapabilities(mCodecID, mVulkanDeviceContext,
+                                         mInfo.mExtraData, mInfo.mColorDepth);
+  if (!mVulkanDecoder.VulkanCanDecodeFormat(mCodecID,
+                                            mLib->avcodec_version())) {
     return NS_ERROR_NOT_AVAILABLE;
   }
 
@@ -2539,6 +2548,23 @@ Maybe<MediaDataDecoder::PropertyValue> FFmpegVideoDecoder<
 }
 #endif
 
+#ifdef MOZ_WIDGET_ANDROID
+/* static */
+bool FFmpegVideoDecoder<LIBAV_VER>::MediaCodecSupportsColorDepth(
+    AVCodecID aCodec, const nsACString& aMimeType,
+    gfx::ColorDepth aColorDepth) {
+  // H264 and HEVC may use the platform software decoders.
+  media::DecodeSupportSet support{media::DecodeSupport::HardwareDecode};
+  if (aCodec == AV_CODEC_ID_H264 || aCodec == AV_CODEC_ID_HEVC) {
+    support += media::DecodeSupport::SoftwareDecode;
+  }
+  return !media::MCSInfo::GetMediaCodecDecodeSupportForColorDepth(
+              media::MCSInfo::GetMediaCodecFromMimeType(aMimeType), support,
+              aColorDepth)
+              .isEmpty();
+}
+#endif
+
 AVCodecID FFmpegVideoDecoder<LIBAV_VER>::GetCodecId(
     const nsACString& aMimeType) {
   if (MP4Decoder::IsH264(aMimeType)) {
@@ -3098,7 +3124,8 @@ MediaResult FFmpegVideoDecoder<LIBAV_VER>::InitMediaCodecDecoder() {
                        RESULT_DETAIL("codec not allowed when minimal"));
   }
 
-  if (mInfo.mColorDepth > gfx::ColorDepth::COLOR_10) {
+  if (!MediaCodecSupportsColorDepth(mCodecID, mInfo.mMimeType,
+                                    mInfo.mColorDepth)) {
     return MediaResult(NS_ERROR_DOM_MEDIA_FATAL_ERR,
                        RESULT_DETAIL("not supported color depth"));
   }
@@ -3297,8 +3324,8 @@ MediaResult FFmpegVideoDecoder<LIBAV_VER>::CreateImageMediaCodec(
   }
 
   RefPtr<VideoData> v = VideoData::CreateFromImage(
-      {mFrame->width, mFrame->height}, aOffset,
-      TimeUnit::FromMicroseconds(aPts), TimeUnit::FromMicroseconds(aDuration),
+      mInfo.mDisplay, aOffset, TimeUnit::FromMicroseconds(aPts),
+      TimeUnit::FromMicroseconds(aDuration),
       img.forget().downcast<layers::Image>(), mFrame->flags & AV_FRAME_FLAG_KEY,
       TimeUnit::FromMicroseconds(aTimecode));
 

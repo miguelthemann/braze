@@ -238,6 +238,10 @@ class WebRenderBridgeParent final : public PWebRenderBridgeParent,
   void RetrySkippedComposite();
 
   TextureFactoryIdentifier GetTextureFactoryIdentifier();
+  // Returns Nothing if we were destroyed, or if we are a root bridge which has
+  // not finished initializing. Content bridges are always initialized when
+  // created.
+  Maybe<TextureFactoryIdentifier> MaybeGetTextureFactoryIdentifier();
 
   void ExtractImageCompositeNotifications(
       nsTArray<ImageCompositeNotificationInfo>* aNotifications);
@@ -263,6 +267,13 @@ class WebRenderBridgeParent final : public PWebRenderBridgeParent,
   bool MatchesNamespace(const wr::FontInstanceKey& aFontKey) const {
     return aFontKey.mNamespace == mLateInit->mIdNamespace;
   }
+
+  // Returns the bridge whose namespace is aNamespace, if it is this bridge or
+  // another bridge of the same content process and the same WebRender window.
+  // Otherwise returns null. A snapshot image can only be adopted
+  // (OpAdoptSnapshotImage) from such a bridge.
+  already_AddRefed<WebRenderBridgeParent> FindSnapshotSourceBridge(
+      const wr::IdNamespace& aNamespace);
 
   bool OwnsExternalImageId(const wr::ExternalImageId& aId) const {
     return static_cast<uint32_t>(wr::AsUint64(aId) >> 32) ==

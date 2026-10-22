@@ -489,7 +489,7 @@ mozilla::ipc::IPCResult CompositorBridgeParent::RecvForcePresent(
 }
 
 mozilla::ipc::IPCResult CompositorBridgeParent::RecvStartFrameTimeRecording(
-    const int32_t& aBufferSize, uint32_t* aOutStartIndex) {
+    const uint32_t& aBufferSize, uint32_t* aOutStartIndex) {
   if (mWrBridge) {
     *aOutStartIndex = mWrBridge->StartFrameTimeRecording(aBufferSize);
   } else {
@@ -1821,6 +1821,27 @@ CompositorBridgeParent::GetLayerTreeState(LayersId aId) {
   MOZ_ASSERT(CompositorThreadHolder::IsInCompositorThread());
 
   return GetLayerTreeStateInternal(aId);
+}
+
+/* static */
+Maybe<TextureFactoryIdentifier>
+CompositorBridgeParent::GetTextureFactoryIdentifierForContent(
+    const dom::ContentParentId& aContentId) {
+  MOZ_ASSERT(CompositorThreadHolder::IsInCompositorThread());
+
+  StaticMonitorAutoLock lock(sIndirectLayerTreesLock);
+  for (auto& it : sIndirectLayerTrees) {
+    LayerTreeState& state = it.second;
+    if (!state.mWrBridge || !state.mContentCompositorBridgeParent ||
+        state.mContentCompositorBridgeParent->GetContentId() != aContentId) {
+      continue;
+    }
+    if (Maybe<TextureFactoryIdentifier> identifier =
+            state.mWrBridge->MaybeGetTextureFactoryIdentifier()) {
+      return identifier;
+    }
+  }
+  return Nothing();
 }
 
 /* static */

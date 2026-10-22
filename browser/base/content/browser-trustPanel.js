@@ -14,6 +14,7 @@ ChromeUtils.defineESModuleGetters(this, {
   E10SUtils: "resource://gre/modules/E10SUtils.sys.mjs",
   FX_MONITOR_OAUTH_CLIENT_ID: "resource://gre/modules/FxAccountsCommon.sys.mjs",
   identifyType: "resource://gre/modules/TrackingDBService.sys.mjs",
+  NimbusFeatures: "resource://nimbus/ExperimentAPI.sys.mjs",
   PanelMultiView:
     "moz-src:///browser/components/customizableui/PanelMultiView.sys.mjs",
   PlacesUtils: "resource://gre/modules/PlacesUtils.sys.mjs",
@@ -114,8 +115,8 @@ const BLOCKER_CLICK_METRICS = {
   cryptominer: "clickCryptominers",
 };
 
-// Values of the opening_reason extra of trustpanel.opened and
-// trustpanel.closed
+// Values of the opening_reason extra of trustpanel.opened,
+// trustpanel.closed and trustpanel.smartblock_toggled
 const OPENING_REASONS = {
   SHIELD_BUTTON_CLICKED: "shieldButtonClicked",
   EMBED_PLACEHOLDER_BUTTON: "embedPlaceholderButton",
@@ -225,6 +226,7 @@ class TrustPanel {
 
   #popupToggleDelayTimer = null;
   #openingReason = OPENING_REASONS.UNKNOWN;
+  #smartblockEmbedTogglesShown = false;
   #closingReason = null;
   #shownAt = null;
 
@@ -446,6 +448,7 @@ class TrustPanel {
       }),
       opening_reason: this.#openingReason,
       trackers_blocked: blockedTrackersCount > 0,
+      smartblock_embed_toggles_shown: this.#smartblockEmbedTogglesShown,
     });
   }
 
@@ -917,9 +920,10 @@ class TrustPanel {
     this.#addButtons("trustpanel-blocked", blocked, true);
     this.#addButtons("trustpanel-detected", detected, false);
 
+    this.#smartblockEmbedTogglesShown = this.#addSmartblockEmbedToggles();
     document
       .getElementById("trustpanel-smartblock-section")
-      .toggleAttribute("hidden", !this.#addSmartblockEmbedToggles());
+      .toggleAttribute("hidden", !this.#smartblockEmbedTogglesShown);
 
     this.#updateAttribute(
       document.getElementById("trustpanel-blocker-section"),
@@ -1921,6 +1925,11 @@ class TrustPanel {
         } else {
           this.#sendReblockMessageToSmartblock(shimId);
         }
+        Glean.trustpanel.smartblockToggled.record({
+          is_block: !event.target.pressed,
+          shim_id: shimId,
+          opening_reason: this.#openingReason,
+        });
         this.#closingReason = CLOSING_REASONS.SMARTBLOCK_TOGGLED;
         PanelMultiView.hidePopup(this.#popup);
       });
@@ -2049,6 +2058,18 @@ class TrustPanel {
       this.#popupToggleDelayTimer = setTimeout(() => {
         this.#enablePopupToggles();
       }, popupClickjackDelay);
+    }
+
+    // Record Nimbus exposure for protections panel redesign experiment
+    if (
+      Services.prefs.getBoolPref(
+        "browser.protectionsPanelRedesign.enabled",
+        false
+      )
+    ) {
+      NimbusFeatures.protectionsPanelRedesign.recordExposureEvent({
+        once: true,
+      });
     }
   }
 

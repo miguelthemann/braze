@@ -20,8 +20,8 @@
  */
 
 /**
- * pdfjsVersion = 6.5.196
- * pdfjsBuild = f73a6986d
+ * pdfjsVersion = 6.5.273
+ * pdfjsBuild = 5d143c409
  */
 
 ;// ./src/shared/util.js
@@ -2623,6 +2623,7 @@ class TilingPattern {
         owner.ctx.drawImage(tmpCanvas.canvas, x0, y0, bboxWidth, bboxHeight);
         owner.canvasFactory.destroy(tmpCanvas);
       } else {
+        owner.resetGraphicsState();
         this.setFillAndStrokeStyleToContext(owner, this.paintType, this.color);
         this.clipBbox(owner, x0, y0, x1, y1);
         owner.baseTransformStack.push(owner.baseTransform);
@@ -4047,6 +4048,27 @@ class CanvasGraphics {
     this.pendingClip = null;
     this._cachedScaleForStroking[0] = -1;
   }
+  resetGraphicsState() {
+    const {
+      clipBox,
+      transferMaps,
+      transferMapsFallback
+    } = this.current;
+    const current = this.current = new CanvasExtraState(0, 0);
+    current.clipBox = clipBox;
+    current.transferMaps = transferMaps;
+    current.transferMapsFallback = transferMapsFallback;
+    const ctx = this.ctx;
+    ctx.lineWidth = 1;
+    ctx.lineCap = "butt";
+    ctx.lineJoin = "miter";
+    ctx.miterLimit = 10;
+    if (ctx.setLineDash !== undefined) {
+      ctx.setLineDash([]);
+      ctx.lineDashOffset = 0;
+    }
+    this._cachedScaleForStroking[0] = -1;
+  }
   transform(opIdx, a, b, c, d, e, f) {
     this.dependencyTracker?.recordIncrementalData("transform", opIdx);
     this.ctx.transform(a, b, c, d, e, f);
@@ -4630,7 +4652,7 @@ class CanvasGraphics {
         } else if (this.contentVisible) {
           this.save();
           if (operatorList.fnArray[0] === OPS.setCharWidth) {
-            current.fillAlpha = current.strokeAlpha = 1;
+            this.current.fillAlpha = this.current.strokeAlpha = 1;
             ctx.globalAlpha = 1;
           }
           ctx.scale(fontSize, fontSize);
@@ -6180,6 +6202,9 @@ class MessageHandler {
     this.#messageAC?.abort();
     this.#messageAC = null;
   }
+  get destroyed() {
+    return !this.#messageAC;
+  }
 }
 
 ;// ./src/shared/obj_bin_transform_utils.js
@@ -7097,6 +7122,7 @@ const PARTIAL_FRAME_TIME = 500;
 class RendererMessageHandler {
   static #canvasFactory;
   static #commonObjs = new PDFObjects();
+  static #connection = null;
   static #enableHWA = false;
   static #enableWebGPU = false;
   static #filterFactory;
@@ -7160,8 +7186,13 @@ class RendererMessageHandler {
         ctx.drawImage(canvas, 0, 0);
         ctx.drawImage(transparentCanvas, 0, 0);
         bitmap = composite.transferToImageBitmap();
+        composite.width = composite.height = 0;
       } else {
         bitmap = await createImageBitmap(canvas);
+        if (renderTaskState.aborted) {
+          bitmap.close();
+          return;
+        }
       }
     }
     const transfers = bitmap ? [bitmap] : [];
@@ -7194,7 +7225,7 @@ class RendererMessageHandler {
       }
     }
   }
-  static #cleanupRenderTask(renderTaskId) {
+  static #cleanupRenderTask(renderTaskId, keepCanvas = false) {
     const renderTaskState = this.#renderTaskStates.get(renderTaskId);
     if (!renderTaskState) {
       return;
@@ -7202,7 +7233,26 @@ class RendererMessageHandler {
     renderTaskState.aborted = true;
     renderTaskState.continueResolve?.();
     renderTaskState.gfx?.endDrawing();
+    if (!keepCanvas) {
+      this.#releaseCanvases(renderTaskState);
+    }
     this.#renderTaskStates.delete(renderTaskId);
+  }
+  static #releaseCanvases({
+    canvas,
+    gfx
+  }) {
+    canvas.width = canvas.height = 0;
+    const map = gfx?.annotationCanvasMap;
+    if (!map) {
+      return;
+    }
+    for (const value of map.values()) {
+      for (const annotationCanvas of Array.isArray(value) ? value : [value]) {
+        annotationCanvas.width = annotationCanvas.height = 0;
+      }
+    }
+    map.clear();
   }
   static #appendFromSharedOperatorList(renderTaskState, length, operationsFilterMask, lastChunk) {
     const {
@@ -7439,9 +7489,13 @@ class RendererMessageHandler {
         recordedBBoxesBuffer = renderTaskState.dependencyTracker?.take().buffer ?? null;
         imageCoordinates = renderTaskState.imagesTracker?.take() ?? null;
         const aborted = renderTaskState.aborted;
-        this.#cleanupRenderTask(renderTaskId);
+        this.#cleanupRenderTask(renderTaskId, !aborted);
         if (!aborted) {
-          await this.#sendFrame(handler, renderTaskState, true);
+          try {
+            await this.#sendFrame(handler, renderTaskState, true);
+          } finally {
+            this.#releaseCanvases(renderTaskState);
+          }
         }
       } else {
         await this.#maybeSendInterimFrame(handler, renderTaskState);
@@ -7456,7 +7510,48 @@ class RendererMessageHandler {
   static #initializeFromPort(port) {
     const handler = new MessageHandler("renderer", "main", port);
     this.#setup(handler);
-    const workerVersion = "6.5.196";
+    handler.on("Connect", ({
+      sourceName,
+      targetName
+    }) => {
+      this.#disconnect();
+      const connection = new MessageHandler(sourceName, targetName, port);
+      this.#connection = connection;
+      this.#setup(connection);
+      connection.on("Disconnect", () => {
+        this.#disconnect();
+      });
+      this.#sendReady(connection);
+    });
+    this.#sendReady(handler);
+  }
+  static #disconnect() {
+    if (!this.#connection) {
+      return;
+    }
+    for (const renderTaskId of this.#renderTaskStates.keys()) {
+      this.#cleanupRenderTask(renderTaskId);
+    }
+    for (const objs of this.#objsMap.values()) {
+      objs.clear();
+    }
+    this.#objsMap.clear();
+    this.#operatorLists.clear();
+    this.#commonObjs.clear();
+    this.#fontLoader.clear();
+    this.#commonObjs = new PDFObjects();
+    this.#fontLoader = new FontLoader({
+      ownerDocument: globalThis
+    });
+    this.#canvasFactory = null;
+    this.#filterFactory?.destroy();
+    this.#filterFactory = null;
+    this.#connection.send("Disconnected", null);
+    this.#connection.destroy();
+    this.#connection = null;
+  }
+  static #sendReady(handler) {
+    const workerVersion = "6.5.273";
     const testObj = new Uint8Array();
     handler.send("ready", {
       testObj,

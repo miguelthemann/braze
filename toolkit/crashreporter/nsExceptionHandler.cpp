@@ -243,6 +243,10 @@ static bool showOSCrashReporter = false;
 static time_t lastCrashTime = 0;
 // The pathname of a file to store the crash time in
 static XP_CHAR lastCrashTimeFilename[XP_PATH_MAX] = {0};
+// The UUID to use for the CrashEventID if a main process crash occurs.
+// We should not generate a UUID in the crash handler because GenerateUUID is
+// not async-signal-safe without rewriting the logic. See bug 2081887.
+static nsID mainProcessCrashEventID;
 
 #if defined(MOZ_WIDGET_ANDROID)
 // on Android 4.2 and above there is a user serial number associated
@@ -1449,9 +1453,12 @@ static void WriteAnnotationsForMainProcessCrash(PlatformWriter& pw,
 
   WriteSynthesizedAnnotations(writer);
   writer.Write(Annotation::CrashTime, uint64_t(crashTime));
-  // Add a unique identifier for this crash event.
+  // Add a unique identifier for this main process crash event (generated in
+  // SetExceptionHandler). We cannot have reached this point of the exception
+  // handler without this value having already been set (and in the worst-case
+  // scenario, it will be the nil UUID from static zero-initialization).
   {
-    NSID_TrimBracketsASCII uuidString(nsID::GenerateUUID());
+    NSID_TrimBracketsASCII uuidString(mainProcessCrashEventID);
     writer.Write(Annotation::CrashEventID, uuidString.Data(),
                  uuidString.Length());
   }
@@ -2046,6 +2053,9 @@ nsresult SetExceptionHandler(nsIFile* aXREDirectory, bool force /*=false*/) {
   dumpSafetyLock = new Mutex("dumpSafetyLock");
   MutexAutoLock lock(*dumpSafetyLock);
   isSafeToDump = true;
+
+  // Set the CrashEventID to use in the event of a main process crash
+  mainProcessCrashEventID = nsID::GenerateUUID();
 
   // now set the exception handler
 #ifdef XP_LINUX
@@ -3233,15 +3243,16 @@ nsresult OOPInit(nsIFile* aXREDirectory, bool force /*=false*/) {
 #if defined(XP_WIN)
   childCrashNotifyPipe = nsCString("\\\\.\\pipe\\gecko-crash-server-pipe.");
   childCrashNotifyPipe.AppendInt(static_cast<int>(::GetCurrentProcessId()));
+  auto notifyPipeName = NS_ConvertUTF8toUTF16(childCrashNotifyPipe);
+  HANDLE notifyPipe = CrashGenerationServer::CreateReportPipe(
+      (const wchar_t*)notifyPipeName.get());
 
   // TODO: Create the crash server and set include_context_heap based on the
   // value of sIncludeContextHeap. Also pass the release channel so we can set
   // the appropriate type of minidump in the crash helper.
   crashHelperClient = crash_helper_launch(
       mozilla::BitwiseCast<const BreakpadChar*>(crashHelperPath.c_str()),
-      mozilla::BitwiseCast<const BreakpadChar*>(
-          NS_ConvertUTF8toUTF16(childCrashNotifyPipe).getW()),
-      mozilla::BitwiseCast<const BreakpadChar*>(tempPath.get()),
+      notifyPipe, mozilla::BitwiseCast<const BreakpadChar*>(tempPath.get()),
       gToolkitBuildID);
 #elif defined(XP_LINUX)
 #  if !defined(MOZ_WIDGET_ANDROID)

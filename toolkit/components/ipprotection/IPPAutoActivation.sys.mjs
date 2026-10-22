@@ -14,8 +14,6 @@ ChromeUtils.defineESModuleGetters(lazy, {
     "moz-src:///toolkit/components/ipprotection/IPPSiteRuleManager.sys.mjs",
   IPPMode:
     "moz-src:///toolkit/components/ipprotection/IPPChannelFilter.sys.mjs",
-  IPProtectionServerlist:
-    "moz-src:///toolkit/components/ipprotection/IPProtectionServerlist.sys.mjs",
   IPPProxyManager:
     "moz-src:///toolkit/components/ipprotection/IPPProxyManager.sys.mjs",
   IPPProxyStates:
@@ -123,9 +121,6 @@ export class IPPAutoActivationSingleton {
    * @returns {import("./IPPChannelFilter.sys.mjs").IPPProxyMode | null}
    */
   desiredMode() {
-    if (!lazy.IPProtectionServerlist.hasList) {
-      return null;
-    }
     if (this.#fullProtectionOwed) {
       return lazy.IPPMode.MODE_FULL;
     }
@@ -203,10 +198,7 @@ export class IPPAutoActivationSingleton {
     this.#stopObservingRestore();
 
     // Only worth holding traffic if the carried-over state says it could work.
-    if (
-      lazy.IPProtectionService.state !== lazy.IPProtectionStates.READY ||
-      !lazy.IPProtectionServerlist.hasList
-    ) {
+    if (lazy.IPProtectionService.state !== lazy.IPProtectionStates.READY) {
       return;
     }
 
@@ -266,16 +258,26 @@ export class IPPAutoActivationSingleton {
     });
   }
 
-  #handleProxyEvent() {
+  #handleProxyEvent(event) {
     switch (lazy.IPPProxyManager.state) {
       case lazy.IPPProxyStates.ACTIVE:
         this.#activation = null;
         break;
 
       case lazy.IPPProxyStates.READY:
-        // Not when an activation of ours is what just failed.
-        if (!this.#activation) {
-          this.#maybeActivate();
+        // Only after a working connection goes away: a failed activation, or
+        // the user stopping a failed connection, is not retried.
+        if (
+          event.detail?.prevState === lazy.IPPProxyStates.ACTIVE ||
+          event.detail?.prevState === lazy.IPPProxyStates.PAUSED
+        ) {
+          // Starting dispatches ACTIVATING, so let every listener see READY
+          // first.
+          Promise.resolve().then(() => {
+            if (this.#initialized) {
+              this.#maybeActivate();
+            }
+          });
         }
         break;
 

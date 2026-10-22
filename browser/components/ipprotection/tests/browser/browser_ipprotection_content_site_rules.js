@@ -16,8 +16,8 @@ const INCLUSION_DESCRIPTION_L10N_ID = "site-rules-description-inclusion";
 
 const VPN_ON_ICON =
   "chrome://browser/content/ipprotection/assets/states/ipprotection-on.svg";
-const VPN_OFF_ICON =
-  "chrome://browser/content/ipprotection/assets/states/ipprotection-off.svg";
+const VPN_EXCLUDED_ICON =
+  "chrome://browser/content/ipprotection/assets/states/ipprotection-excluded.svg";
 
 const SETTINGS_PANE = "privacy-vpnsiterules";
 
@@ -479,7 +479,7 @@ add_task(async function test_site_rule_status_exclusion() {
   await checkSiteRuleStatus(
     content,
     EXCLUSION_DESCRIPTION_L10N_ID,
-    VPN_OFF_ICON
+    VPN_EXCLUDED_ICON
   );
 
   await closePanel();
@@ -758,7 +758,7 @@ add_task(async function test_site_rule_status_follows_protection_state() {
   await checkSiteRuleStatus(
     content,
     EXCLUSION_DESCRIPTION_L10N_ID,
-    VPN_OFF_ICON
+    VPN_EXCLUDED_ICON
   );
 
   let statusHiddenPromise = BrowserTestUtils.waitForMutationCondition(
@@ -878,8 +878,8 @@ add_task(async function test_site_rule_status_inclusion_from_rule() {
       MOCK_SITE_NAME
     );
   IPPPermissionRules.setRule(principal, IPPPrincipalRules.INCLUDED);
-  await waitForProxyState(IPPProxyStates.ACTIVE);
 
+  await waitForProxyState(IPPProxyStates.ACTIVE);
   let content = await openPanel();
 
   Assert.ok(

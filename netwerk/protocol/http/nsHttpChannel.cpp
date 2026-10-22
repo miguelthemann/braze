@@ -763,9 +763,8 @@ nsresult nsHttpChannel::PrepareToConnect() {
   // If Windows 10 SSO is enabled, we potentially add auth
   // information to secure top level loads (DOCUMENTs) and iframes
   // (SUBDOCUMENTs) that aren't anonymous or private browsing.
-  if (StaticPrefs::network_http_windows_sso_enabled() &&
-      mURI->SchemeIs("https") && !(mLoadFlags & LOAD_ANONYMOUS) &&
-      !mPrivateBrowsing) {
+  if (StaticPrefs::network_http_windows_sso_enabled() && IsHTTPS() &&
+      !(mLoadFlags & LOAD_ANONYMOUS) && !mPrivateBrowsing) {
     ExtContentPolicyType type = mLoadInfo->GetExternalContentPolicyType();
     if ((type == ExtContentPolicy::TYPE_DOCUMENT ||
          type == ExtContentPolicy::TYPE_SUBDOCUMENT) &&
@@ -791,9 +790,8 @@ nsresult nsHttpChannel::PrepareToConnect() {
   // If macOS SSO is enabled, we potentially add auth
   // information to secure top level loads (DOCUMENTs) and iframes
   // (SUBDOCUMENTs) that aren't anonymous or private browsing.
-  if (StaticPrefs::network_http_microsoft_entra_sso_enabled() &&
-      mURI->SchemeIs("https") && !(mLoadFlags & LOAD_ANONYMOUS) &&
-      !mPrivateBrowsing) {
+  if (StaticPrefs::network_http_microsoft_entra_sso_enabled() && IsHTTPS() &&
+      !(mLoadFlags & LOAD_ANONYMOUS) && !mPrivateBrowsing) {
     ExtContentPolicyType type = mLoadInfo->GetExternalContentPolicyType();
     if ((type == ExtContentPolicy::TYPE_DOCUMENT ||
          type == ExtContentPolicy::TYPE_SUBDOCUMENT) &&
@@ -930,7 +928,7 @@ nsresult nsHttpChannel::OnBeforeConnect() {
   }
 
   nsCOMPtr<nsIPrincipal> resultPrincipal;
-  if (!mURI->SchemeIs("https")) {
+  if (!IsHTTPS()) {
     nsContentUtils::GetSecurityManager()->GetChannelResultPrincipal(
         this, getter_AddRefs(resultPrincipal));
   }
@@ -1075,8 +1073,7 @@ nsresult nsHttpChannel::MaybeUseHTTPSRRForUpgrade(bool aShouldUpgrade,
 
   bool forceOffline = IsForcedOffline();
 
-  if (mURI->SchemeIs("https") || aShouldUpgrade || !LoadUseHTTPSSVC() ||
-      forceOffline) {
+  if (IsHTTPS() || aShouldUpgrade || !LoadUseHTTPSSVC() || forceOffline) {
     return ContinueOnBeforeConnect(aShouldUpgrade, aStatus);
   }
 
@@ -1179,7 +1176,7 @@ nsresult nsHttpChannel::ContinueOnBeforeConnect(bool aShouldUpgrade,
     return aStatus;
   }
 
-  if (aShouldUpgrade && !mURI->SchemeIs("https")) {
+  if (aShouldUpgrade && !IsHTTPS()) {
     // only set HTTPS_RR to be responsbile for the upgrade in the loadinfo
     // if it actually was responsible, otherwise the correct flag is
     // already present in the loadinfo.
@@ -1501,7 +1498,7 @@ nsresult nsHttpChannel::ConnectOnTailUnblock() {
   SpeculativeConnect();
 
   // open a cache entry for this channel...
-  rv = OpenCacheEntry(mURI->SchemeIs("https"));
+  rv = OpenCacheEntry(IsHTTPS());
 
   // do not continue if asyncOpenCacheEntry is in progress
   if (AwaitingCacheCallbacks()) {
@@ -2878,7 +2875,7 @@ nsresult nsHttpChannel::ProcessWAICTHeader() {
   // Unlike HSTS, WAICT is supported for HTTP as well, so we need to use the
   // correct helper.
   OriginAttributes originAttributes;
-  if (mURI->SchemeIs("https")) {
+  if (IsHTTPS()) {
     if (NS_WARN_IF(!StoragePrincipalHelper::GetOriginAttributesForHTTPSRR(
             this, originAttributes))) {
       return NS_ERROR_FAILURE;
@@ -2935,7 +2932,7 @@ nsresult nsHttpChannel::ProcessSecurityHeaders() {
   // If this channel is not loading securely, STS or PKP doesn't do anything.
   // In the case of HSTS, the upgrade to HTTPS takes place earlier in the
   // channel load process.
-  if (!mURI->SchemeIs("https")) {
+  if (!IsHTTPS()) {
     return NS_OK;
   }
 
@@ -3065,15 +3062,8 @@ void nsHttpChannel::ProcessAltService(nsHttpConnectionInfo* aTransConnInfo) {
   }
 
   OriginAttributes originAttributes;
-  // Regular principal in case we have a proxy.
-  if (proxyInfo &&
-      !StaticPrefs::privacy_partition_network_state_connection_with_proxy()) {
-    StoragePrincipalHelper::GetOriginAttributes(
-        this, originAttributes, StoragePrincipalHelper::eRegularPrincipal);
-  } else {
-    StoragePrincipalHelper::GetOriginAttributesForNetworkState(
-        this, originAttributes);
-  }
+  StoragePrincipalHelper::GetOriginAttributesForHttpConnection(
+      this, !!proxyInfo, originAttributes);
 
   AltSvcMapping::ProcessHeader(altSvc, scheme, originHost, originPort,
                                mUsername, mPrivateBrowsing, callbacks,
@@ -3763,6 +3753,13 @@ nsresult nsHttpChannel::ContinueProcessNormal(nsresult rv) {
   // response.  we must clear this flag to prevent BufferPartialContent from
   // being called inside our OnDataAvailable (see bug 136678).
   StoreCachedContentIsPartial(false);
+
+  // The body we are about to deliver comes from the network, so no cached
+  // alternative data describes it.  Normally InitCacheEntry() has already
+  // dropped it, but not when we no longer hold the entry it came from.
+  mAvailableCachedAltDataType.Truncate();
+  StoreDeliveringAltData(false);
+  mAltDataLength = -1;
 
   UpdateInhibitPersistentCachingFlag();
 
@@ -5259,6 +5256,28 @@ void nsHttpChannel::UntieValidationRequest() {
   MOZ_ASSERT(NS_SUCCEEDED(rv));
 }
 
+void nsHttpChannel::DiscardCacheEntryCheckState() {
+  StoreCachedContentIsValid(CachedContentValidity::Invalid);
+
+  if (mDidReval) {
+    LOG(("  Removing conditional request headers"));
+    UntieValidationRequest();
+    mDidReval = false;
+  }
+
+  if (LoadCachedContentIsPartial()) {
+    LOG(("  Removing byte range request headers"));
+    UntieByteRangeRequest();
+    StoreCachedContentIsPartial(false);
+  }
+
+  mCachedResponseHead = nullptr;
+  mCacheInputStream.CloseAndRelease();
+  mAvailableCachedAltDataType.Truncate();
+  StoreDeliveringAltData(false);
+  mAltDataLength = -1;
+}
+
 NS_IMETHODIMP
 nsHttpChannel::OnCacheEntryCheck(nsICacheEntry* entry, uint32_t* aResult) {
   nsresult rv = NS_OK;
@@ -5268,11 +5287,19 @@ nsHttpChannel::OnCacheEntryCheck(nsICacheEntry* entry, uint32_t* aResult) {
   LOG(("nsHttpChannel::OnCacheEntryCheck enter [channel=%p entry=%p]", this,
        entry));
 
+  // Held for the whole check: this may run on the cache I/O thread while the
+  // backstop timeout runs on the main thread, and the timeout must not slip in
+  // between the test below and the state we arm from here on.
+  MutexAutoLock lock(mCacheWaitLock);
+
   if (mCacheWaitTimedOut) {
     LOG(("  cache entry check arrived after backstop timeout, declining"));
     *aResult = ENTRY_NOT_WANTED;
     return NS_OK;
   }
+
+  // Each check starts from a clean slate.
+  DiscardCacheEntryCheckState();
 
   NoteCacheEntryKeyMatch(entry);
 
@@ -5470,7 +5497,7 @@ nsHttpChannel::OnCacheEntryCheck(nsICacheEntry* entry, uint32_t* aResult) {
     }
   }
 
-  bool isHttps = mURI->SchemeIs("https");
+  bool isHttps = IsHTTPS();
 
   bool doValidation = false;
   bool doBackgroundValidation = false;
@@ -5751,23 +5778,9 @@ nsresult nsHttpChannel::OnNormalCacheEntryAvailable(nsICacheEntry* aEntry,
   StoreWaitForCacheEntry(LoadWaitForCacheEntry() & ~WAIT_FOR_CACHE_ENTRY);
 
   if (NS_FAILED(aEntryStatus) || aNew) {
-    // Make sure this flag is dropped.  It may happen the entry is doomed
-    // between OnCacheEntryCheck and OnCacheEntryAvailable.
-    StoreCachedContentIsValid(CachedContentValidity::Invalid);
-
-    // From the same reason remove any conditional headers added
-    // in OnCacheEntryCheck.
-    if (mDidReval) {
-      LOG(("  Removing conditional request headers"));
-      UntieValidationRequest();
-      mDidReval = false;
-    }
-
-    if (LoadCachedContentIsPartial()) {
-      LOG(("  Removing byte range request headers"));
-      UntieByteRangeRequest();
-      StoreCachedContentIsPartial(false);
-    }
+    // It may happen the entry is doomed between OnCacheEntryCheck and
+    // OnCacheEntryAvailable; whatever the check armed from it must go.
+    DiscardCacheEntryCheckState();
 
     if (mLoadFlags & LOAD_ONLY_FROM_CACHE) {
       // if this channel is only allowed to pull from the cache, then
@@ -5893,7 +5906,7 @@ nsresult nsHttpChannel::OpenCacheInputStream(nsICacheEntry* cacheEntry,
                                              bool startBuffering) {
   nsresult rv;
 
-  if (mURI->SchemeIs("https")) {
+  if (IsHTTPS()) {
     rv = cacheEntry->GetSecurityInfo(getter_AddRefs(mCachedSecurityInfo));
     if (NS_FAILED(rv)) {
       LOG(("failed to parse security-info [channel=%p, entry=%p]", this,
@@ -6354,8 +6367,7 @@ void nsHttpChannel::UpdateInhibitPersistentCachingFlag() {
   }
 
   // Only cache SSL content on disk if the pref is set
-  if (!gHttpHandler->IsPersistentHttpsCachingEnabled() &&
-      mURI->SchemeIs("https")) {
+  if (!gHttpHandler->IsPersistentHttpsCachingEnabled() && IsHTTPS()) {
     mLoadFlags |= INHIBIT_PERSISTENT_CACHING;
   }
 }
@@ -8135,7 +8147,7 @@ nsresult nsHttpChannel::BeginConnect() {
   nsAutoCString host;
   nsAutoCString scheme;
   int32_t port = -1;
-  bool isHttps = mURI->SchemeIs("https");
+  bool isHttps = IsHTTPS();
 
   rv = mURI->GetScheme(scheme);
   if (NS_SUCCEEDED(rv)) rv = mURI->GetAsciiHost(host);
@@ -8180,15 +8192,8 @@ nsresult nsHttpChannel::BeginConnect() {
   SetGlobalPrivacyControl();
 
   OriginAttributes originAttributes;
-  // Regular principal in case we have a proxy.
-  if (proxyInfo &&
-      !StaticPrefs::privacy_partition_network_state_connection_with_proxy()) {
-    StoragePrincipalHelper::GetOriginAttributes(
-        this, originAttributes, StoragePrincipalHelper::eRegularPrincipal);
-  } else {
-    StoragePrincipalHelper::GetOriginAttributesForNetworkState(
-        this, originAttributes);
-  }
+  StoragePrincipalHelper::GetOriginAttributesForHttpConnection(
+      this, !!proxyInfo, originAttributes);
 
   // Adjust mCaps according to our request headers:
   //  - If "Connection: close" is set as a request header, then do not bother
@@ -8445,7 +8450,8 @@ nsresult nsHttpChannel::BeginConnect() {
     // Only the initial document resets the pool, and only for connections
     // sharing this channel's origin attributes.
     if (mLoadFlags & LOAD_INITIAL_DOCUMENT_URI) {
-      gHttpHandler->AltServiceCache()->ClearAltServiceMappings();
+      gHttpHandler->AltServiceCache()->ClearAltServiceMappingsMatchingOA(
+          mConnectionInfo->GetOriginAttributes());
       rv = gHttpHandler->DoShiftReloadConnectionCleanupWithConnInfo(
           mConnectionInfo);
       if (NS_FAILED(rv)) {
@@ -9052,14 +9058,6 @@ nsHttpChannel::GetTransactionPending(TimeStamp* _retval) {
 //-----------------------------------------------------------------------------
 // nsHttpChannel::nsIHttpAuthenticableChannel
 //-----------------------------------------------------------------------------
-
-NS_IMETHODIMP
-nsHttpChannel::GetIsSSL(bool* aIsSSL) {
-  // this attribute is really misnamed - it wants to know if
-  // https:// is being used. SSL might be used to cover http://
-  // in some circumstances (proxies, http/2, etc..)
-  return mURI->SchemeIs("https", aIsSSL);
-}
 
 NS_IMETHODIMP
 nsHttpChannel::GetProxyMethodIsConnect(bool* aProxyMethodIsConnect) {
@@ -12370,17 +12368,21 @@ nsresult nsHttpChannel::OnCacheWaitTimeout() {
   }
 
   LOG(("  cache entry wait timed out, forcing network [this=%p]", this));
-  mCacheWaitTimedOut = true;
+  {
+    // Waits for an OnCacheEntryCheck in flight on the cache I/O thread.
+    MutexAutoLock lock(mCacheWaitLock);
+    mCacheWaitTimedOut = true;
+  }
 
   // Stop treating the outstanding cache open as blocking.  We stay registered
   // as a callback on the entry, but a late OnCacheEntryCheck or
   // OnCacheEntryAvailable will be declined/ignored (see mCacheWaitTimedOut).
   StoreWaitForCacheEntry(LoadWaitForCacheEntry() & ~WAIT_FOR_CACHE_ENTRY);
 
-  mCacheInputStream.CloseAndRelease();
-  mAvailableCachedAltDataType.Truncate();
-  StoreDeliveringAltData(false);
-  mAltDataLength = -1;
+  // OnCacheEntryCheck may already have run for an entry we now won't get
+  // (e.g. it asked to be rechecked once a wedged writer finishes); the network
+  // response must not carry its conditional headers or alt-data.
+  DiscardCacheEntryCheckState();
 
   nsresult rv = TriggerNetwork();
   if (NS_FAILED(rv)) {

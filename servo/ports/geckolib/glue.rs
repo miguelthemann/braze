@@ -6212,6 +6212,17 @@ pub extern "C" fn Servo_DeclarationBlock_HasCSSWideKeyword(
 }
 
 #[unsafe(no_mangle)]
+pub extern "C" fn Servo_DeclarationBlock_HasUnparsedValue(
+    declarations: &LockedDeclarationBlock,
+    property: NonCustomCSSPropertyId,
+) -> bool {
+    let property_id = get_property_id_from_noncustomcsspropertyid!(property, false);
+    read_locked_arc(declarations, |decls: &PropertyDeclarationBlock| {
+        decls.has_unparsed_value(&property_id)
+    })
+}
+
+#[unsafe(no_mangle)]
 pub extern "C" fn Servo_MediaList_GetText(list: &LockedMediaList, result: &mut nsACString) {
     read_locked_arc(list, |list: &MediaList| {
         list.to_css(&mut CssWriter::new(result)).unwrap();
@@ -10417,7 +10428,7 @@ pub extern "C" fn Servo_ViewTransitionRule_GetTypes(
     result: &mut nsTArray<*mut nsAtom>,
 ) {
     if let Some(ref types) = rule.descriptors.types {
-        result.extend(types.value.iter().map(|ty| ty.0.as_ptr()));
+        result.extend(types.iter().map(|ty| ty.0.as_ptr()));
     }
 }
 

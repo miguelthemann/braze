@@ -6,7 +6,7 @@ android-lint = "32.4.1"
 # Kotlin
 coroutines = "1.11.0"
 kotlin = "2.4.21"
-serialization = "1.11.0"
+serialization = "1.12.0"
 
 # AndroidX
 activity = "1.13.0"
@@ -89,7 +89,7 @@ ktfmt = "0.64"
 spotless = "8.10.3"
 
 # Mozilla
-glean = "70.2.1"
+glean = "70.3.0"
 
 # Testing libraries
 androidx-test = "1.7.0"

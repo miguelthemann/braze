@@ -77,7 +77,11 @@
   <string name="about_content" tools:ignore="BrandUsage">%1$s er produsert av Mozilla.</string>
   <!-- Private Browsing -->
   <string name="private_browsing_common_myths">Vanlige myter om privat nettlesing</string>
-  <!-- Text to be announced by the accessibility service to inform the user that the private browsing mode is currently active. -->
+  <!--
+    Private Browsing
+
+    Text to be announced by the accessibility service to inform the user that the private browsing mode is currently active.
+  -->
   <string name="private_browsing_a11y_session_announcement">Privat nettlesingsøkt</string>
   <!--
     True Private Browsing Mode
@@ -181,8 +185,10 @@
   <!--
     Browser Fragment
 
-    Content description (not visible, for screen readers etc.): Navigate backward (browsing history)
+    Label for popup button that appears when long-pressing the main menu. Tapping it allows the user to customize the main menu layout.
   -->
+  <string name="customize_menu">Tilpass meny</string>
+  <!-- Content description (not visible, for screen readers etc.): Navigate backward (browsing history) -->
   <string name="browser_menu_back">Tilbake</string>
   <!-- Content description (not visible, for screen readers etc.): Navigate forward (browsing history) -->
   <string name="browser_menu_forward">Frem</string>
@@ -416,7 +422,7 @@
   <!-- Search suggestion onboarding hint title text -->
   <string name="search_suggestions_onboarding_title">Tillate søkeforslag i private økter?</string>
   <!-- Search suggestion onboarding hint description text, %s is the name of the app (for example "Firefox"). -->
-  <string name="search_suggestions_onboarding_text">%s deler alt du skriver i adressefeltet med standard søkemotor.</string>
+  <string name="search_suggestions_onboarding_text">%s deler alt du skriver i adresselinjen med standard søkemotor.</string>
   <!-- Search engine suggestion title text. %s is the name of the suggested engine. -->
   <string name="search_engine_suggestions_title">Søk %s</string>
   <!-- Search engine suggestion description text -->
@@ -709,13 +715,25 @@
   <string name="search_widget_text_long">Søk på nettet</string>
   <!-- Content description (not visible, for screen readers etc.): Voice search -->
   <string name="search_widget_voice">Stemmesøk</string>
+  <!-- Content description (not visible, for screen readers etc.): Button in the search widget that starts a search in a private tab -->
+  <string name="search_widget_private_search">Privat søk</string>
+  <!-- Widget description in the widget picker screen for the search bar widget that includes buttons for private search and for voice search -->
+  <string name="search_bar_widget_description">Søkelinje med privat- og stemmesøk</string>
+  <!-- Widget description in the widget picker screen for the search bar widget that includes buttons for image search, private search and voice search -->
+  <string name="search_bar_with_lens_widget_description">Søkelinje med bilde-, privat- og stemmesøk</string>
+  <!-- Widget description in the widget picker screen for the compact search bar widget -->
+  <string name="compact_search_bar_widget_description">Kompakt søkelinje</string>
   <!--
     Preferences
 
     Title for the settings page
   -->
   <string name="settings">Innstillinger</string>
-  <!-- Preference category for general settings -->
+  <!--
+    Preferences
+
+    Preference category for general settings
+  -->
   <string name="preferences_category_general">Generelt</string>
   <!-- Preference category for all links about Fenix -->
   <string name="preferences_category_about">Om</string>

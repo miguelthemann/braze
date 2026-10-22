@@ -32,6 +32,7 @@
 #include "mozilla/css/StreamLoader.h"
 #include "mozilla/dom/DocGroup.h"
 #include "mozilla/dom/Document.h"
+#include "mozilla/dom/Element.h"
 #include "mozilla/dom/FetchPriority.h"
 #include "mozilla/dom/MediaList.h"
 #include "mozilla/dom/SRICheck.h"
@@ -1553,14 +1554,13 @@ Loader::Completed Loader::ParseSheet(
 
 void Loader::AddPerformanceEntryForCachedSheet(SheetLoadData& aLoadData) {
   MOZ_ASSERT(aLoadData.mURI);
-
-  if (!aLoadData.mNetworkMetadata) {
+  if (!mDocument || !aLoadData.mNetworkMetadata) {
     return;
   }
-  if (!mDocument) {
+  if (aLoadData.mParentData &&
+      !aLoadData.mParentData->mSheet->IsOriginClean()) {
     return;
   }
-
   nsAutoCString name;
   aLoadData.mURI->GetSpec(name);
   NS_ConvertUTF8toUTF16 entryName(name);
@@ -1579,6 +1579,14 @@ void Loader::AddPerformanceEntryForCachedSheet(SheetLoadData& aLoadData) {
 void Loader::NotifyObservers(SheetLoadData& aData, nsresult aStatus,
                              bool aCanFireEvents) {
   aData.mSheet->PropagateUseCountersTo(mDocument);
+
+  // https://html.spec.whatwg.org/#render-blocking-mechanism
+  // Unblock rendering once the sheet loads or fails.
+  if (nsINode* owner = aData.mSheet->GetOwnerNode();
+      mDocument && owner && owner->IsElement()) {
+    mDocument->UnblockRendering(*owner->AsElement());
+  }
+
   if (MaybePutIntoLoadsPerformed(aData) &&
       aData.mShouldEmulateNotificationsForCachedLoad) {
     NotifyObserversForCachedSheet(aData);
@@ -1709,15 +1717,15 @@ static bool BaseURIsArePathCompatible(nsIURI* aA, nsIURI* aB) {
 static bool CanReuseInlineSheet(SharedStyleSheetCache::InlineSheetEntry& aEntry,
                                 nsIURI* aNewBaseURI, bool aIsImage) {
   auto dependency = aEntry.mSheet->OriginalContentsUriDependency();
+  if (aIsImage != aEntry.mWasLoadedAsImage) {
+    // If the document was loaded as an image on one document, but wasn't on
+    // another, we can't cache the sheet. Non-local URIs should not load in
+    // those, see bug 1982344 and bug 2081280.
+    return false;
+  }
   if (dependency == StyleNonLocalUriDependency::No) {
     // If there are no non-local uris, then we can reuse.
     return true;
-  }
-  if (aIsImage != aEntry.mWasLoadedAsImage) {
-    // Even with the same base uri, if the document was loaded as an image on
-    // one document, but wasn't on another, we can't cache the sheet, since
-    // non-local URIs should not load in those, see bug 1982344.
-    return false;
   }
   if (dependency == StyleNonLocalUriDependency::Absolute) {
     // If there are only absolute uris, then we don't need to worry about the

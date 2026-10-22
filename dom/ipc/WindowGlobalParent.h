@@ -264,6 +264,10 @@ class WindowGlobalParent final : public WindowContext,
 
   bool DocumentHasLoaded() { return mDocumentHasLoaded; }
 
+  bool MayHaveViewTransitionOptIn() const {
+    return mMayHaveViewTransitionOptIn;
+  }
+
   bool DocumentHasUserInteracted() { return mDocumentHasUserInteracted; }
 
   uint32_t SandboxFlags() { return mSandboxFlags; }
@@ -276,7 +280,7 @@ class WindowGlobalParent final : public WindowContext,
 
   uint32_t HttpsOnlyStatus() { return mHttpsOnlyStatus; }
 
-  void AddSecurityState(uint32_t aStateFlags);
+  void ApplySecurityStateToTop(uint32_t aStateFlags);
   uint32_t GetSecurityFlags() { return mSecurityState; }
 
   const RemoteType& GetRemoteType() const override;
@@ -321,6 +325,7 @@ class WindowGlobalParent final : public WindowContext,
       const MaybeDiscarded<dom::BrowsingContext>& aTargetBC,
       nsDocShellLoadState* aLoadState, bool aSetNavigating);
   mozilla::ipc::IPCResult RecvInternalLoad(nsDocShellLoadState* aLoadState);
+  mozilla::ipc::IPCResult RecvAddSecurityState(uint32_t aStateFlags);
   mozilla::ipc::IPCResult RecvUpdateDocumentURI(NotNull<nsIURI*> aURI);
   mozilla::ipc::IPCResult RecvUpdateDocumentPrincipal(
       nsIPrincipal* aNewDocumentPrincipal,
@@ -328,6 +333,7 @@ class WindowGlobalParent final : public WindowContext,
   mozilla::ipc::IPCResult RecvUpdatePrincipalPartitioning(
       bool aPartitionStoragePrincipal);
   mozilla::ipc::IPCResult RecvUpdateDocumentHasLoaded(bool aDocumentHasLoaded);
+  mozilla::ipc::IPCResult RecvSetMayHaveViewTransitionOptIn(bool aMayHave);
   mozilla::ipc::IPCResult RecvUpdateDocumentHasUserInteracted(
       bool aDocumentHasUserInteracted);
   mozilla::ipc::IPCResult RecvUpdateSandboxFlags(uint32_t aSandboxFlags);
@@ -481,6 +487,11 @@ class WindowGlobalParent final : public WindowContext,
   // https://wicg.github.io/nav-speculation/prefetch.html#wait-for-a-matching-prefetch-record
   bool HasPotentialPrefetchMatch(nsIURI* aURI);
 
+  // Whether a prefetch candidate covered aURI, whether or not it was fetched.
+  // Branch-symmetric, so the experiment can compare prefetched navigations
+  // against ones that would have been prefetched.
+  bool HasMatchingPrefetchCandidate(nsIURI* aURI);
+
   void RemoveWaiter(PrefetchMatchWaiter* aWaiter);
 
   void UpdateFullscreenKeyboardLockStatus(FullscreenKeyboardLock aStatus);
@@ -575,6 +586,7 @@ class WindowGlobalParent final : public WindowContext,
 
   bool mDocumentHasLoaded;
   bool mDocumentHasUserInteracted;
+  bool mMayHaveViewTransitionOptIn = false;
   bool mDocumentTreeWouldPreloadResources = false;
   bool mBlockAllMixedContent;
   bool mUpgradeInsecureRequests;

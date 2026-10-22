@@ -187,6 +187,7 @@ import org.mozilla.fenix.browser.store.BrowserScreenMiddleware
 import org.mozilla.fenix.browser.store.BrowserScreenState
 import org.mozilla.fenix.browser.store.BrowserScreenStore
 import org.mozilla.fenix.browser.tabstrip.TabStrip
+import org.mozilla.fenix.browser.tabstrip.ext.handleTabStripLastTabClosed
 import org.mozilla.fenix.components.AppStore
 import org.mozilla.fenix.components.FenixAutocompletePrompt
 import org.mozilla.fenix.components.FenixEmailMaskPrompt
@@ -242,6 +243,9 @@ import org.mozilla.fenix.settings.downloads.DownloadLocationManager
 import org.mozilla.fenix.snackbar.FenixSnackbarDelegate
 import org.mozilla.fenix.snackbar.SnackbarBinding
 import org.mozilla.fenix.tabgroups.TabGroupsStrip
+import org.mozilla.fenix.tabgroups.strip.redux.TabGroupsStripAction
+import org.mozilla.fenix.tabgroups.strip.redux.TabGroupsStripMiddleware
+import org.mozilla.fenix.tabgroups.strip.redux.TabGroupsStripStore
 import org.mozilla.fenix.tabstray.ext.toDisplayTitle
 import org.mozilla.fenix.tabstray.redux.state.Page
 import org.mozilla.fenix.theme.FirefoxTheme
@@ -475,6 +479,10 @@ abstract class BaseBrowserFragment :
             requireComponents.core.store,
             isCustomTabSession = customTabSessionId != null,
         )
+
+        if (customTabSessionId == null) {
+            tabGroupsStripStore.dispatch(TabGroupsStripAction.InitializeDataObservation)
+        }
 
         observePrivateModeLock {
             findNavController()
@@ -1354,6 +1362,7 @@ abstract class BaseBrowserFragment :
                     },
                     shouldShowDoNotAskAgainCheckBox = context.components.appStore.state.mode != BrowsingMode.Private,
                     store = store,
+                    coroutineScope = requireComponents.applicationScope,
                     shouldHide = {
                         // if the fragment is detached,
                         // returning true will hide the site permission prompt rather than crash
@@ -1601,8 +1610,17 @@ abstract class BaseBrowserFragment :
                     }
                 },
                 onLastTabClose = { isPrivate ->
-                    requireComponents.appStore.dispatch(AppAction.TabStripAction.UpdateLastTabClosed(isPrivate))
-                    findNavController().navigate(BrowserFragmentDirections.actionGlobalHome())
+                    handleTabStripLastTabClosed(
+                        isHomepageAsNewTabEnabled = settings.enableHomepageAsNewTab,
+                        isLastTabClosedPrivate = isPrivate,
+                        navigateFromId = R.id.browserFragment,
+                        appStore = requireComponents.appStore,
+                        browsingMode = requireComponents.appStore.state.mode,
+                        navController = findNavController(),
+                    ) {
+                        requireComponents.appStore.dispatch(AppAction.TabStripAction.UpdateLastTabClosed(isPrivate))
+                        findNavController().navigate(BrowserFragmentDirections.actionGlobalHome())
+                    }
                 },
                 onSelectedTabClick = {},
                 onCloseTabClick = { isPrivate ->
@@ -1613,7 +1631,19 @@ abstract class BaseBrowserFragment :
         }
     }
 
-    private fun buildTabGroupsStrip(): @Composable () -> Unit = { TabGroupsStrip() }
+    private val tabGroupsStripStore by lazy {
+        TabGroupsStripStore(
+            middleware =
+                listOf(
+                    TabGroupsStripMiddleware(
+                        tabDataCoordinator = requireComponents.tabDataCoordinator,
+                        scope = lifecycleScope,
+                    )
+                )
+        )
+    }
+
+    private fun buildTabGroupsStrip(): @Composable () -> Unit = { TabGroupsStrip(store = tabGroupsStripStore) }
 
     private fun buildAwesomeBar(
         activity: HomeActivity,

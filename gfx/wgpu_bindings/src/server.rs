@@ -1127,9 +1127,25 @@ pub extern "C" fn wgpu_server_buffer_map_blocking(
     BufferMapAsyncStatus::from(status_result)
 }
 
+/// The result of getting a mapped range.
+///
+/// On success, this returns the range's start address and size, as
+/// well as the [`BufferMapping`] tracking its lifetime. Unmapping or
+/// destroying the buffer will block until the `BufferMapping` is
+/// dropped.
+///
+/// On failure, `core_mapping` and `ptr` are null.
+///
+/// [`BufferMapping`]: wgc::resource::BufferMapping
 #[repr(C)]
-pub struct MappedBufferSlice {
+pub struct BufferMappingResult {
+    /// A `Box<BufferMapping>` as a raw pointer, or `null` if the mapping was cancelled.
+    pub core_mapping: *mut wgc::resource::BufferMapping,
+
+    /// The start of the mapped range, or `null` if the mapping was cancelled.
     pub ptr: *mut u8,
+
+    /// The length of the mapped range in bytes.
     pub length: u64,
 }
 
@@ -1143,11 +1159,12 @@ pub unsafe extern "C" fn wgpu_server_buffer_get_mapped_range(
     buffer_id: id::BufferId,
     start: wgt::BufferAddress,
     size: wgt::BufferAddress,
-) -> MappedBufferSlice {
+) -> BufferMappingResult {
     match global.buffer_get_mapped_range(buffer_id, start, Some(size)) {
-        Ok((ptr, len)) => MappedBufferSlice {
-            ptr: ptr.as_ptr(),
-            length: len,
+        Ok(mapping) => BufferMappingResult {
+            ptr: mapping.ptr().as_ptr(),
+            length: mapping.len(),
+            core_mapping: Box::into_raw(Box::new(mapping)),
         },
         Err(error) => match error {
             // The map may have been cancelled before the caller got here:
@@ -1155,7 +1172,8 @@ pub unsafe extern "C" fn wgpu_server_buffer_get_mapped_range(
             // returns it to the idle state. Report an empty slice so the
             // caller can turn it into a map error.
             BufferAccessError::DestroyedResource(_) | BufferAccessError::NotMapped => {
-                MappedBufferSlice {
+                BufferMappingResult {
+                    core_mapping: core::ptr::null_mut(),
                     ptr: core::ptr::null_mut(),
                     length: 0,
                 }
@@ -1163,6 +1181,22 @@ pub unsafe extern "C" fn wgpu_server_buffer_get_mapped_range(
             _ => panic!("{error}"),
         },
     }
+}
+
+/// # Safety
+///
+/// This function must be passed a valid pointer that was created by
+/// calling `Box::into_raw` on a `Box<wgpu_core::resource::BufferMapping>`.
+/// (`BufferMappingResult::core_mapping`, when non-null, is such a
+/// pointer.)
+#[no_mangle]
+pub unsafe extern "C" fn wgpu_server_buffer_mapping_destroy(
+    mapping: *mut wgc::resource::BufferMapping,
+) {
+    assert!(!mapping.is_null());
+    // Safety: this function's contract requires that `mapping` is
+    // valid and created by `Box::into_raw`.
+    drop(unsafe { Box::from_raw(mapping) });
 }
 
 #[no_mangle]
@@ -3224,17 +3258,19 @@ pub struct VkSemaphoreHandle(pub u64);
 /// the submission they belong to has been attempted. The actual
 /// `vkDestroySemaphore` calls happen later, from an `on_submitted_work_done`
 /// closure.
+///
+/// Returns `true` if at least one of `handles` was registered in (and removed
+/// from) the queue.
 #[cfg(target_os = "linux")]
 fn enqueue_signal_semaphores_destruction(
     queue: &Arc<wgc::device::queue::Queue>,
     device: Arc<wgc::device::Device>,
     handles: &[VkSemaphoreHandle],
-    submission_errored: bool,
-) {
+) -> bool {
     use ash::vk::Handle as _;
 
     if handles.is_empty() {
-        return;
+        return false;
     }
 
     let semaphores: Vec<vk::Semaphore> = handles
@@ -3242,15 +3278,18 @@ fn enqueue_signal_semaphores_destruction(
         .map(|handle| vk::Semaphore::from_raw(handle.0))
         .collect();
 
-    if submission_errored {
-        // Unregister the pending signals so that a later submission on this
-        // queue does not signal them. This is a no-op for any semaphore that a
-        // batch already consumed before `queue_submit` reported the failure.
+    // There may be some semaphores still left in the HAL queue if an error was
+    // encountered, and we must ensure they aren't signalled after destruction.
+    // Since attempting to remove a semaphore that was already consumed is a
+    // no-op, just ask the queue to remove all of the ones we know were part of
+    // the submission.
+    let mut semaphore_removed = false;
+    {
         let queue = queue.clone();
         let hal_queue =
             unsafe { queue.as_hal::<wgc::api::Vulkan>() }.expect("Vulkan backend queue on linux");
         for &semaphore in &semaphores {
-            hal_queue.remove_signal_semaphore(semaphore);
+            semaphore_removed |= hal_queue.remove_signal_semaphore(semaphore);
         }
     }
 
@@ -3275,6 +3314,8 @@ fn enqueue_signal_semaphores_destruction(
             }
         }
     }));
+
+    semaphore_removed
 }
 
 #[no_mangle]
@@ -3292,21 +3333,23 @@ pub unsafe extern "C" fn wgpu_server_queue_submit(
     device.push_error_scope(ErrorFilter::Validation);
     let submission_index = global.queue_submit(queue_id, unsafe { command_buffer_ids.as_slice() });
     let error = device.pop_error_scope().unwrap();
-    let submission_succeeded = error.is_none();
+    #[cfg_attr(not(target_os = "linux"), expect(unused_mut))]
+    let mut submission_succeeded = error.is_none();
     if let Some(error) = error {
         device.handle_error(error, None, "Queue::submit");
     }
 
     #[cfg(target_os = "linux")]
-    enqueue_signal_semaphores_destruction(
-        &queue,
-        device.clone(),
-        unsafe { signal_semaphores.as_slice() },
-        !submission_succeeded,
-    );
+    {
+        submission_succeeded &=
+            !enqueue_signal_semaphores_destruction(&queue, device.clone(), unsafe {
+                signal_semaphores.as_slice()
+            });
+    }
     #[cfg(not(target_os = "linux"))]
     let _ = signal_semaphores;
 
+    // NOTE: `0` means "no index to follow up with".
     submission_succeeded
         .then_some(submission_index)
         .unwrap_or(0)

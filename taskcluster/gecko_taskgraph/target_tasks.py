@@ -892,8 +892,6 @@ def target_tasks_custom_car_perf_testing(full_task_graph, parameters, graph_conf
                 return True
         elif accept_raptor_android_build(platform):
             if "browsertime" in try_name and "cstm-car-m" in try_name:
-                if "-nofis" not in try_name:
-                    return False
                 if "hw-s24" in platform and "speedometer3" not in try_name:
                     return False
                 if "jetstream3" in try_name:
@@ -908,8 +906,8 @@ def target_tasks_custom_car_perf_testing(full_task_graph, parameters, graph_conf
                     and "ebay-kleinanzeigen-search" not in try_name
                 ):
                     return False
-                # Bug 1960921 Disable ebay-kleinanzeigen-search-nofis on custom-car
-                if "ebay-kleinanzeigen-search-nofis" in try_name:
+                # Bug 1960921 Disable ebay-kleinanzeigen-search on custom-car
+                if "ebay-kleinanzeigen-search" in try_name:
                     return False
                 return True
         return False
@@ -961,6 +959,11 @@ def target_tasks_general_perf_testing(full_task_graph, parameters, graph_config)
             # Bug 1961145 - Disable bing-search for test-windows11-64-24h2-shippable
             if "windows11" in platform and "bing-search" in try_name:
                 return False
+            # Bug 2074111 - Already running on macosx1500
+            if "macosx1470" in platform and (
+                "jetstream3" in try_name or "speedometer3" in try_name
+            ):
+                return False
             if "browsertime" in try_name:
                 if "chrome" in try_name or "custom-car" in try_name:
                     # Bug 2049065: linux2404 chrome/custom-car tp6 and
@@ -995,16 +998,10 @@ def target_tasks_general_perf_testing(full_task_graph, parameters, graph_config)
         elif accept_raptor_android_build(platform):
             if "hw-s24" in platform and "speedometer3" not in try_name:
                 return False
-            if "chrome-m" in try_name and "-nofis" not in try_name:
-                return False
             # Bug 1929960 - Enable all chrome-m tp6m tests on a55 only
             if "chrome-m" in try_name and "tp6m" in try_name and "hw-a55" in platform:
                 # Bug 1954923 - Disable ebay-kleinanzeigen
-                if (
-                    "ebay-kleinanzeigen" in try_name
-                    and "search" not in try_name
-                    and "nofis" in try_name
-                ):
+                if "ebay-kleinanzeigen" in try_name and "search" not in try_name:
                     return False
                 return True
             if "chrome-m" in try_name and (
@@ -1081,10 +1078,18 @@ def make_desktop_nightly_filter(platforms, graph_config):
     """Returns a filter that gets all nightly tasks on the given platform."""
 
     def filter(task, parameters):
-        # _filter_by_release_project is used instead of filter_for_project
-        # because it fakes things a bit for Try, and allows tasks that
-        # otherwise wouldn't run there to be run
-        filter_for_target_project = _filter_by_release_project(parameters, graph_config)
+        # On Try, _filter_by_release_project fakes things a bit, and allows
+        # tasks that otherwise wouldn't run there to be run. Elsewhere,
+        # including project branches such as Pine, use the project's own
+        # run-on-projects.
+        if parameters["project"] == "try":
+            filter_for_target_project = _filter_by_release_project(
+                parameters, graph_config
+            )
+        else:
+            filter_for_target_project = functools.partial(
+                filter_for_project, parameters=parameters
+            )
 
         return all([
             filter_on_platforms(task, platforms),
@@ -1129,8 +1134,6 @@ def target_tasks_speedometer_tests(full_task_graph, parameters, graph_config):
                 and "speedometer3" in try_name
                 and "chrome-m" in try_name
             ):
-                if "-nofis" not in try_name:
-                    return False
                 return True
 
     return [l for l, t in full_task_graph.tasks.items() if filter(t)]

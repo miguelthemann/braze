@@ -622,6 +622,11 @@ IPCResult WindowGlobalParent::RecvUpdateDocumentHasLoaded(
   return IPC_OK();
 }
 
+IPCResult WindowGlobalParent::RecvSetMayHaveViewTransitionOptIn(bool aMayHave) {
+  mMayHaveViewTransitionOptIn = aMayHave;
+  return IPC_OK();
+}
+
 IPCResult WindowGlobalParent::RecvUpdateDocumentHasUserInteracted(
     bool aDocumentHasUserInteracted) {
   mDocumentHasUserInteracted = aDocumentHasUserInteracted;
@@ -2043,17 +2048,19 @@ bool WindowGlobalParent::ShouldTrackSiteOriginTelemetry() {
   return DocumentPrincipal()->GetIsContentPrincipal();
 }
 
-void WindowGlobalParent::AddSecurityState(uint32_t aStateFlags) {
+mozilla::ipc::IPCResult WindowGlobalParent::RecvAddSecurityState(
+    uint32_t aStateFlags) {
+  if ((aStateFlags & kValidSecurityStateFlags) != aStateFlags) {
+    return IPC_FAIL(this, "Invalid security state flags");
+  }
+
+  AddSecurityState(aStateFlags);
+  return IPC_OK();
+}
+
+void WindowGlobalParent::ApplySecurityStateToTop(uint32_t aStateFlags) {
   MOZ_ASSERT(TopWindowContext() == this);
-  MOZ_ASSERT((aStateFlags &
-              (nsIWebProgressListener::STATE_LOADED_MIXED_DISPLAY_CONTENT |
-               nsIWebProgressListener::STATE_LOADED_MIXED_ACTIVE_CONTENT |
-               nsIWebProgressListener::STATE_BLOCKED_MIXED_DISPLAY_CONTENT |
-               nsIWebProgressListener::STATE_BLOCKED_MIXED_ACTIVE_CONTENT |
-               nsIWebProgressListener::STATE_HTTPS_ONLY_MODE_UPGRADED |
-               nsIWebProgressListener::STATE_HTTPS_ONLY_MODE_UPGRADE_FAILED |
-               nsIWebProgressListener::STATE_HTTPS_ONLY_MODE_UPGRADED_FIRST)) ==
-                 aStateFlags,
+  MOZ_ASSERT((aStateFlags & kValidSecurityStateFlags) == aStateFlags,
              "Invalid flags specified!");
 
   if ((mSecurityState & aStateFlags) == aStateFlags) {
@@ -2434,6 +2441,19 @@ bool WindowGlobalParent::HasPotentialPrefetchMatch(nsIURI* aURI) {
     auto* rec = static_cast<PrefetchRecordParent*>(p);
     if (rec->State() == PrefetchState::Ongoing &&
         rec->IsExpectedToMatch(aURI)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool WindowGlobalParent::HasMatchingPrefetchCandidate(nsIURI* aURI) {
+  nsTArray<PPrefetchRecordParent*> managed;
+  ManagedPPrefetchRecordParent(managed);
+  for (auto* p : managed) {
+    auto* rec = static_cast<PrefetchRecordParent*>(p);
+    // Network outcomes exist only in treatment and must not change eligibility.
+    if (rec->IsEligibleForPrefetch() && rec->MatchesCandidateURL(aURI)) {
       return true;
     }
   }

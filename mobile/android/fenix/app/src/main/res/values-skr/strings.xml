@@ -77,7 +77,11 @@
   <string name="about_content" tools:ignore="BrandUsage">%1$s موزلّا ولوں تیار تھیا ہے۔</string>
   <!-- Private Browsing -->
   <string name="private_browsing_common_myths">نجی براؤزنگ بارے عام فرضی قصے</string>
-  <!-- Text to be announced by the accessibility service to inform the user that the private browsing mode is currently active. -->
+  <!--
+    Private Browsing
+
+    Text to be announced by the accessibility service to inform the user that the private browsing mode is currently active.
+  -->
   <string name="private_browsing_a11y_session_announcement">نجی براؤزنگ سیشن</string>
   <!--
     True Private Browsing Mode
@@ -178,11 +182,7 @@
   <string name="recently_visited_menu_item_remove">ہٹاؤ</string>
   <!-- Content description for the button which navigates the user to show all of their history. -->
   <string name="past_explorations_show_all_content_description_2">ماضی دیاں ساریاں پھلوراں ݙکھاؤ</string>
-  <!--
-    Browser Fragment
-
-    Content description (not visible, for screen readers etc.): Navigate backward (browsing history)
-  -->
+  <!-- Content description (not visible, for screen readers etc.): Navigate backward (browsing history) -->
   <string name="browser_menu_back">پچھوں</string>
   <!-- Content description (not visible, for screen readers etc.): Navigate forward (browsing history) -->
   <string name="browser_menu_forward">اڳوں تے</string>
@@ -723,7 +723,11 @@
     Title for the settings page
   -->
   <string name="settings">ترتیباں</string>
-  <!-- Preference category for general settings -->
+  <!--
+    Preferences
+
+    Preference category for general settings
+  -->
   <string name="preferences_category_general">عمومی</string>
   <!-- Preference category for all links about Fenix -->
   <string name="preferences_category_about">تعارف</string>
@@ -1106,7 +1110,7 @@
   <!-- Message to warn users that applying an alternative app icon may require an app restart. Whether or not the app closes depends on what version of Android it is, so we use the word "may" instead of "will". %1$s is replaced by the brand name (e.g. Firefox). -->
   <string name="restart_warning_dialog_body_2">ایپ بند تھی سڳدی ہے۔ %1$s کوں ولا کھولݨ کیتے صرف آپݨے نویں چمکدار آئیکن تے ٹیپ کرو۔</string>
   <!-- Message to warn users that applying an alternative app icon may require an app restart and will remove existing shortcuts because of the OS limitations. Whether or not the app closes depends on what version of Android it is, so we use the word "may" instead of "will". %1$s is replaced by the brand name (e.g. Firefox). -->
-  <string name="restart_and_shortcuts_removal_warning_dialog_body">آئیکن تبدیل کرݨ نال تہاڈی ہوم سکرین تے محفوظ کیتے گئے ساریاں سائٹس اور شارٹ کٹس ختم تھی ویسن۔</string>
+  <string name="restart_and_shortcuts_removal_warning_dialog_body">آئیکان تبدیل کرݨ نال تہاݙی ہوم سکرین تے محفوظ کیتے گئے ساریاں سائٹاں تے شارٹ کٹس %1$s بند تھی سڳدن۔ ولدا کھولݨ کیتے نویں آئیکان تے انگل تھپکاؤ</string>
   <!-- Dialog button text for confirming the possible app restart and new icon selection -->
   <string name="restart_warning_dialog_button_positive_2">آئیکن تبدیل کرو</string>
   <!-- Dialog button text for cancelling app icon change -->

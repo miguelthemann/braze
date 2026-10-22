@@ -237,8 +237,10 @@ open class FxaAccountManager(
                         syncManager?.now(reason, debounce, customEngineSubset)
                     }
 
-                    // refresh profile on explicit "sync now" action
-                    refreshProfile(ignoreCache = true)
+                    // Only an explicit full "sync now"; feature syncs (e.g. tabs) run on every tab change.
+                    if (reason == SyncReason.User && customEngineSubset.isEmpty()) {
+                        refreshProfile(ignoreCache = true)
+                    }
                 }
                 else -> logger.info("Ignoring syncNow request, not in the right state: $s")
             }
@@ -359,7 +361,7 @@ open class FxaAccountManager(
         pairingUrl: String? = null,
         entrypoint: FxAEntryPoint,
         authScopes: Set<String> = scopes,
-        service: String = "",
+        service: String,
     ): String? =
         withContext(coroutineContext) {
             // When sync decoupling is enabled, we need to send empty scopes.

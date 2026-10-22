@@ -20,8 +20,8 @@
  */
 
 /**
- * pdfjsVersion = 6.5.196
- * pdfjsBuild = f73a6986d
+ * pdfjsVersion = 6.5.273
+ * pdfjsBuild = 5d143c409
  */
 
 ;// ./src/shared/util.js
@@ -9877,11 +9877,16 @@ const distDecode = new Int32Array([0x00001, 0x00002, 0x00003, 0x00004, 0x10005, 
 const fixedLitCodeTab = [new Int32Array([0x70100, 0x80050, 0x80010, 0x80118, 0x70110, 0x80070, 0x80030, 0x900c0, 0x70108, 0x80060, 0x80020, 0x900a0, 0x80000, 0x80080, 0x80040, 0x900e0, 0x70104, 0x80058, 0x80018, 0x90090, 0x70114, 0x80078, 0x80038, 0x900d0, 0x7010c, 0x80068, 0x80028, 0x900b0, 0x80008, 0x80088, 0x80048, 0x900f0, 0x70102, 0x80054, 0x80014, 0x8011c, 0x70112, 0x80074, 0x80034, 0x900c8, 0x7010a, 0x80064, 0x80024, 0x900a8, 0x80004, 0x80084, 0x80044, 0x900e8, 0x70106, 0x8005c, 0x8001c, 0x90098, 0x70116, 0x8007c, 0x8003c, 0x900d8, 0x7010e, 0x8006c, 0x8002c, 0x900b8, 0x8000c, 0x8008c, 0x8004c, 0x900f8, 0x70101, 0x80052, 0x80012, 0x8011a, 0x70111, 0x80072, 0x80032, 0x900c4, 0x70109, 0x80062, 0x80022, 0x900a4, 0x80002, 0x80082, 0x80042, 0x900e4, 0x70105, 0x8005a, 0x8001a, 0x90094, 0x70115, 0x8007a, 0x8003a, 0x900d4, 0x7010d, 0x8006a, 0x8002a, 0x900b4, 0x8000a, 0x8008a, 0x8004a, 0x900f4, 0x70103, 0x80056, 0x80016, 0x8011e, 0x70113, 0x80076, 0x80036, 0x900cc, 0x7010b, 0x80066, 0x80026, 0x900ac, 0x80006, 0x80086, 0x80046, 0x900ec, 0x70107, 0x8005e, 0x8001e, 0x9009c, 0x70117, 0x8007e, 0x8003e, 0x900dc, 0x7010f, 0x8006e, 0x8002e, 0x900bc, 0x8000e, 0x8008e, 0x8004e, 0x900fc, 0x70100, 0x80051, 0x80011, 0x80119, 0x70110, 0x80071, 0x80031, 0x900c2, 0x70108, 0x80061, 0x80021, 0x900a2, 0x80001, 0x80081, 0x80041, 0x900e2, 0x70104, 0x80059, 0x80019, 0x90092, 0x70114, 0x80079, 0x80039, 0x900d2, 0x7010c, 0x80069, 0x80029, 0x900b2, 0x80009, 0x80089, 0x80049, 0x900f2, 0x70102, 0x80055, 0x80015, 0x8011d, 0x70112, 0x80075, 0x80035, 0x900ca, 0x7010a, 0x80065, 0x80025, 0x900aa, 0x80005, 0x80085, 0x80045, 0x900ea, 0x70106, 0x8005d, 0x8001d, 0x9009a, 0x70116, 0x8007d, 0x8003d, 0x900da, 0x7010e, 0x8006d, 0x8002d, 0x900ba, 0x8000d, 0x8008d, 0x8004d, 0x900fa, 0x70101, 0x80053, 0x80013, 0x8011b, 0x70111, 0x80073, 0x80033, 0x900c6, 0x70109, 0x80063, 0x80023, 0x900a6, 0x80003, 0x80083, 0x80043, 0x900e6, 0x70105, 0x8005b, 0x8001b, 0x90096, 0x70115, 0x8007b, 0x8003b, 0x900d6, 0x7010d, 0x8006b, 0x8002b, 0x900b6, 0x8000b, 0x8008b, 0x8004b, 0x900f6, 0x70103, 0x80057, 0x80017, 0x8011f, 0x70113, 0x80077, 0x80037, 0x900ce, 0x7010b, 0x80067, 0x80027, 0x900ae, 0x80007, 0x80087, 0x80047, 0x900ee, 0x70107, 0x8005f, 0x8001f, 0x9009e, 0x70117, 0x8007f, 0x8003f, 0x900de, 0x7010f, 0x8006f, 0x8002f, 0x900be, 0x8000f, 0x8008f, 0x8004f, 0x900fe, 0x70100, 0x80050, 0x80010, 0x80118, 0x70110, 0x80070, 0x80030, 0x900c1, 0x70108, 0x80060, 0x80020, 0x900a1, 0x80000, 0x80080, 0x80040, 0x900e1, 0x70104, 0x80058, 0x80018, 0x90091, 0x70114, 0x80078, 0x80038, 0x900d1, 0x7010c, 0x80068, 0x80028, 0x900b1, 0x80008, 0x80088, 0x80048, 0x900f1, 0x70102, 0x80054, 0x80014, 0x8011c, 0x70112, 0x80074, 0x80034, 0x900c9, 0x7010a, 0x80064, 0x80024, 0x900a9, 0x80004, 0x80084, 0x80044, 0x900e9, 0x70106, 0x8005c, 0x8001c, 0x90099, 0x70116, 0x8007c, 0x8003c, 0x900d9, 0x7010e, 0x8006c, 0x8002c, 0x900b9, 0x8000c, 0x8008c, 0x8004c, 0x900f9, 0x70101, 0x80052, 0x80012, 0x8011a, 0x70111, 0x80072, 0x80032, 0x900c5, 0x70109, 0x80062, 0x80022, 0x900a5, 0x80002, 0x80082, 0x80042, 0x900e5, 0x70105, 0x8005a, 0x8001a, 0x90095, 0x70115, 0x8007a, 0x8003a, 0x900d5, 0x7010d, 0x8006a, 0x8002a, 0x900b5, 0x8000a, 0x8008a, 0x8004a, 0x900f5, 0x70103, 0x80056, 0x80016, 0x8011e, 0x70113, 0x80076, 0x80036, 0x900cd, 0x7010b, 0x80066, 0x80026, 0x900ad, 0x80006, 0x80086, 0x80046, 0x900ed, 0x70107, 0x8005e, 0x8001e, 0x9009d, 0x70117, 0x8007e, 0x8003e, 0x900dd, 0x7010f, 0x8006e, 0x8002e, 0x900bd, 0x8000e, 0x8008e, 0x8004e, 0x900fd, 0x70100, 0x80051, 0x80011, 0x80119, 0x70110, 0x80071, 0x80031, 0x900c3, 0x70108, 0x80061, 0x80021, 0x900a3, 0x80001, 0x80081, 0x80041, 0x900e3, 0x70104, 0x80059, 0x80019, 0x90093, 0x70114, 0x80079, 0x80039, 0x900d3, 0x7010c, 0x80069, 0x80029, 0x900b3, 0x80009, 0x80089, 0x80049, 0x900f3, 0x70102, 0x80055, 0x80015, 0x8011d, 0x70112, 0x80075, 0x80035, 0x900cb, 0x7010a, 0x80065, 0x80025, 0x900ab, 0x80005, 0x80085, 0x80045, 0x900eb, 0x70106, 0x8005d, 0x8001d, 0x9009b, 0x70116, 0x8007d, 0x8003d, 0x900db, 0x7010e, 0x8006d, 0x8002d, 0x900bb, 0x8000d, 0x8008d, 0x8004d, 0x900fb, 0x70101, 0x80053, 0x80013, 0x8011b, 0x70111, 0x80073, 0x80033, 0x900c7, 0x70109, 0x80063, 0x80023, 0x900a7, 0x80003, 0x80083, 0x80043, 0x900e7, 0x70105, 0x8005b, 0x8001b, 0x90097, 0x70115, 0x8007b, 0x8003b, 0x900d7, 0x7010d, 0x8006b, 0x8002b, 0x900b7, 0x8000b, 0x8008b, 0x8004b, 0x900f7, 0x70103, 0x80057, 0x80017, 0x8011f, 0x70113, 0x80077, 0x80037, 0x900cf, 0x7010b, 0x80067, 0x80027, 0x900af, 0x80007, 0x80087, 0x80047, 0x900ef, 0x70107, 0x8005f, 0x8001f, 0x9009f, 0x70117, 0x8007f, 0x8003f, 0x900df, 0x7010f, 0x8006f, 0x8002f, 0x900bf, 0x8000f, 0x8008f, 0x8004f, 0x900ff]), 9];
 const fixedDistCodeTab = [new Int32Array([0x50000, 0x50010, 0x50008, 0x50018, 0x50004, 0x50014, 0x5000c, 0x5001c, 0x50002, 0x50012, 0x5000a, 0x5001a, 0x50006, 0x50016, 0x5000e, 0x00000, 0x50001, 0x50011, 0x50009, 0x50019, 0x50005, 0x50015, 0x5000d, 0x5001d, 0x50003, 0x50013, 0x5000b, 0x5001b, 0x50007, 0x50017, 0x5000f, 0x00000]), 5];
 class FlateStream extends DecodeStream {
+  static #MIN_ASYNC_COMPRESSED_LENGTH = 1024;
   #isAsync = true;
   constructor(str, maybeLength) {
     super(maybeLength);
     this.stream = str;
     this.dict = str.dict;
+    if (str instanceof Stream && str.length < FlateStream.#MIN_ASYNC_COMPRESSED_LENGTH) {
+      assert(!str.isAsync, "Stream sub-classes are never asynchronous");
+      this.#isAsync = false;
+    }
     const cmf = str.getByte();
     const flg = str.getByte();
     if (cmf === -1 || flg === -1) {
@@ -9990,8 +9995,9 @@ class FlateStream extends DecodeStream {
             code2 = code2 << 1 | t & 1;
             t >>= 1;
           }
+          const entry = len << 16 | val;
           for (i = code2; i < size; i += skip) {
-            codes[i] = len << 16 | val;
+            codes[i] = entry;
           }
           ++code;
         }
@@ -10085,9 +10091,10 @@ class FlateStream extends DecodeStream {
           codeLengths[i++] = len = code;
           continue;
         }
-        let repeatLength = this.getBits(bitsLength) + bitsOffset;
-        while (repeatLength-- > 0) {
-          codeLengths[i++] = what;
+        const repeatLen = this.getBits(bitsLength) + bitsOffset;
+        if (repeatLen > 0) {
+          codeLengths.fill(what, i, i + repeatLen);
+          i += repeatLen;
         }
       }
       litCodeTable = this.generateHuffmanTable(codeLengths.subarray(0, numLitCodes));
@@ -10131,8 +10138,14 @@ class FlateStream extends DecodeStream {
           buffer = this.ensureBuffer(pos + len);
           limit = buffer.length;
         }
-        for (let k = 0; k < len; ++k, ++pos) {
-          buffer[pos] = buffer[pos - dist];
+        if (len <= dist) {
+          const startPos = pos - dist;
+          buffer.copyWithin(pos, startPos, startPos + len);
+          pos += len;
+        } else {
+          for (let k = 0; k < len; ++k, ++pos) {
+            buffer[pos] = buffer[pos - dist];
+          }
         }
       }
     } catch (ex) {
@@ -11219,48 +11232,18 @@ class Parser {
         break;
       }
     }
-    const length = stream.pos - startPos;
-    if (b === -1) {
-      warn("Inline DCTDecode image stream: " + "EOI marker not found, searching for /EI/ instead.");
-      stream.skip(-length);
-      return this.findDefaultInlineStreamEnd(stream);
-    }
-    this.inlineStreamSkipEI(stream);
-    return length;
+    return this.inlineStreamSkipEI(stream, startPos, b, "DCTDecode");
   }
   findASCII85DecodeInlineStreamEnd(stream) {
-    const TILDE = 0x7e,
-      GT = 0x3e;
+    const TILDE = 0x7e;
     const startPos = stream.pos;
     let ch;
     while ((ch = stream.getByte()) !== -1) {
       if (ch === TILDE) {
-        const tildePos = stream.pos;
-        ch = stream.peekByte();
-        while (isWhiteSpace(ch)) {
-          stream.skip();
-          ch = stream.peekByte();
-        }
-        if (ch === GT) {
-          stream.skip();
-          break;
-        }
-        if (stream.pos > tildePos) {
-          const maybeEI = stream.peekBytes(2);
-          if (maybeEI[0] === 0x45 && maybeEI[1] === 0x49) {
-            break;
-          }
-        }
+        break;
       }
     }
-    const length = stream.pos - startPos;
-    if (ch === -1) {
-      warn("Inline ASCII85Decode image stream: " + "EOD marker not found, searching for /EI/ instead.");
-      stream.skip(-length);
-      return this.findDefaultInlineStreamEnd(stream);
-    }
-    this.inlineStreamSkipEI(stream);
-    return length;
+    return this.inlineStreamSkipEI(stream, startPos, ch, "ASCII85Decode");
   }
   findASCIIHexDecodeInlineStreamEnd(stream) {
     const GT = 0x3e;
@@ -11271,20 +11254,19 @@ class Parser {
         break;
       }
     }
+    return this.inlineStreamSkipEI(stream, startPos, ch, "ASCIIHexDecode");
+  }
+  inlineStreamSkipEI(stream, startPos, ch, name) {
     const length = stream.pos - startPos;
     if (ch === -1) {
-      warn("Inline ASCIIHexDecode image stream: " + "EOD marker not found, searching for /EI/ instead.");
+      const type = name === "DCTDecode" ? "EOI" : "EOD";
+      warn(`Inline ${name} image stream: ${type} marker not found, searching for /EI/ instead.`);
       stream.skip(-length);
       return this.findDefaultInlineStreamEnd(stream);
     }
-    this.inlineStreamSkipEI(stream);
-    return length;
-  }
-  inlineStreamSkipEI(stream) {
     const E = 0x45,
       I = 0x49;
-    let state = 0,
-      ch;
+    let state = 0;
     while ((ch = stream.getByte()) !== -1) {
       if (state === 0) {
         state = ch === E ? 1 : 0;
@@ -11294,6 +11276,7 @@ class Parser {
         break;
       }
     }
+    return length;
   }
   makeInlineImage(cipherTransform) {
     const lexer = this.lexer;
@@ -11687,9 +11670,13 @@ class Lexer {
               strBuf.push("\f");
               break;
             case 0x5c:
+              strBuf.push("\\");
+              break;
             case 0x28:
+              strBuf.push("(");
+              break;
             case 0x29:
-              strBuf.push(String.fromCharCode(ch));
+              strBuf.push(")");
               break;
             case 0x30:
             case 0x31:
@@ -24876,6 +24863,7 @@ class OpenTypeFileBuilder {
 
 
 
+
 const HINTING_ENABLED = false;
 const COMMAND_MAP = {
   hstem: [1],
@@ -25150,22 +25138,21 @@ function decryptAscii(data, key, discardNumber) {
   const count = data.length,
     maybeLength = count >>> 1;
   const decrypted = new Uint8Array(maybeLength);
+  let digit1 = -1;
   let i, j;
   for (i = 0, j = 0; i < count; i++) {
-    const digit1 = data[i];
-    if (!isHexDigit(digit1)) {
+    const digit = toHexDigit(data[i]);
+    if (digit < 0) {
       continue;
     }
-    i++;
-    let digit2;
-    while (i < count && !isHexDigit(digit2 = data[i])) {
-      i++;
+    if (digit1 < 0) {
+      digit1 = digit;
+      continue;
     }
-    if (i < count) {
-      const value = parseInt(String.fromCharCode(digit1, digit2), 16);
-      decrypted[j++] = value ^ r >> 8;
-      r = (value + r) * c1 + c2 & (1 << 16) - 1;
-    }
+    const value = digit1 << 4 | digit;
+    digit1 = -1;
+    decrypted[j++] = value ^ r >> 8;
+    r = (value + r) * c1 + c2 & (1 << 16) - 1;
   }
   return decrypted.slice(discardNumber, j);
 }
@@ -25511,15 +25498,15 @@ class Type1Parser {
       let digit1 = -1,
         j = 0;
       for (let i = 0, ii = binary.length; i < ii && j < startDataLength; i++) {
-        const digit = binary[i];
-        if (!isHexDigit(digit)) {
+        const digit = toHexDigit(binary[i]);
+        if (digit < 0) {
           continue;
         }
         if (digit1 < 0) {
           digit1 = digit;
           continue;
         }
-        decoded[j++] = parseInt(String.fromCharCode(digit1, digit), 16);
+        decoded[j++] = digit1 << 4 | digit;
         digit1 = -1;
       }
       if (j !== startDataLength) {
@@ -25955,6 +25942,7 @@ class Type1Font {
 }
 
 ;// ./src/core/fonts.js
+
 
 
 
@@ -27053,7 +27041,7 @@ class Font {
       }
       throw new FormatError(`TrueType Collection does not contain "${fontName}" font.`);
     }
-    function readCmapTable(cmap, file, isSymbolicFont, hasEncoding) {
+    function readCmapTable(cmap, file, isSymbolicFont, hasEncoding, numGlyphs) {
       if (!cmap) {
         warn("No cmap table available.");
         return {
@@ -27249,13 +27237,16 @@ class Font {
           });
         }
       } else if (format === 12) {
-        file.skip(2 + 4 + 4);
-        const nGroups = file.getInt32() >>> 0;
-        for (j = 0; j < nGroups; j++) {
+        file.skip(2);
+        const length = file.getInt32() >>> 0;
+        file.skip(4);
+        const nGroups = MathClamp(file.getInt32() >>> 0, 0, Math.min((length - 16) / 12 | 0, (file.end - file.pos) / 12 | 0));
+        for (j = 0; j < nGroups && mappings.length <= 0x110000; j++) {
           const startCharCode = file.getInt32() >>> 0;
           const endCharCode = file.getInt32() >>> 0;
           let glyphCode = file.getInt32() >>> 0;
-          for (let charCode = startCharCode; charCode <= endCharCode; charCode++) {
+          const lastCharCode = glyphCode < numGlyphs ? Math.min(endCharCode, startCharCode + (numGlyphs - glyphCode - 1), 0x10ffff) : startCharCode - 1;
+          for (let charCode = startCharCode; charCode <= lastCharCode; charCode++) {
             mappings.push({
               charCode,
               glyphId: glyphCode++
@@ -28159,7 +28150,7 @@ class Font {
         }
       });
     } else {
-      const cmapTable = readCmapTable(tables.cmap, font, this.isSymbolicFont, properties.hasEncoding);
+      const cmapTable = readCmapTable(tables.cmap, font, this.isSymbolicFont, properties.hasEncoding, numGlyphs);
       const cmapPlatformId = cmapTable.platformId;
       const cmapEncodingId = cmapTable.encodingId;
       const cmapMappings = cmapTable.mappings;
@@ -29157,6 +29148,7 @@ class PsArgNode extends PsNode {
     super(PS_NODE.arg);
     this.index = index;
     this.valueType = PS_VALUE_TYPE.numeric;
+    this.depth = 0;
   }
 }
 class PsConstNode extends PsNode {
@@ -29164,6 +29156,7 @@ class PsConstNode extends PsNode {
     super(PS_NODE.const);
     this.value = value;
     this.valueType = typeof value === "boolean" ? PS_VALUE_TYPE.boolean : PS_VALUE_TYPE.numeric;
+    this.depth = 0;
   }
 }
 class PsUnaryNode extends PsNode {
@@ -29172,6 +29165,7 @@ class PsUnaryNode extends PsNode {
     this.op = op;
     this.operand = operand;
     this.valueType = valueType;
+    this.depth = operand.depth + 1;
   }
 }
 class PsBinaryNode extends PsNode {
@@ -29181,6 +29175,7 @@ class PsBinaryNode extends PsNode {
     this.first = first;
     this.second = second;
     this.valueType = valueType;
+    this.depth = Math.max(first.depth, second.depth) + 1;
   }
 }
 class PsTernaryNode extends PsNode {
@@ -29190,12 +29185,15 @@ class PsTernaryNode extends PsNode {
     this.then = then;
     this.otherwise = otherwise;
     this.valueType = valueType;
+    this.depth = Math.max(cond.depth, then.depth, otherwise.depth) + 1;
   }
 }
+const MAX_NESTING_DEPTH = 1000;
 class ast_Parser {
   constructor(lexer) {
     this.lexer = lexer;
     this._token = null;
+    this._depth = 0;
   }
   static _isRegularOperator(id) {
     return id >= TOKEN.true && id < TOKEN.if;
@@ -29232,6 +29230,9 @@ class ast_Parser {
           break;
         case TOKEN.lbrace:
           {
+            if (++this._depth > MAX_NESTING_DEPTH) {
+              throw new FormatError("PostScript function: procedures are nested too deeply.");
+            }
             this._advance();
             const thenBlock = this._parseBlock();
             this._expect(TOKEN.rbrace);
@@ -29247,6 +29248,7 @@ class ast_Parser {
             } else {
               throw new FormatError("PostScript function: a procedure block must be followed by 'if' or '{…} ifelse'.");
             }
+            this._depth--;
             break;
           }
         case TOKEN.rbrace:
@@ -29268,28 +29270,6 @@ class ast_Parser {
 }
 function parsePostScriptFunction(source) {
   return new ast_Parser(new lexer_Lexer(source)).parse();
-}
-function _nodesEqual(a, b) {
-  if (a === b) {
-    return true;
-  }
-  if (a.type !== b.type) {
-    return false;
-  }
-  switch (a.type) {
-    case PS_NODE.arg:
-      return a.index === b.index;
-    case PS_NODE.const:
-      return a.value === b.value;
-    case PS_NODE.unary:
-      return a.op === b.op && _nodesEqual(a.operand, b.operand);
-    case PS_NODE.binary:
-      return a.op === b.op && _nodesEqual(a.first, b.first) && _nodesEqual(a.second, b.second);
-    case PS_NODE.ternary:
-      return _nodesEqual(a.cond, b.cond) && _nodesEqual(a.then, b.then) && _nodesEqual(a.otherwise, b.otherwise);
-    default:
-      return false;
-  }
 }
 function _evalBinaryConst(op, a, b) {
   switch (op) {
@@ -29390,6 +29370,9 @@ function _evalUnaryConst(op, v) {
   }
 }
 const MAX_STACK_SIZE = 100;
+const MAX_WORK = 100_000;
+const MAX_FORK_DEPTH = 1000;
+const MAX_TREE_DEPTH = 500;
 function _unaryValueType(op, operandType) {
   return op === TOKEN.not ? operandType : PS_VALUE_TYPE.numeric;
 }
@@ -29426,6 +29409,8 @@ class PSStackToTree {
       PSStackToTree.#init();
     }
     this._failed = false;
+    this._work = 0;
+    this._forkDepth = 0;
     if (numInputs > MAX_STACK_SIZE) {
       return null;
     }
@@ -29481,7 +29466,7 @@ class PSStackToTree {
   }
   _evalBlockFrom(instructions, startIdx, stack) {
     for (let idx = startIdx; idx < instructions.length; idx++) {
-      if (this._failed) {
+      if (this._failed || !this._checkWorkLimit()) {
         break;
       }
       const instr = instructions[idx];
@@ -29521,6 +29506,11 @@ class PSStackToTree {
                 }
                 break;
               }
+              if (this._forkDepth >= MAX_FORK_DEPTH) {
+                this._failed = true;
+                break;
+              }
+              this._forkDepth++;
               const trueStack = stack.slice();
               this._evalBlockFrom(instructions, idx + 1, trueStack);
               if (this._failed) {
@@ -29531,6 +29521,7 @@ class PSStackToTree {
               if (this._failed) {
                 break;
               }
+              this._forkDepth--;
               if (trueStack.length !== falseStack.length) {
                 const zero = new PsConstNode(0);
                 while (trueStack.length < falseStack.length) {
@@ -29716,6 +29707,41 @@ class PSStackToTree {
         break;
     }
   }
+  _checkWorkLimit() {
+    if (++this._work > MAX_WORK) {
+      this._failed = true;
+      return false;
+    }
+    return true;
+  }
+  _checkDepth(node) {
+    if (node.depth > MAX_TREE_DEPTH) {
+      this._failed = true;
+    }
+    return node;
+  }
+  _nodesEqual(a, b) {
+    if (a === b) {
+      return true;
+    }
+    if (a.type !== b.type || !this._checkWorkLimit()) {
+      return false;
+    }
+    switch (a.type) {
+      case PS_NODE.arg:
+        return a.index === b.index;
+      case PS_NODE.const:
+        return a.value === b.value;
+      case PS_NODE.unary:
+        return a.op === b.op && this._nodesEqual(a.operand, b.operand);
+      case PS_NODE.binary:
+        return a.op === b.op && this._nodesEqual(a.first, b.first) && this._nodesEqual(a.second, b.second);
+      case PS_NODE.ternary:
+        return this._nodesEqual(a.cond, b.cond) && this._nodesEqual(a.then, b.then) && this._nodesEqual(a.otherwise, b.otherwise);
+      default:
+        return false;
+    }
+  }
   _makeBinary(op, first, second) {
     if (first.type === PS_NODE.const && second.type === PS_NODE.const) {
       const v = _evalBinaryConst(op, second.value, first.value);
@@ -29723,7 +29749,7 @@ class PSStackToTree {
         return new PsConstNode(v);
       }
     }
-    if (_nodesEqual(first, second)) {
+    if (this._nodesEqual(first, second)) {
       switch (op) {
         case TOKEN.sub:
           return new PsConstNode(0);
@@ -29743,6 +29769,13 @@ class PSStackToTree {
         case TOKEN.gt:
         case TOKEN.lt:
           return new PsConstNode(false);
+      }
+    }
+    if (op === TOKEN.eq || op === TOKEN.ne) {
+      if (first.valueType === PS_VALUE_TYPE.unknown || second.valueType === PS_VALUE_TYPE.unknown) {
+        this._failed = true;
+      } else if (first.valueType !== second.valueType) {
+        return new PsConstNode(op === TOKEN.ne);
       }
     }
     if (first.type === PS_NODE.const) {
@@ -29877,7 +29910,7 @@ class PSStackToTree {
           break;
       }
     }
-    return new PsBinaryNode(op, first, second, _binaryValueType(op, first.valueType, second.valueType));
+    return this._checkDepth(new PsBinaryNode(op, first, second, _binaryValueType(op, first.valueType, second.valueType)));
   }
   _makeUnary(op, operand) {
     if (operand.type === PS_NODE.const) {
@@ -29906,13 +29939,13 @@ class PSStackToTree {
         return operand;
       }
     }
-    return new PsUnaryNode(op, operand, _unaryValueType(op, operand.valueType));
+    return this._checkDepth(new PsUnaryNode(op, operand, _unaryValueType(op, operand.valueType)));
   }
   _makeTernary(cond, then, otherwise) {
     if (cond.type === PS_NODE.const) {
       return cond.value ? then : otherwise;
     }
-    if (_nodesEqual(then, otherwise)) {
+    if (this._nodesEqual(then, otherwise)) {
       return then;
     }
     if (then.type === PS_NODE.const && otherwise.type === PS_NODE.const) {
@@ -29930,22 +29963,22 @@ class PSStackToTree {
         second: cs
       } = cond;
       if (cop === TOKEN.gt || cop === TOKEN.ge) {
-        if (_nodesEqual(then, cf) && _nodesEqual(otherwise, cs)) {
+        if (this._nodesEqual(then, cf) && this._nodesEqual(otherwise, cs)) {
           return this._makeBinary(TOKEN.min, cf, cs);
         }
-        if (_nodesEqual(then, cs) && _nodesEqual(otherwise, cf)) {
+        if (this._nodesEqual(then, cs) && this._nodesEqual(otherwise, cf)) {
           return this._makeBinary(TOKEN.max, cf, cs);
         }
       } else if (cop === TOKEN.lt || cop === TOKEN.le) {
-        if (_nodesEqual(then, cf) && _nodesEqual(otherwise, cs)) {
+        if (this._nodesEqual(then, cf) && this._nodesEqual(otherwise, cs)) {
           return this._makeBinary(TOKEN.max, cf, cs);
         }
-        if (_nodesEqual(then, cs) && _nodesEqual(otherwise, cf)) {
+        if (this._nodesEqual(then, cs) && this._nodesEqual(otherwise, cf)) {
           return this._makeBinary(TOKEN.min, cf, cs);
         }
       }
     }
-    return new PsTernaryNode(cond, then, otherwise, then.valueType === otherwise.valueType ? then.valueType : PS_VALUE_TYPE.unknown);
+    return this._checkDepth(new PsTernaryNode(cond, then, otherwise, then.valueType === otherwise.valueType ? then.valueType : PS_VALUE_TYPE.unknown));
   }
 }
 
@@ -30437,21 +30470,24 @@ class PsJsCompiler {
 }
 class PSStackBasedInterpreter {
   static #stack = new Float64Array(100);
+  static #isBool = new Uint8Array(100);
   static #sp = 0;
-  static #push(v) {
+  static #push(v, isBool = 0) {
     if (this.#sp < this.#stack.length) {
+      this.#isBool[this.#sp] = isBool;
       this.#stack[this.#sp++] = v;
     }
   }
   static #execOp(op) {
     const stack = this.#stack;
+    const isBool = this.#isBool;
     switch (op) {
       case TOKEN.true:
-        this.#push(1);
-        break;
+        this.#push(1, 1);
+        return;
       case TOKEN.false:
-        this.#push(0);
-        break;
+        this.#push(0, 1);
+        return;
       case TOKEN.abs:
         stack[this.#sp - 1] = Math.abs(stack[this.#sp - 1]);
         break;
@@ -30493,8 +30529,8 @@ class PSStackBasedInterpreter {
       case TOKEN.not:
         {
           const v = stack[this.#sp - 1];
-          stack[this.#sp - 1] = v === 0 || v === 1 ? 1 - v : ~(v | 0);
-          break;
+          stack[this.#sp - 1] = isBool[this.#sp - 1] ? 1 - v : ~(v | 0);
+          return;
         }
       case TOKEN.add:
         {
@@ -30548,56 +30584,65 @@ class PSStackBasedInterpreter {
       case TOKEN.eq:
         {
           const b = stack[--this.#sp];
-          stack[this.#sp - 1] = stack[this.#sp - 1] === b ? 1 : 0;
-          break;
+          stack[this.#sp - 1] = stack[this.#sp - 1] === b && isBool[this.#sp - 1] === isBool[this.#sp] ? 1 : 0;
+          isBool[this.#sp - 1] = 1;
+          return;
         }
       case TOKEN.ne:
         {
           const b = stack[--this.#sp];
-          stack[this.#sp - 1] = stack[this.#sp - 1] !== b ? 1 : 0;
-          break;
+          stack[this.#sp - 1] = stack[this.#sp - 1] !== b || isBool[this.#sp - 1] !== isBool[this.#sp] ? 1 : 0;
+          isBool[this.#sp - 1] = 1;
+          return;
         }
       case TOKEN.gt:
         {
           const b = stack[--this.#sp];
           stack[this.#sp - 1] = stack[this.#sp - 1] > b ? 1 : 0;
-          break;
+          isBool[this.#sp - 1] = 1;
+          return;
         }
       case TOKEN.ge:
         {
           const b = stack[--this.#sp];
           stack[this.#sp - 1] = stack[this.#sp - 1] >= b ? 1 : 0;
-          break;
+          isBool[this.#sp - 1] = 1;
+          return;
         }
       case TOKEN.lt:
         {
           const b = stack[--this.#sp];
           stack[this.#sp - 1] = stack[this.#sp - 1] < b ? 1 : 0;
-          break;
+          isBool[this.#sp - 1] = 1;
+          return;
         }
       case TOKEN.le:
         {
           const b = stack[--this.#sp];
           stack[this.#sp - 1] = stack[this.#sp - 1] <= b ? 1 : 0;
-          break;
+          isBool[this.#sp - 1] = 1;
+          return;
         }
       case TOKEN.and:
         {
           const b = stack[--this.#sp] | 0;
           stack[this.#sp - 1] = (stack[this.#sp - 1] | 0) & b;
-          break;
+          isBool[this.#sp - 1] &= isBool[this.#sp];
+          return;
         }
       case TOKEN.or:
         {
           const b = stack[--this.#sp] | 0;
           stack[this.#sp - 1] = stack[this.#sp - 1] | 0 | b;
-          break;
+          isBool[this.#sp - 1] &= isBool[this.#sp];
+          return;
         }
       case TOKEN.xor:
         {
           const b = stack[--this.#sp] | 0;
           stack[this.#sp - 1] = (stack[this.#sp - 1] | 0) ^ b;
-          break;
+          isBool[this.#sp - 1] &= isBool[this.#sp];
+          return;
         }
       case TOKEN.bitshift:
         {
@@ -30619,33 +30664,35 @@ class PSStackBasedInterpreter {
           break;
         }
       case TOKEN.dup:
-        this.#push(stack[this.#sp - 1]);
-        break;
+        this.#push(stack[this.#sp - 1], isBool[this.#sp - 1]);
+        return;
       case TOKEN.exch:
         {
           const a = stack[--this.#sp];
+          const aIsBool = isBool[this.#sp];
           const b = stack[--this.#sp];
-          this.#push(a);
-          this.#push(b);
-          break;
+          const bIsBool = isBool[this.#sp];
+          this.#push(a, aIsBool);
+          this.#push(b, bIsBool);
+          return;
         }
       case TOKEN.pop:
         this.#sp--;
-        break;
+        return;
       case TOKEN.copy:
         {
           const n = Math.trunc(stack[--this.#sp]);
           const base = this.#sp - n;
           for (let k = 0; k < n; k++) {
-            this.#push(stack[base + k]);
+            this.#push(stack[base + k], isBool[base + k]);
           }
-          break;
+          return;
         }
       case TOKEN.index:
         {
           const i = Math.trunc(stack[--this.#sp]);
-          this.#push(stack[this.#sp - 1 - i]);
-          break;
+          this.#push(stack[this.#sp - 1 - i], isBool[this.#sp - 1 - i]);
+          return;
         }
       case TOKEN.roll:
         {
@@ -30656,14 +30703,17 @@ class PSStackBasedInterpreter {
             if (mod !== 0) {
               const base = this.#sp - n;
               const sub = stack.slice(base, this.#sp);
+              const subIsBool = isBool.slice(base, this.#sp);
               for (let k = 0; k < n; k++) {
                 stack[base + k] = sub[(k - mod + n) % n];
+                isBool[base + k] = subIsBool[(k - mod + n) % n];
               }
             }
           }
-          break;
+          return;
         }
     }
+    isBool[this.#sp - 1] = 0;
   }
   static #execBlock(instructions) {
     for (const instr of instructions) {
@@ -58488,7 +58538,7 @@ class XRef {
           if (offsetByte === -1) {
             throw new FormatError("Invalid XRef byteWidths 'offset'.");
           }
-          offset = offset << 8 | offsetByte;
+          offset = offset * 256 + offsetByte;
         }
         for (let j = 0; j < generationFieldWidth; ++j) {
           const generationByte = stream.getByte();
@@ -59871,9 +59921,12 @@ class PDFDocument {
     }
     return data;
   }
+  get hasOnlyXfa() {
+    return shadow(this, "hasOnlyXfa", this.catalog.needsRendering && this.formInfo.hasXfa && !this.formInfo.hasAcroForm);
+  }
   get xfaFactory() {
     let data;
-    if (this.pdfManager.enableXfa && this.catalog.needsRendering && this.formInfo.hasXfa && !this.formInfo.hasAcroForm) {
+    if (this.pdfManager.enableXfa && this.hasOnlyXfa) {
       data = this.xfaData;
     }
     return shadow(this, "xfaFactory", data ? new XFAFactory(data) : null);
@@ -60617,8 +60670,7 @@ function parseDocBaseUrl(url) {
   return null;
 }
 class BasePdfManager {
-  static #handlers = new Set();
-  #handler = null;
+  static #handlers = new Map();
   constructor({
     docBaseUrl,
     docId,
@@ -60629,10 +60681,9 @@ class BasePdfManager {
   }) {
     this._docBaseUrl = parseDocBaseUrl(docBaseUrl);
     this._docId = docId;
-    this.#handler = handler;
     this._password = password;
     this.enableXfa = enableXfa;
-    BasePdfManager.#handlers.add(handler);
+    BasePdfManager.#handlers.set(this, handler);
     evaluatorOptions.isOffscreenCanvasSupported &&= FeatureTest.isOffscreenCanvasSupported;
     evaluatorOptions.isImageDecoderSupported &&= FeatureTest.isImageDecoderSupported;
     this.evaluatorOptions = Object.freeze(evaluatorOptions);
@@ -60641,7 +60692,7 @@ class BasePdfManager {
     OperatorList.setOptions(evaluatorOptions);
     const options = {
       ...evaluatorOptions,
-      getHandler: () => this.#handler ?? BasePdfManager.#handlers.keys().next().value
+      getHandler: () => BasePdfManager.#handlers.values().find(h => !h.destroyed)
     };
     IccColorSpace.setOptions(options);
     CmykICCBasedCS.setOptions(options);
@@ -60697,8 +60748,7 @@ class BasePdfManager {
     this.pdfDocument.xref.encrypt?.setPassword(password);
   }
   terminate(reason) {
-    BasePdfManager.#handlers.delete(this.#handler);
-    this.#handler = null;
+    BasePdfManager.#handlers.delete(this);
   }
 }
 class LocalPdfManager extends BasePdfManager {
@@ -61162,6 +61212,9 @@ class MessageHandler {
     this.#messageAC?.abort();
     this.#messageAC = null;
   }
+  get destroyed() {
+    return !this.#messageAC;
+  }
 }
 
 ;// ./src/core/editor/print_appearances.js
@@ -61397,7 +61450,7 @@ async function writeStream(stream, buffer, transform) {
   const isFilterZeroImageDecode = isName(filterZero, "DCTDecode") || isName(filterZero, "JPXDecode") || isName(filterZero, "JBIG2Decode") || isName(filterZero, "CCITTFaxDecode") || isName(filterZero, "LZWDecode");
   const isFilterZeroCompressedObject = isFilterZeroFlateDecode || isFilterZeroImageDecode || isName(filterZero, "BrotliDecode");
   const MIN_LENGTH_FOR_COMPRESSING = 256;
-  if (!isFilterZeroCompressedObject && !cryptFilterName && bytes.length >= MIN_LENGTH_FOR_COMPRESSING) {
+  if (!isFilterZeroCompressedObject && !cryptFilterName && !isDict(dict, "Metadata") && bytes.length >= MIN_LENGTH_FOR_COMPRESSING) {
     try {
       const cs = new CompressionStream("deflate");
       const writer = cs.writable.getWriter();
@@ -61799,6 +61852,7 @@ async function incrementalUpdate({
 
 const MAX_LEAVES_PER_PAGES_NODE = 16;
 const MAX_IN_NAME_TREE_NODE = 64;
+const INFO_CONFORMANCE_KEYS = ["GTS_PDFXVersion", "GTS_PDFXConformance", "ISO_PDFEVersion"];
 class PageData {
   constructor(page, documentData) {
     this.page = page;
@@ -64103,6 +64157,9 @@ class PDFEditor {
           infoMap.set(key, stringToPDFString(value));
         }
       }
+      for (const key of INFO_CONFORMANCE_KEYS) {
+        infoMap.delete(key);
+      }
     }
     infoMap.delete("ModDate");
     infoMap.set("CreationDate", getModificationDate());
@@ -64147,17 +64204,28 @@ class PDFEditor {
     this.currentDocument = null;
     return result;
   }
-  async #createChanges() {
+  async #createChanges(encrypt, encryptRef) {
     const changes = new RefMap();
     changes.put(Ref.get(0, 0xffff), {
       data: null
     });
     for (let i = 1, ii = this.xref.length; i < ii; i++) {
+      const ref = Ref.get(i, 0);
+      const obj = this.xref[i];
       if (this.objStreamRefs?.has(i)) {
-        await this.#createObjectStream(Ref.get(i, 0), this.xref[i], changes);
+        await this.#createObjectStream(ref, obj, changes);
+      } else if (typeof obj === "string") {
+        const buffer = [];
+        await writeObject(ref, obj, buffer, {
+          encrypt,
+          encryptRef
+        });
+        changes.put(ref, {
+          data: buffer.join("")
+        });
       } else {
-        changes.put(Ref.get(i, 0), {
-          data: this.xref[i]
+        changes.put(ref, {
+          data: obj
         });
       }
     }
@@ -64197,7 +64265,7 @@ class PDFEditor {
     await this.#makeRoot();
     const infoMap = this.#makeInfo();
     const [encryptRef, encrypt, fileIds] = await this.#makeEncrypt();
-    const [changes, xrefTableRef] = await this.#createChanges();
+    const [changes, xrefTableRef] = await this.#createChanges(encrypt, encryptRef);
     const header = stringToBytes(`%PDF-${this.version}\n%\xfa\xde\xfa\xce`);
     return incrementalUpdate({
       originalData: header,
@@ -64438,7 +64506,7 @@ class WorkerMessageHandler {
       docId,
       apiVersion
     } = docParams;
-    const workerVersion = "6.5.196";
+    const workerVersion = "6.5.273";
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match the Worker version "${workerVersion}".`);
     }
@@ -64790,7 +64858,8 @@ class WorkerMessageHandler {
       if (!Array.isArray(pageInfos)) {
         pageInfos = [pageInfos];
       }
-      let newDocumentId = 0;
+      let managers = null,
+        newDocumentId = 0;
       for (const pageInfo of pageInfos) {
         if (pageInfo.image) {
           continue;
@@ -64805,6 +64874,7 @@ class WorkerMessageHandler {
             password: pageInfo.password ?? null,
             evaluatorOptions: Object.assign({}, pdfManager.evaluatorOptions)
           });
+          (managers ??= []).push(manager);
           let recoveryMode = false;
           let isValid = true;
           while (true) {
@@ -64840,15 +64910,14 @@ class WorkerMessageHandler {
           }
           if (!isValid) {
             pageInfo.document = null;
-          }
-          const isPureXfa = await manager.ensureDoc("isPureXfa");
-          if (isPureXfa) {
+          } else if (await manager.ensureDoc("hasOnlyXfa")) {
             pageInfo.document = null;
             warn("extractPages does not support pure XFA documents.");
           } else {
             pageInfo.document = manager.pdfDocument;
           }
         } else {
+          pageInfo.document = null;
           warn("extractPages: invalid document.");
         }
       }
@@ -64865,6 +64934,7 @@ class WorkerMessageHandler {
         if (task) {
           finishWorkerTask(task);
         }
+        managers?.forEach(manager => manager.terminate(new AbortException("ExtractPages was finished.")));
       }
     });
     async function generateAppearances({

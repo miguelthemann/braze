@@ -13,15 +13,12 @@ const SHORTCUTS_PREF = "browser.ml.chat.shortcuts";
 const PROVIDER_PREF = "browser.ml.chat.provider";
 
 /**
- * Open the pane that holds the setting, which differs between the redesigned
- * and legacy layouts.
+ * Open the pane that holds the setting.
  *
  * @returns {Promise<{tab: MozTabbrowserTab, control: Element}>}
  */
 async function openPaneWithSetting() {
-  let pane = Services.prefs.getBoolPref("browser.settings-redesign.enabled")
-    ? "tabsBrowsing"
-    : "general";
+  let pane = "tabsBrowsing";
   let tab = await openPrefsTab(pane);
   let doc = tab.linkedBrowser.contentDocument;
   await TestUtils.waitForCondition(
@@ -72,6 +69,7 @@ add_task(async function test_visibility_follows_feature_gate() {
 });
 
 add_task(async function test_checkbox_controls_pref() {
+  Services.fog.testResetFOG();
   await SpecialPowers.pushPrefEnv({
     set: [
       [FEATURE_GATE_PREF, true],
@@ -108,6 +106,21 @@ add_task(async function test_checkbox_controls_pref() {
     "Wait for the pref to turn off"
   );
   Assert.ok(!control.checked, "Unchecking the setting turns the menu off");
+
+  Assert.deepEqual(
+    Glean.selectionMenu.optionToggled
+      .testGetValue()
+      .map(({ extra: { action, enabled, source } }) => [
+        action,
+        enabled,
+        source,
+      ]),
+    [
+      ["master", "true", "settings"],
+      ["master", "false", "settings"],
+    ],
+    "Both clicks on the menu setting are recorded"
+  );
 
   await BrowserTestUtils.removeTab(tab);
   await SpecialPowers.popPrefEnv();
@@ -152,6 +165,7 @@ add_task(async function test_ask_chatbot_toggle() {
 });
 
 add_task(async function test_menu_never_on_without_an_action() {
+  Services.fog.testResetFOG();
   await SpecialPowers.pushPrefEnv({
     set: [
       [FEATURE_GATE_PREF, true],
@@ -220,6 +234,23 @@ add_task(async function test_menu_never_on_without_an_action() {
     doc.getElementById(ASK_SETTING_ID).checked &&
       doc.getElementById(SEARCH_SETTING_ID).checked,
     "Turning the menu on with no action checked checks every action"
+  );
+
+  Assert.deepEqual(
+    Glean.selectionMenu.optionToggled
+      .testGetValue()
+      .map(({ extra: { action, enabled, source } }) => [
+        action,
+        enabled,
+        source,
+      ]),
+    [
+      ["ai", "false", "settings"],
+      ["search", "false", "settings"],
+      ["master", "false", "uncheck_all"],
+      ["master", "true", "settings"],
+    ],
+    "Each click is recorded, and the menu turning itself off is recorded after the click that caused it"
   );
 
   await BrowserTestUtils.removeTab(tab);
