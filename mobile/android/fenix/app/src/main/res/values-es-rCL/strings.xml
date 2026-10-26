@@ -182,6 +182,12 @@
   <string name="recently_visited_menu_item_remove">Eliminar</string>
   <!-- Content description for the button which navigates the user to show all of their history. -->
   <string name="past_explorations_show_all_content_description_2">Mostrar todas las exploraciones pasadas</string>
+  <!--
+    Browser Fragment
+
+    Label for popup button that appears when long-pressing the main menu. Tapping it allows the user to customize the main menu layout.
+  -->
+  <string name="customize_menu">Personalizar menú</string>
   <!-- Content description (not visible, for screen readers etc.): Navigate backward (browsing history) -->
   <string name="browser_menu_back">Retroceder</string>
   <!-- Content description (not visible, for screen readers etc.): Navigate forward (browsing history) -->
@@ -313,8 +319,6 @@
   <string name="browser_menu_default_banner_title">Establece %1$s como predeterminado</string>
   <!-- Label text within the set as default banner -->
   <string name="browser_menu_default_banner_subtitle_2">Rápido, privado y hecho para ti.</string>
-  <!-- Content description (not visible, for screen readers etc.) for the button that dismisses the set as default banner in the menu -->
-  <string name="browser_menu_default_banner_dismiss_promotion">Descartar promoción</string>
   <!-- Content description (not visible, for screen readers etc.) for recommended extensions in main menu -->
   <string name="browser_menu_recommended_extensions_content_description">Más información</string>
   <!--
@@ -4593,6 +4597,12 @@
   <string name="firefox_labs_website_isolation_title" tools:ignore="UnusedResources">Aislamiento de sitios web</string>
   <!-- Description of the Firefox Labs Sandboxing experiment. -->
   <string name="firefox_labs_website_isolation_description" tools:ignore="UnusedResources">Una barrera adicional entre sitios web que ayuda a proteger tus datos en diferentes pestañas. Puede afectar el rendimiento, la estabilidad, la compatibilidad con otros sitios web y la forma en que se guarda el historial de navegación.</string>
+  <!--
+    PDF viewer toolbar and buttons
+
+    Content description for accessibility (used by screen readers): Description for the button that triggers the start of a signature workflow on the PDF displayed on the screen.
+  -->
+  <string name="pdf_tools_sign_content_description_2">Añadir una firma</string>
   <!--
     PDF viewer toolbar and buttons
 
