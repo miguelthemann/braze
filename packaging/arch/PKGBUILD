@@ -87,7 +87,15 @@ EOF
     chmod 755 "$pkgdir/usr/bin/braze"
     
     install -d "$pkgdir/usr/share/applications"
-    install -d "$pkgdir/usr/share/icons/hicolor/128x128/apps"
     cp braze.desktop "$pkgdir/usr/share/applications/braze.desktop"
-    cp assets/icon-128.png "$pkgdir/usr/share/icons/hicolor/128x128/apps/braze.png"
+    for size in 16 32 48 128; do
+        install -d "$pkgdir/usr/share/icons/hicolor/${size}x${size}/apps"
+        if [ -f "assets/icon-${size}.png" ]; then
+            cp "assets/icon-${size}.png" "$pkgdir/usr/share/icons/hicolor/${size}x${size}/apps/braze.png"
+        fi
+    done
+    install -d "$pkgdir/usr/share/icons/hicolor/scalable/apps"
+    if [ -f "assets/cat_logo.svg" ]; then
+        cp assets/cat_logo.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/braze.svg"
+    fi
 }

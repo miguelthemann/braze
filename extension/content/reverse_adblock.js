@@ -237,16 +237,19 @@
     }, 3000);
   }
 
-  window.addEventListener('DOMContentLoaded', () => {
+  let initialized = false;
+  function init() {
+    if (initialized) return;
+    initialized = true;
     promoteAdvertisements();
     injectStatusTicker();
     setTimeout(spawnRetroPopup, 2000);
-  });
+  }
 
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    promoteAdvertisements();
-    injectStatusTicker();
-    setTimeout(spawnRetroPopup, 2000);
+    init();
+  } else {
+    window.addEventListener('DOMContentLoaded', init);
   }
 
   setInterval(promoteAdvertisements, 4000);

@@ -27,7 +27,11 @@ sed -i 's/^Vendor=Mozilla/Vendor=Braze/' "$BUILD_DIR/opt/braze/application.ini"
 cp "$BUILD_DIR/opt/braze/application.ini" "$BUILD_DIR/opt/braze/browser/application.ini"
 
 # Rename binaries to native braze executables
-mv "$BUILD_DIR/opt/braze/firefox-bin" "$BUILD_DIR/opt/braze/braze-bin"
+if [ -f "$BUILD_DIR/opt/braze/firefox-bin" ]; then
+  mv "$BUILD_DIR/opt/braze/firefox-bin" "$BUILD_DIR/opt/braze/braze-bin"
+elif [ -f "$BUILD_DIR/opt/braze/firefox" ]; then
+  cp "$BUILD_DIR/opt/braze/firefox" "$BUILD_DIR/opt/braze/braze-bin"
+fi
 ln -sf braze-bin "$BUILD_DIR/opt/braze/firefox-bin"
 rm -f "$BUILD_DIR/opt/braze/firefox"
 
@@ -93,13 +97,28 @@ chmod 755 "$BUILD_DIR/usr/bin/braze"
 
 # 4. Desktop entry and icons
 cp braze.desktop "$BUILD_DIR/usr/share/applications/"
-cp assets/icon-128.png "$BUILD_DIR/usr/share/icons/hicolor/128x128/apps/braze.png"
+for size in 16 32 48 128; do
+  mkdir -p "$BUILD_DIR/usr/share/icons/hicolor/${size}x${size}/apps"
+  if [ -f "assets/icon-${size}.png" ]; then
+    cp "assets/icon-${size}.png" "$BUILD_DIR/usr/share/icons/hicolor/${size}x${size}/apps/braze.png"
+  fi
+done
+mkdir -p "$BUILD_DIR/usr/share/icons/hicolor/scalable/apps"
+if [ -f "assets/cat_logo.svg" ]; then
+  cp assets/cat_logo.svg "$BUILD_DIR/usr/share/icons/hicolor/scalable/apps/braze.svg"
+fi
 
 # 5. Package with FPM
 fpm -s dir -t deb \
   -n "braze" -v "$VERSION" --architecture amd64 \
   --description "O rival caótico do Microfost Ledge" \
   --maintainer "Miguel The Mann" \
+  --deb-compression xz \
+  --depends "libgtk-3-0" \
+  --depends "libasound2 | libasound2t64" \
+  --depends "libdbus-glib-1-2" \
+  --depends "libxt6" \
+  --category "web" \
   -C "$BUILD_DIR" -p "$OUT_DIR/braze_${VERSION}_amd64.deb" \
   opt usr
 
@@ -107,6 +126,11 @@ fpm -s dir -t rpm \
   -n "braze" -v "$VERSION" --architecture x86_64 \
   --description "O rival caótico do Microfost Ledge" \
   --maintainer "Miguel The Mann" \
+  --depends "gtk3" \
+  --depends "alsa-lib" \
+  --depends "dbus-glib" \
+  --depends "libXt" \
+  --category "Applications/Internet" \
   -C "$BUILD_DIR" -p "$OUT_DIR/braze-${VERSION}-1.x86_64.rpm" \
   opt usr
 

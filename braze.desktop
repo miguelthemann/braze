@@ -16,5 +16,23 @@ Icon=braze
 Terminal=false
 Type=Application
 Categories=Network;WebBrowser;
+StartupNotify=true
 StartupWMClass=Braze
 MimeType=text/html;text/xml;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;
+Actions=new-window;new-private-window;
+
+[Desktop Action new-window]
+Name=Nova Janela
+Name[pt]=Nova Janela
+Name[en_US]=New Window
+Name[en_GB]=New Window
+Name[it_IT]=Nuova Finestra
+Exec=braze --new-window %u
+
+[Desktop Action new-private-window]
+Name=Nova Janela Privada
+Name[pt]=Nova Janela Privada
+Name[en_US]=New Private Window
+Name[en_GB]=New Private Window
+Name[it_IT]=Nuova Finestra Anonima
+Exec=braze --private-window %u
