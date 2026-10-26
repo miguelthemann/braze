@@ -24,7 +24,11 @@ package() {
     cp "$pkgdir/opt/braze/application.ini" "$pkgdir/opt/braze/browser/application.ini"
 
     # Renomear binários para braze nativo
-    mv "$pkgdir/opt/braze/firefox-bin" "$pkgdir/opt/braze/braze-bin"
+    if [ -f "$pkgdir/opt/braze/firefox-bin" ]; then
+        mv "$pkgdir/opt/braze/firefox-bin" "$pkgdir/opt/braze/braze-bin"
+    elif [ -f "$pkgdir/opt/braze/firefox" ]; then
+        cp "$pkgdir/opt/braze/firefox" "$pkgdir/opt/braze/braze-bin"
+    fi
     ln -sf braze-bin "$pkgdir/opt/braze/firefox-bin"
     rm -f "$pkgdir/opt/braze/firefox"
 

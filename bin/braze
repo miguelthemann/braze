@@ -9,23 +9,26 @@ PROFILE_DIR="$DIR/profile"
 export MOZ_APP_DISPLAYNAME="Braze"
 export MOZ_APP_NAME="braze"
 export MOZ_APP_VENDOR="Braze"
+export MOZ_APP_REMOTINGNAME="braze"
+export MOZ_NO_REMOTE=1
+export MOZ_NEW_INSTANCE=1
 
-FIREFOX_BIN="firefox"
-if ! command -v firefox >/dev/null 2>&1; then
-  if [ -x "/opt/braze/braze" ]; then
-    FIREFOX_BIN="/opt/braze/braze"
-  elif [ -x "$DIR/firefox/firefox" ]; then
-    FIREFOX_BIN="$DIR/firefox/firefox"
-  else
-    echo "Erro: Executável 'firefox' não encontrado no PATH nem em /opt/braze/braze." >&2
-    echo "Instale o Firefox ou o pacote do Braze para executar." >&2
-    exit 1
-  fi
+if [ -x "/opt/braze/braze" ]; then
+  FIREFOX_BIN="/opt/braze/braze"
+elif [ -x "$DIR/firefox/firefox" ]; then
+  FIREFOX_BIN="$DIR/firefox/firefox"
+elif command -v firefox >/dev/null 2>&1; then
+  FIREFOX_BIN="firefox"
+else
+  echo "Erro: Executável 'braze' ou 'firefox' não encontrado." >&2
+  echo "Instale o pacote do Braze ou o Firefox para executar." >&2
+  exit 1
 fi
 
 exec "$FIREFOX_BIN" \
   --class "Braze" \
   --name "Braze" \
+  --new-instance \
   --no-remote \
   --profile "$PROFILE_DIR" \
   "$@"
