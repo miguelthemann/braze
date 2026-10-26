@@ -29,10 +29,11 @@ RequestExecutionLevel admin
 !insertmacro MUI_LANGUAGE "Italian"
 
 Section "Braze Core" SecCore
+  SetRegView 64
   SetOutPath "$INSTDIR"
   
   # Terminar processos anteriores do braze.exe que possam estar a bloquear ficheiros ou o perfil
-  ExecWait 'taskkill /F /IM braze.exe'
+  ExecWait 'taskkill /F /IM braze.exe' $0
 
   # The runner will drop the prepared files into build-win\Braze
   File /r "..\..\build-win\Braze\*"
@@ -46,6 +47,7 @@ Section "Braze Core" SecCore
   
   # Register in Add/Remove Programs
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Braze" "DisplayName" "Braze Browser"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Braze" "DisplayVersion" "${VERSION}"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Braze" "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Braze" "QuietUninstallString" "$\"$INSTDIR\uninstall.exe$\" /S"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Braze" "Publisher" "Miguel The Mann"
@@ -53,6 +55,8 @@ Section "Braze Core" SecCore
 SectionEnd
 
 Section "Uninstall"
+  SetRegView 64
+  ExecWait 'taskkill /F /IM braze.exe' $0
   Delete "$DESKTOP\Braze.lnk"
   Delete "$SMPROGRAMS\Braze\Braze.lnk"
   RMDir "$SMPROGRAMS\Braze"
